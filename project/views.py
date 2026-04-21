@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, View
+from .models import Vacancy, Category, Like, Response, Resume
 
 #Інфа про сайт
 class Job_site_ListView(ListView):
@@ -8,7 +9,9 @@ class Job_site_ListView(ListView):
 
 #Виводе всі вакансій
 class Job_ListView(ListView):
-    pass
+    model = Vacancy
+    context_object_name = "job"
+    template_name = "job/job_list.html"
 
 #Інформація про вакансію
 class Job_DetailView(DetailView):
@@ -16,6 +19,10 @@ class Job_DetailView(DetailView):
 
 #Створити вакансію
 class Job_CreateView(CreateView):
+    pass
+
+#Створити резюме
+class Job_ResumeCreateView(CreateView):
     pass
 
 #Видалити вакансію (може буде робитись автоматично)
