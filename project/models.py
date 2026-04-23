@@ -2,18 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
+#Міста
 class City(models.Model):
     name = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name
 
-
+#Категорій
 class Category(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self):
         return self.name
+    
 
 #Вакансій роботи
 class Vacancy(models.Model):
@@ -32,6 +35,10 @@ class Vacancy(models.Model):
 
     def total_likes(self):
         return self.likes.count()
+    
+    
+class Application(models.Model):
+    pass
 
 #Резюме користувача
 class Resume(models.Model):
@@ -52,6 +59,10 @@ class Response(models.Model):
     
     def total_likes(self):
         return self.likes.count()
+    
+
+class Chat(models.Model):
+    pass
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -60,8 +71,7 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # Цей рядок робить так, щоб один юзер міг лайкнути один матеріал лише 1 раз
-        unique_together = [['user', 'vacancy'], ['user', 'response']]
+        unique_together = ('user', 'vacancy', 'response')
 
 
 

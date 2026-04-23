@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<title>Головна</title>
+    <h1>Хай</h1>
+
+    <a href="{% url 'job_creat' %}">
+    Створити вакансію
+</a>
+{% for jo in jobs %}
+
+<a href="{% url 'job_datail' pk=jo.id %}">
+<ul>
+    <li>
+        {{ jo.title }}|
+        {{ jo.category }}|
+        {{ jo.city }}
+    </li>
+</ul>
+</a>
+
+<a href="#">
+    Подати заявку
+</a>
+<button href="{% url 'toggle_like' 'vacancy' jo.id %}">Лайк</button>
+{% endfor %}
+<br>
+{% if all_responses %}
+    {% for res in all_responses %}
+        <div class="response-item">
+            <p>{{ res.author }}</p>
+            <p>{{ res.content }}</p>
+            
+            <a href="{% url 'toggle_like' 'response' res.id %}" class="btn btn-sm btn-outline-primary">
+                Лайк ({{ res.likes.count }})
+            </a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Відгуків ще немає.</p>
+{% endif %}
+<button type="button">
+    Написати відгук
+</button>
+{% endblock %}
