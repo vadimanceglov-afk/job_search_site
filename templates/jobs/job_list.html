@@ -22,24 +22,32 @@
 <a href="#">
     Подати заявку
 </a>
-<button href="{% url 'toggle_like' 'vacancy' jo.id %}">Лайк</button>
+
 {% endfor %}
-<br>
-{% if all_responses %}
-    {% for res in all_responses %}
-        <div class="response-item">
-            <p>{{ res.author }}</p>
-            <p>{{ res.content }}</p>
-            
-            <a href="{% url 'toggle_like' 'response' res.id %}" class="btn btn-sm btn-outline-primary">
-                Лайк ({{ res.likes.count }})
-            </a>
-        </div>
-    {% endfor %}
+
+{% if user.is_authenticated %}
+    {% if user_already_responded %}
+        <p>Ви вже залишили відгук про наш сайт. Дякуємо!</p>
+    {% else %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Опублікувати відгук</button>
+        </form>
+    {% endif %}
 {% else %}
-    <p>Відгуків ще немає.</p>
+    <p>Будь ласка, увійдіть, щоб залишити відгук.</p>
 {% endif %}
-<button type="button">
-    Написати відгук
-</button>
+<br>
+<div class="responses">
+    {% for res in all_responses %}
+
+                <p>{{ res.author }}</p>
+                <p>{{ res.content }}</p>
+    <a href="{% url 'Like_Response' res.id %}">
+        like {{ res.likes.count }}
+    </a>
+    {% endfor %}
+</div>
+
 {% endblock %}

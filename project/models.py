@@ -33,8 +33,7 @@ class Vacancy(models.Model):
     street = models.CharField(max_length=255, verbose_name="Вулиця")
     date = models.DateTimeField(auto_now_add=True)#дата створення
 
-    def total_likes(self):
-        return self.likes.count()
+
     
     
 class Application(models.Model):
@@ -49,16 +48,12 @@ class Resume(models.Model):
 
 #Відгуки про сайт
 class Response(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coments")#автор
+    author = models.OneToOneField(User, on_delete=models.CASCADE, related_name="site_comment")#автор
     content = models.TextField()#опис
     created_at = models.DateTimeField(auto_now_add=True)
 
-
     def __str__(self):
-        return f'Comment by {self.author.username}'
-    
-    def total_likes(self):
-        return self.likes.count()
+        return f'Відгук від {self.author.username}'
     
 
 class Chat(models.Model):
@@ -66,12 +61,11 @@ class Chat(models.Model):
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name='likes', null=True, blank=True)
     response = models.ForeignKey(Response, on_delete=models.CASCADE, related_name='likes', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'vacancy', 'response')
+        unique_together = ('user','response')
 
 
 
