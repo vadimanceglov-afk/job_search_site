@@ -33,18 +33,34 @@ class Vacancy(models.Model):
     street = models.CharField(max_length=255, verbose_name="Вулиця")
     date = models.DateTimeField(auto_now_add=True)#дата створення
 
-
+    def total_applications(self):
+        return self.applications.count()
     
+    def __str__(self):
+        return self.title
     
-class Application(models.Model):
-    pass
-
 #Резюме користувача
 class Resume(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="resume")#автор
     title = models.CharField(max_length=256)#Заголовок
     description = models.TextField()#опис
-    file = models.FileField(upload_to='resumes/',  null=True, blank=True)#файл
+    file = models.FileField(upload_to='resumes/',  null=True, blank=True)#файл   
+
+    def __str__(self):
+        return self.title
+    
+class Application(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications")
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name="applications")
+    resume = models.ForeignKey(Resume, on_delete=models.SET_NULL, null=True, blank=True)
+    res_file = models.FileField(upload_to='application_docs/', null=True, blank=True) # Ось воно!
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        # Використовуємо getattr або просту перевірку, щоб уникнути NoneType Error
+        name = self.author.username if self.author else "Анонім"
+        target = self.vacancy.title if self.vacancy else "невідому вакансію"
+        return f"Заявка від {name} на {target}"
 
 #Відгуки про сайт
 class Response(models.Model):

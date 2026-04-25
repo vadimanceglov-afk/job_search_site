@@ -1,9 +1,43 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, View
-from .models import Vacancy, Like, Response, Resume
-from project.forms import Vacancy_CreatFrom, Response_CreatFrom
+from .models import Vacancy, Like, Response, Resume, Application
+from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form
+
+@login_required
+def apply_for_job(request, vacancy_id):
+    vacancy = get_object_or_404(Vacancy, id=vacancy_id)
+    
+    if request.method == 'POST':
+        form = Application_Form(request.POST, request.FILES)
+        if form.is_valid():
+            # Створюємо об'єкт у пам'яті, але ще не записуємо в базу
+            application = form.save(commit=False)
+            
+            application.vacancy = vacancy
+            application.author = request.user
+            
+            # --- ЛОГІКА ВЧИТЕЛЯ: Перевірка наявності файлу ---
+            # Якщо в формі ПЕРЕДАНО файл (res_file)
+            if request.FILES.get('res_file'):
+                # Очищаємо поле resume, навіть якщо там щось було вибрано
+                application.resume = None
+            else:
+                if not application.resume:
+                    application.resume = Resume.objects.filter(author=request.user).last()
+
+            
+            application.save()
+            return redirect('job_list') 
+    else:
+        form = Application_Form()
+        # Обмежуємо вибір тільки резюме поточного користувача
+        if 'resume' in form.fields:
+            form.fields['resume'].queryset = Resume.objects.filter(author=request.user)
+    
+    return render(request, 'jobs/job_appl.html', {'form': form, 'vacancy': vacancy})
 
 def Like_Response(request, pk):
     response = get_object_or_404(Response, id=pk)
@@ -51,7 +85,7 @@ class Job_ListView(ListView):
         return self.get(request, *args, **kwargs)
 
 #Інформація про вакансію
-class Job_DetailView(DetailView):
+class Job_DatailView(DetailView):
     model = Vacancy
     context_object_name = "jobs"
     template_name = "jobs/job_datail.html"
@@ -68,20 +102,22 @@ class Job_CreateView(CreateView):
     success_url = reverse_lazy("job_list")
 
     def form_valid(self, form):
-
         vacancy = form.save(commit=False)
-
         vacancy.company = self.request.user 
-
         return super().form_valid(form)
 
 
 #Створити резюме
 class Job_ResumeCreateView(CreateView):
     model = Resume
-    template_name = "jobs/job_creat.html"
-    form_class = Vacancy_CreatFrom
+    template_name = "jobs/job_creat_resume.html"
+    form_class = Resume_CreatFrom
     success_url = reverse_lazy("job_list")
+
+    def form_valid(self, form):
+        resume = form.save(commit=False)
+        resume.author = self.request.user 
+        return super().form_valid(form)
 
 #Видалити вакансію (може буде робитись автоматично)
 class Job_DeleteView(DeleteView):

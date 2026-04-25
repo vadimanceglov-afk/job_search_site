@@ -1,5 +1,5 @@
 from django import forms
-from project.models import Vacancy, Response
+from project.models import Vacancy, Response, Resume, Application
 
 class Vacancy_CreatFrom(forms.ModelForm):
     class Meta:
@@ -21,6 +21,18 @@ class Response_CreatFrom(forms.ModelForm):
             'placeholder': 'Додайте коментар',
             'rows': 4
         })}
+
+
+class Resume_CreatFrom(forms.ModelForm):
+    class Meta:
+        model = Resume
+        fields = ["title", "description", "file"]
+
+
+class Application_Form(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ["resume", "res_file"]
 
 
 class Vacancy_FilterFrom(forms.ModelForm):
