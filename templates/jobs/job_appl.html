@@ -2,10 +2,16 @@
 {% load static %}
 {% block content %}
 <h2>Відгукнутися на вакансію: {{ vacancy.title }}</h2>
-  
+{% if already_applied %}
+    <button disabled>Already Applied</button>
+{% else %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Надіслати заявку</button>
   </form>
+{% endif %}
+<a href="{% url 'job_list' %}">
+    Назад
+</a>
 {% endblock %}

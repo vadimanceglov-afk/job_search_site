@@ -56,11 +56,20 @@ class Application(models.Model):
     res_file = models.FileField(upload_to='application_docs/', null=True, blank=True) # Ось воно!
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['author', 'vacancy'], name='unique_user_application')
+        ]
+
     def __str__(self):
         # Використовуємо getattr або просту перевірку, щоб уникнути NoneType Error
         name = self.author.username if self.author else "Анонім"
         target = self.vacancy.title if self.vacancy else "невідому вакансію"
         return f"Заявка від {name} на {target}"
+    
+    def total_applications(self):
+        return self.applications.count()
 
 #Відгуки про сайт
 class Response(models.Model):

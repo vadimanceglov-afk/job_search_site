@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, View
 from .models import Vacancy, Like, Response, Resume, Application
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form
@@ -9,35 +10,40 @@ from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFro
 @login_required
 def apply_for_job(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
-    
-    if request.method == 'POST':
-        form = Application_Form(request.POST, request.FILES)
-        if form.is_valid():
-            # Створюємо об'єкт у пам'яті, але ще не записуємо в базу
-            application = form.save(commit=False)
-            
-            application.vacancy = vacancy
-            application.author = request.user
-            
-            # --- ЛОГІКА ВЧИТЕЛЯ: Перевірка наявності файлу ---
-            # Якщо в формі ПЕРЕДАНО файл (res_file)
-            if request.FILES.get('res_file'):
-                # Очищаємо поле resume, навіть якщо там щось було вибрано
-                application.resume = None
-            else:
-                if not application.resume:
-                    application.resume = Resume.objects.filter(author=request.user).last()
 
-            
-            application.save()
-            return redirect('job_list') 
+    total_applications = Application.objects.filter(vacancy=vacancy).count()
+
+    already_applied = Application.objects.filter(author=request.user, vacancy=vacancy).exists()
+    if request.method == 'POST':
+        if already_applied:
+            messages.error(request, "You have already applied for this job.")
+            return redirect('job_datail', vacancy_id=vacancy.id)
+        else:
+            form = Application_Form(request.POST, request.FILES)
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.vacancy = vacancy
+                application.author = request.user
+                if request.FILES.get('res_file'):
+                    application.resume = None
+                else:
+                    if not application.resume:
+                        application.resume = Resume.objects.filter(author=request.user).last()
+                application.save()
+                messages.success(request, "Application submitted successfully!")
+                return redirect('job_list') 
     else:
         form = Application_Form()
         # Обмежуємо вибір тільки резюме поточного користувача
         if 'resume' in form.fields:
             form.fields['resume'].queryset = Resume.objects.filter(author=request.user)
     
-    return render(request, 'jobs/job_appl.html', {'form': form, 'vacancy': vacancy})
+    return render(request, 'jobs/job_appl.html', {
+        'form': form, 
+        'already_applied': already_applied, 
+        'total_applications': total_applications,
+        'vacancy': vacancy
+        })
 
 def Like_Response(request, pk):
     response = get_object_or_404(Response, id=pk)

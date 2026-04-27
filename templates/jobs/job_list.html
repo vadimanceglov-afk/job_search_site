@@ -25,8 +25,12 @@
 <a href="{% url 'apply_for_job' jo.id %}">
     Подати заявку
 </a>
-<p>Заявки</p>
+
+
+<p>Заявок({{ jo.applications.count }})</p>
+
 {% endfor %}
+
 
 {% if user.is_authenticated %}
     {% if user_already_responded %}
