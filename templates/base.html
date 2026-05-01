@@ -24,23 +24,24 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">Профіль</a>
                         </li>
                         <li class="nav-item">
-                            <form action="#" method="post" class="d-inline">
+                            <form action="{% url 'logout' %}" method="post" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="nav-link btn btn-link">Вийти</button>
                             </form>
                         </li>
-
+                    {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Увійти</a>
+                            <a class="nav-link" href="{% url 'job_login'%}">Увійти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Зареєструватися</a>
+                            <a class="nav-link" href="{% url 'signup_cho'%}">Зареєструватися</a>
                         </li>
-
+                    {% endif %}
                 </ul>
             </div>
         </div>

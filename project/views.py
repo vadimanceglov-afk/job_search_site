@@ -3,9 +3,10 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, View
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
 from .models import Vacancy, Like, Response, Resume, Application
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form
+
 
 @login_required
 def apply_for_job(request, vacancy_id):
@@ -100,6 +101,13 @@ class Job_DatailView(DetailView):
     #def all_resume():
     #    return Resume.objects.all()
 
+#Редагувати вакансію
+class Vacancy_UpdateView(UpdateView):
+    model =Vacancy
+    form_class = Vacancy_CreatFrom
+    template_name = "jobs/job_creat.html"
+    success_url = reverse_lazy("job_list")
+
 #Створити вакансію
 class Job_CreateView(CreateView):
     model = Vacancy
@@ -108,9 +116,14 @@ class Job_CreateView(CreateView):
     success_url = reverse_lazy("job_list")
 
     def form_valid(self, form):
-        vacancy = form.save(commit=False)
-        vacancy.company = self.request.user 
-        return super().form_valid(form)
+        # Перевірка, чи є користувач роботодавцем
+        if hasattr(self.request.user, 'employerprofile'):
+            vacancy = form.save(commit=False)
+            vacancy.company = self.request.user # або self.request.user.employerprofile
+            return super().form_valid(form)
+        else:
+            messages.error(self.request, "Тільки роботодавці можуть створювати вакансії")
+            return redirect('job_list')
 
 
 #Створити резюме

@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<h2>Редагування мого профілю</h2>
 
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+</form>
+
+<hr>
+<a href="{% url 'job_profil' %}">Назад до профілю</a>
 {% endblock %}
