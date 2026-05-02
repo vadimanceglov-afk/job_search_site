@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from auth_system.models import EmployerProfile
 
 
 #Міста
@@ -20,11 +20,10 @@ class Category(models.Model):
 
 #Вакансій роботи
 class Vacancy(models.Model):
-
     title = models.CharField(max_length=256)#Заголовок
     description = models.TextField()#опис
     link = models.URLField(max_length=500, null=True, blank=True)
-    company = models.ForeignKey(User, on_delete=models.CASCADE, related_name="vacancies")
+    company = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE, related_name="vacancies")
     image = models.ImageField(upload_to='vacancies/images/',  null=True, blank=True)
     price_start = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     price_end = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -63,7 +62,6 @@ class Application(models.Model):
         ]
 
     def __str__(self):
-        # Використовуємо getattr або просту перевірку, щоб уникнути NoneType Error
         name = self.author.username if self.author else "Анонім"
         target = self.vacancy.title if self.vacancy else "невідому вакансію"
         return f"Заявка від {name} на {target}"

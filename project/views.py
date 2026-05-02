@@ -35,7 +35,6 @@ def apply_for_job(request, vacancy_id):
                 return redirect('job_list') 
     else:
         form = Application_Form()
-        # Обмежуємо вибір тільки резюме поточного користувача
         if 'resume' in form.fields:
             form.fields['resume'].queryset = Resume.objects.filter(author=request.user)
     
@@ -45,6 +44,8 @@ def apply_for_job(request, vacancy_id):
         'total_applications': total_applications,
         'vacancy': vacancy
         })
+
+
 
 def Like_Response(request, pk):
     response = get_object_or_404(Response, id=pk)
@@ -97,9 +98,12 @@ class Job_DatailView(DetailView):
     context_object_name = "jobs"
     template_name = "jobs/job_datail.html"
 
-    #@staticmethod
-    #def all_resume():
-    #    return Resume.objects.all()
+
+#Інформація про вакансію
+class Job_ResumeView(DetailView):
+    model = Resume
+    context_object_name = "resume"
+    template_name = "jobs/job_resume.html"
 
 #Редагувати вакансію
 class Vacancy_UpdateView(UpdateView):
@@ -117,13 +121,13 @@ class Job_CreateView(CreateView):
 
     def form_valid(self, form):
         # Перевірка, чи є користувач роботодавцем
-        if hasattr(self.request.user, 'employerprofile'):
-            vacancy = form.save(commit=False)
-            vacancy.company = self.request.user # або self.request.user.employerprofile
+        #if hasattr(self.request.user, 'employerprofile'):
+            current_user = self.request.user
+            form.instance.company = current_user.employer # або self.request.user.employerprofile /тут треба employerprofile/
             return super().form_valid(form)
-        else:
-            messages.error(self.request, "Тільки роботодавці можуть створювати вакансії")
-            return redirect('job_list')
+        #else:
+            #messages.error(self.request, "Тільки роботодавці можуть створювати вакансії")
+            #return redirect('job_list')
 
 
 #Створити резюме

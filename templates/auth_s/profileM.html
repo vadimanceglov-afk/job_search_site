@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<h1>Emp</h1>
+    {{ employer.name_company }}|
+    {{ employer.description }}|
+<p>Знайдено заявок: {{ applications.count }}</p>
+<h3>Заявки на вакансії:</h3>
+{% for application in applications %}
+        <p>Заявка від</p>{{ application.author.username }} <br>
+        <p>На вакансію</p>{{ application.vacancy.title }} <br>
+
+        {% if application.resume and application.resume.pk %}
+            <a href="{% url 'job_resume' application.resume.pk %}">
+                Переглянути резюме
+            </a>
+        {% else %}
+            <button disabled>Резюме не додано</button>
+        {% endif %}
+    {% empty %}
+        <p>На ваші вакансії поки немає жодного відгуку.</p>
+{% endfor %}
+
+
+
 
 {% endblock %}

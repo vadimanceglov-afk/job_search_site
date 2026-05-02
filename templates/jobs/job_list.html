@@ -7,7 +7,7 @@
     <a href="{% url 'job_creat' %}">
     Створити вакансію
 </a>
-<a href="{% url 'job_update' %}">
+<a href="#">
     Редагувати вакансію
 </a>
 <a href="{% url 'job_creat_resume' %}">
@@ -18,12 +18,15 @@
 <a href="{% url 'job_datail' pk=jo.id %}">
 <ul>
     <li>
+        {{ jo.company }}|
         {{ jo.title }}|
         {{ jo.category }}|
         {{ jo.city }}
     </li>
 </ul>
 </a>
+
+<a href="{% url 'job_delete' jo.pk %}">delete</a>
 
 <a href="{% url 'apply_for_job' jo.id %}">
     Подати заявку

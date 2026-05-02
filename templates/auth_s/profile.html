@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<h1>User</h1>
+
+    {{ profile.first_name }}|
+    {{ profile.last_name }}|
+    {{ profile.patronymic }}|
+    {{ profile.gender }}|
+    {{ profile.bio }}|
+    {{ profile.referral }}|
 
 {% endblock %}

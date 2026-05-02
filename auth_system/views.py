@@ -7,6 +7,8 @@ from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.models import User
+from project.views import apply_for_job
+from project.models import Application
 
 def Choise(request):
     return render(request=request, template_name="auth_s/cho.html")
@@ -37,20 +39,31 @@ def login_user(request):
 #Інфа про користувача
 class Job_ProfileView(DetailView):
     model = UserProfile
-    context_object_name = "auth_s"
     template_name = "auth_s/profile.html"
+    context_object_name = 'profile'
 
     def get_object(self):
-        return self.request.user.profile
+        obj, created = UserProfile.objects.get_or_create(user=self.request.user)
+        return obj
 
 #Інфа про компанію
 class Job_EmployerView(DetailView):
     model = EmployerProfile
-    context_object_name = "auth_s"
     template_name = "auth_s/profileM.html"
+    context_object_name = "employer"
+    
+    def get_object(self, queryset=None):
+        # Отримуємо або створюємо профіль для поточного юзера
+        obj, created = EmployerProfile.objects.get_or_create(user=self.request.user)
+        return obj
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Використовуємо self.object, щоб отримати заявки саме для цієї компанії
+        # Фільтруємо через вакансії (Vacancy), які належать цій компанії
+        context['applications'] = Application.objects.filter(vacancy__company=self.object)
+        return context
 
-    def get_object(self):
-        return self.request.user.employer
 
 #Реєстрація нового користувача
 class Job_singupView(CreateView):
@@ -81,7 +94,7 @@ class Job_singupView(CreateView):
 class Job_Emp_singupView(CreateView):
     form_class = SignUp_EmployerForm
     template_name = 'auth_s/register.html'
-    success_url = reverse_lazy('job_profilM')
+    success_url = reverse_lazy('job_company')
 
     def form_valid(self, form):
         user = form.save()

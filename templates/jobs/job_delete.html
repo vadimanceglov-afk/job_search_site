@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<h1>Видалення</h1>
+<p>точно видалити?</p>
+<form method="post">
+{% csrf_token %}
+<button type="submit">yes</button>
+<a href="{% url 'job_list' %}">no</a>
+</form>
 
 {% endblock %}

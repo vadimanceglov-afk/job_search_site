@@ -34,6 +34,8 @@ class Application_Form(forms.ModelForm):
         model = Application
         fields = ["resume", "res_file"]
 
+class Vacancy_SurchFrom(forms.ModelForm):
+    pass
 
 class Vacancy_FilterFrom(forms.ModelForm):
     pass
