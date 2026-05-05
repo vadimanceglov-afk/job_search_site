@@ -4,6 +4,10 @@
 <h1>Emp</h1>
     {{ employer.name_company }}|
     {{ employer.description }}|
+
+<a href="{% url 'job_creat' %}">
+    Створити вакансію
+</a>
 <p>Знайдено заявок: {{ applications.count }}</p>
 <h3>Заявки на вакансії:</h3>
 {% for application in applications %}

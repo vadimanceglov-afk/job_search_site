@@ -4,15 +4,7 @@
 <title>Головна</title>
     <h1>Хай</h1>
 
-    <a href="{% url 'job_creat' %}">
-    Створити вакансію
-</a>
-<a href="#">
-    Редагувати вакансію
-</a>
-<a href="{% url 'job_creat_resume' %}">
-    Створити резюме
-</a>
+
 {% for jo in jobs %}
 
 <a href="{% url 'job_datail' pk=jo.id %}">
@@ -24,6 +16,10 @@
         {{ jo.city }}
     </li>
 </ul>
+</a>
+
+<a href="{% url 'job_update' jo.pk %}">
+    Редагувати вакансію
 </a>
 
 <a href="{% url 'job_delete' jo.pk %}">delete</a>
