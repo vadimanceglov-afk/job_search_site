@@ -4,8 +4,21 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
-from .models import Vacancy, Like, Response, Resume, Application
+from .models import Vacancy, Like, Response, Resume, Application, Category
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form
+from django.db.models import Q
+
+
+def job_sursceh(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        vacancy = Vacancy.objects.filter(name__contains=searched)
+
+        return render(request, 'jobs/job_surh.html',
+        {'searched': searched,
+        'vacancy': vacancy})
+    else:
+        return render(request, 'jobs/job_surh.html',{})
 
 
 @login_required
@@ -70,8 +83,6 @@ class Job_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['all_responses'] = Response.objects.all()
-        
-        # Перевіряємо, чи юзер вже залишив відгук
         user_already_responded = False
         if self.request.user.is_authenticated:
             user_already_responded = Response.objects.filter(author=self.request.user).exists()
