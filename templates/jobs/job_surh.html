@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<h1>Surh</h1>
+
+{% for jo in vac %}
+<a href="{% url 'job_datail' pk=jo.id %}">
+        {{ jo.company }}|
+        {{ jo.title }}|
+        {{ jo.category }}|
+        {{ jo.city }}
+</a>
+{% empty %}
+<p>no</p>
+{% endfor %}
 
 {% endblock %}

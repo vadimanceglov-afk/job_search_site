@@ -5,20 +5,38 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
 from .models import Vacancy, Like, Response, Resume, Application, Category
-from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form
+from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form, Vacancy_SurchFrom, Vacancy_FilterFrom
+from django.contrib.auth.mixins import LoginRequiredMixin
+from project.mixins import UserJob
 from django.db.models import Q
 
 
 def job_sursceh(request):
-    if request.method == "POST":
-        searched = request.POST['searched']
-        vacancy = Vacancy.objects.filter(name__contains=searched)
+    # 1. Отримуємо 'q' прямо з запиту для надійності
+    query = request.GET.get('q', '').strip()
+    
+    # 2. Створюємо форму з даними або порожню
+    form = Vacancy_SurchFrom(request.GET or None)
+    
+    vac = []
 
-        return render(request, 'jobs/job_surh.html',
-        {'searched': searched,
-        'vacancy': vacancy})
-    else:
-        return render(request, 'jobs/job_surh.html',{})
+    # 3. Якщо запит є, намагаємось фільтрувати
+    if query:
+        # Ми можемо фільтрувати навіть без is_valid, якщо це простий пошук,
+        # але з формою краще так:
+        vac = Vacancy.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) | # Додав опис, це корисно
+            Q(company__name_company__icontains=query) |
+            Q(city__name__icontains=query)
+        ).distinct()
+
+    # 4. ВАЖЛИВО: ми завжди передаємо об'єкт 'form'
+    return render(request, 'jobs/job_surh.html', {
+        'vac': vac, 
+        'form': form, 
+        'query': query
+    })
 
 
 @login_required
@@ -86,9 +104,13 @@ class Job_ListView(ListView):
         user_already_responded = False
         if self.request.user.is_authenticated:
             user_already_responded = Response.objects.filter(author=self.request.user).exists()
+
+        context['search_form'] = Vacancy_SurchFrom() 
         
-        context['user_already_responded'] = user_already_responded
-        context['form'] = self.form_class()
+        if self.request.user.is_authenticated:
+            context['user_already_responded'] = user_already_responded
+
+        context['response_form'] = self.form_class() 
         return context
     
     def post(self, request, *args, **kwargs):
@@ -131,8 +153,6 @@ class Job_CreateView(CreateView):
     success_url = reverse_lazy("job_list")
 
     def form_valid(self, form):
-        # Перевірка, чи є користувач роботодавцем
-        #if hasattr(self.request.user, 'employerprofile'):
             current_user = self.request.user
             form.instance.company = current_user.employer # або self.request.user.employerprofile /тут треба employerprofile/
             return super().form_valid(form)
@@ -158,7 +178,3 @@ class Job_DeleteView(DeleteView):
     model = Vacancy
     template_name = "jobs/job_delete.html"
     success_url = reverse_lazy("job_list")
-
-    #@staticmethod
-    #def all_resume():
-    #    return Resume.objects.all()

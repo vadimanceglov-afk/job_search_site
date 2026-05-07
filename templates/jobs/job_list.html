@@ -3,9 +3,9 @@
 {% block content %}
 <title>Головна</title>
     <h1>Хай</h1>
-<form action="{% url 'job_surh' %}" method="GET">
-    <input type="text" name="searched" placeholder="Введіть назву вакансії...">
-    <button type="submit">Знайти</button>
+<form action="{% url 'job_surh' %}" method="get">
+    {{ search_form.q }}
+    <button type="submit">Search</button>
 </form>
 
 
@@ -44,7 +44,7 @@
     {% else %}
         <form method="POST" action="">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ response_form.as_p }}
             <button type="submit">Опублікувати відгук</button>
         </form>
     {% endif %}
