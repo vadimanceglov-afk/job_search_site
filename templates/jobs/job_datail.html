@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Інфа</h1>
 
+
         {{ jobs.title }}|
         {{ jobs.description }}|
         {{ jobs.category }}|
@@ -11,4 +12,23 @@
 <a href="{% url 'job_list' %}">
     Назад
 </a>
+
+
+
+{% if user.employer %} 
+<a href="{% url 'job_update' object.pk %}">
+    Редагувати вакансію
+</a>
+
+<a href="{% url 'job_delete' object.pk %}">delete</a>
+
+<p>Заявок({{ jo.applications.count }})</p>
+{% else %}
+
+<a href="{% url 'apply_for_job' object.id %}">
+    Подати заявку
+</a>
+{% endif %}
+
+
 {% endblock %}

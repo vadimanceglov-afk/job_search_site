@@ -4,7 +4,15 @@
 <h1>Створити вакансію</h1>
 <form method="POST">
 {% csrf_token %}
-{{ form.as_p }}
+{{ form.title }}
+{{ form.description }}
+{{ form.cetagory }}
+{{ form.link }}
+{{ form.price_start }}
+{{ form.price_end }}
+{{ form.image }}
+{{ form.city }}
+{{ form.street }}
 <button type="submit">Зберегти</button>
 </form>
 

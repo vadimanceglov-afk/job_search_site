@@ -5,7 +5,9 @@
 
 <form method="POST">
 {% csrf_token %}
-{{ form.as_p }}
+{{ form.title }}
+{{ form.description }}
+
 <button type="submit">Зберегти</button>
 </form>
 

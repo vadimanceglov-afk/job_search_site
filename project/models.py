@@ -79,8 +79,6 @@ class Response(models.Model):
         return f'Відгук від {self.author.username}'
     
 
-class Chat(models.Model):
-    pass
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from django import forms
-from project.models import Vacancy, Response, Resume, Application
+from project.models import Vacancy, Response, Resume, Application, Category, City
 
 class Vacancy_CreatFrom(forms.ModelForm):
     class Meta:
@@ -75,4 +75,33 @@ class Vacancy_SurchFrom(forms.Form):
         })
     )
 class Vacancy_FilterFrom(forms.Form):
-    pass
+# Поля для вибору зі списку (ForeignKey)
+    city = forms.ModelChoiceField(
+        queryset=City.objects.all(), 
+        required=False,
+        label="Місто",
+        empty_label="Всі міста", # Додає порожній пункт спочатку
+        widget=forms.Select(attrs={'class': 'form-select'}) # Для гарного стилю Bootstrap
+    )
+    
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(), 
+        required=False,
+        label="Категорія",
+        empty_label="Всі категорії",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    # Поля для ручного введення ціни
+    # ВАЖЛИВО: назви мають збігатися з тими, що у views.py (request.GET.get("..."))
+    price_start = forms.IntegerField(
+        required=False, 
+        label="Ціна від",
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Від'})
+    )
+    
+    price_end = forms.IntegerField(
+        required=False, 
+        label="Ціна до",
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'До'})
+    )

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
-from .models import Vacancy, Like, Response, Resume, Application, Category
+from .models import Vacancy, Like, Response, Resume, Application, Category, City
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form, Vacancy_SurchFrom, Vacancy_FilterFrom
 from django.contrib.auth.mixins import LoginRequiredMixin
 from project.mixins import UserJob
@@ -12,31 +12,50 @@ from django.db.models import Q
 
 
 def job_sursceh(request):
-    # 1. Отримуємо 'q' прямо з запиту для надійності
-    query = request.GET.get('q', '').strip()
-    
-    # 2. Створюємо форму з даними або порожню
-    form = Vacancy_SurchFrom(request.GET or None)
-    
-    vac = []
+    search_form = Vacancy_SurchFrom(request.GET)
+    filter_form = Vacancy_FilterFrom(request.GET)
 
-    # 3. Якщо запит є, намагаємось фільтрувати
+    
+    all_cities = City.objects.all()
+    all_categories = Category.objects.all()
+    vac = Vacancy.objects.all()
+
+    query = request.GET.get("q")
+    city_id = request.GET.get('city')
+    cat_id = request.GET.get('category')
+    p_start = request.GET.get("price_start")
+    p_end = request.GET.get("price_end")
+
     if query:
-        # Ми можемо фільтрувати навіть без is_valid, якщо це простий пошук,
-        # але з формою краще так:
-        vac = Vacancy.objects.filter(
-            Q(title__icontains=query) |
-            Q(description__icontains=query) | # Додав опис, це корисно
+        vac = vac.filter(
+            Q(category__name__icontains=query) |
             Q(company__name_company__icontains=query) |
             Q(city__name__icontains=query)
         ).distinct()
 
-    # 4. ВАЖЛИВО: ми завжди передаємо об'єкт 'form'
+    if city_id:
+        vac = vac.filter(city_id=city_id)
+    if cat_id:
+        vac = vac.filter(category_id=cat_id)
+    if p_start:
+        vac = vac.filter(price_start__gte=p_start)
+    if p_end:
+        vac = vac.filter(price_end__lte=p_end)
+
     return render(request, 'jobs/job_surh.html', {
         'vac': vac, 
-        'form': form, 
-        'query': query
+        'search_form': search_form,
+        'filter_form': filter_form,
+        'cities': all_cities,
+        'categories': all_categories,
+        'query': query,
+        'price_start': p_start,
+        'price_end': p_end,
     })
+
+
+
+
 
 
 @login_required
