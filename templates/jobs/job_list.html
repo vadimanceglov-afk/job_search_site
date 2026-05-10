@@ -6,7 +6,7 @@
 <form action="{% url 'job_surh' %}" method="get">
     {{ search_form.q }}
     <button type="submit">Search</button>
-
+</form>
 
 
 
@@ -23,13 +23,14 @@
 </ul>
 </a>
 {% if user.employer %} 
-<a href="{% url 'job_update' jo.pk %}">
-    Редагувати вакансію
-</a>
+    {% if user == jo.company.user %}
+        <a href="{% url 'job_update' jo.pk %}">
+            Редагувати мою вакансію
+        </a>
+        <a href="{% url 'job_delete' jo.pk %}">delete</a>
 
-<a href="{% url 'job_delete' jo.pk %}">delete</a>
-
-<p>Заявок({{ jo.applications.count }})</p>
+        <p>Заявок({{ jo.applications.count }})</p>
+    {% endif %}
 {% else %}
 
 <a href="{% url 'apply_for_job' jo.id %}">

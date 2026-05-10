@@ -2,8 +2,9 @@
 {% load static %}
 {% block content %}
 <h2>Відгукнутися на вакансію: {{ vacancy.title }}</h2>
-{% if already_applied %}
-    <button disabled>Already Applied</button>
+{% if already_applied and application %}
+    <button disabled>Вже відгукнулися</button>
+    <a href="{% url 'chat_room' application.id %}" class="btn">Чат з роботодавцем</a>
 {% else %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -14,5 +15,5 @@
 {% endif %}
 <a href="{% url 'job_list' %}">
     Назад
-</a>
+
 {% endblock %}

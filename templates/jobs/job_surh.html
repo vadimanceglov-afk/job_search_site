@@ -3,10 +3,11 @@
 {% block content %}
 <h1>Surh</h1>
 <form action="{% url 'job_surh' %}" method="get">
+    {{ search_form.q }}
+    <button type="submit">Search</button>
+</form>
+<form action="{% url 'job_surh' %}" method="get">
     <input type="hidden" name="q" value="{{ query|default:'' }}">
-
-
-        
         <div class="col-md-3">
             <div class="form-floating">
                 <select name="city" class="form-select" id="city_select">

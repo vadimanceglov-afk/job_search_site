@@ -5,7 +5,13 @@
 
 <form method="POST">
 {% csrf_token %}
+<div class="mb-1">
+    <strong>Заголовок:</strong>
+</div>
 {{ form.title }}
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
 {{ form.description }}
 
 <button type="submit">Зберегти</button>

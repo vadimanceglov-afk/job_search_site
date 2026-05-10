@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'auth_system',
     'project',
     'chat',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

@@ -22,6 +22,8 @@ class Category(models.Model):
 class Vacancy(models.Model):
     title = models.CharField(max_length=256)#Заголовок
     description = models.TextField()#опис
+    description1 = models.TextField(null=True, blank=True)#опис
+    description2 = models.TextField(null=True, blank=True)#опис
     link = models.URLField(max_length=500, null=True, blank=True)
     company = models.ForeignKey(EmployerProfile, on_delete=models.CASCADE, related_name="vacancies")
     image = models.ImageField(upload_to='vacancies/images/',  null=True, blank=True)
@@ -49,12 +51,17 @@ class Resume(models.Model):
         return self.title
     
 class Application(models.Model):
+    STATUS_CHOICES = (
+        ('reject', 'Відхилено'),
+        ('under_review', 'На розгляді'),
+        ('accepted', 'Прийнято'),
+    )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications")
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE, related_name="applications")
     resume = models.ForeignKey(Resume, on_delete=models.SET_NULL, null=True, blank=True)
     res_file = models.FileField(upload_to='application_docs/', null=True, blank=True) # Ось воно!
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-
+    status = models.CharField(choices=STATUS_CHOICES,max_length=50, null=True, blank=True)
 
     class Meta:
         constraints = [

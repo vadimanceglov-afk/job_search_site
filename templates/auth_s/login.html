@@ -4,7 +4,13 @@
 <h2>Login</h2>
 <form method="post">
   {% csrf_token %}
+  <div class="mb-1">
+    <strong>Введіть Логін:</strong>
+</div>
   {{ form.username }}
+  <div class="mb-1">
+    <strong>Введіть пароль:</strong>
+</div>
   {{ form.password }}
   <button type="submit">Login</button>
 </form>

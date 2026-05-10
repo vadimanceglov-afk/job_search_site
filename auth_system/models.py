@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 from django.contrib.auth.models import User
 
 ROLE_CHOICES = [
@@ -8,12 +9,15 @@ ROLE_CHOICES = [
 ]
 
 GENDER_CHOICES = [
-    ('Ч', 'Чоловік'),
-    ('Ж', 'Жінка')
+    ('Men', 'Чоловік'),
+    ('Women', 'Жінка')
 ]
 
 class UserProfile(models.Model):
-
+    OP_CHOICES = [
+        ('Yes', 'Так'),
+        ('No', 'Ні')
+    ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     #
@@ -28,12 +32,21 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.last_name} {self.first_name} {self.patronymic}"
+    
+    @property
+    def age(self):
+        today = date.today()
+        # Обчислення віку: різниця років - 1, якщо день народження ще не настав
+        return today.year - self.birth_date.year - (
+            (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
+        )
 
 class EmployerProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employer')
 
     name_company = models.CharField(max_length=20)#назва компанії
+    role = models.CharField(choices=ROLE_CHOICES, max_length=20, default='Employer')#
     description = models.TextField()#опис
     logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)#логотип
     referral_company = models.ForeignKey('project.Category', on_delete=models.SET_NULL, null=True)#направлення компаній

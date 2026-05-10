@@ -29,8 +29,8 @@ def job_sursceh(request):
     if query:
         vac = vac.filter(
             Q(category__name__icontains=query) |
-            Q(company__name_company__icontains=query) |
-            Q(city__name__icontains=query)
+            Q(title__icontains=query) |
+            Q(company__name_company__icontains=query) 
         ).distinct()
 
     if city_id:
@@ -54,17 +54,15 @@ def job_sursceh(request):
     })
 
 
-
-
-
-
 @login_required
 def apply_for_job(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
 
     total_applications = Application.objects.filter(vacancy=vacancy).count()
 
-    already_applied = Application.objects.filter(author=request.user, vacancy=vacancy).exists()
+    application = Application.objects.filter(author=request.user, vacancy=vacancy).first()
+    already_applied = application is not None
+    
     if request.method == 'POST':
         if already_applied:
             messages.error(request, "You have already applied for this job.")
@@ -92,6 +90,7 @@ def apply_for_job(request, vacancy_id):
         'form': form, 
         'already_applied': already_applied, 
         'total_applications': total_applications,
+        'application': application,
         'vacancy': vacancy
         })
 
@@ -109,6 +108,8 @@ def Like_Response(request, pk):
 #Інфа про сайт
 def Job_site_ListView(request):
     return render(request=request, template_name="jobs/job_site.html")
+
+
 
 #Виводе всі вакансій
 class Job_ListView(ListView):
@@ -163,6 +164,13 @@ class Vacancy_UpdateView(UpdateView):
     form_class = Vacancy_CreatFrom
     template_name = "jobs/job_creat.html"
     success_url = reverse_lazy("job_list")
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.company.user != request.user:
+            return redirect('job_list') 
+            
+        return super().get(request, *args, **kwargs)
 
 #Створити вакансію
 class Job_CreateView(CreateView):

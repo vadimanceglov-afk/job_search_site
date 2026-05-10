@@ -13,4 +13,17 @@
 <a href="{% url 'job_creat_resume' %}">
     Створити резюме
 </a>
+
+<h3>Ваші резюме:</h3>
+{% for resume in resumes %}
+    <a href="{% url 'job_resume' resume.pk %}">
+        <strong>{{ resume.title }}</strong>
+    </a>
+ 
+        
+
+    
+{% empty %}
+    <p>Ви ще не створили жодної вакансії.</p>
+{% endfor %}
 {% endblock %}

@@ -5,17 +5,31 @@
 <form method="post">
 
   {% csrf_token %}
+  <div class="mb-1">
+    <strong>Логін:</strong>
+</div>
   {{ form.username }}
+  <div class="mb-1">
+    <strong>Імя:</strong>
+</div>
   {{ form.first_name }}
+  <div class="mb-1">
+    <strong>Імя по батькові:</strong>
+</div>
   {{ form.last_name }}
+  <div class="mb-1">
+    <strong>Прізвище:</strong>
+</div>
   {{ form.patronymic }}
+  <div class="mb-1">
+    <strong>Стать:</strong>
+</div>
   {{ form.gender }}
+  <div class="mb-1">
+    <strong>Електрона пошта:</strong>
+</div>
   {{ form.email }}
  
-  {{ form.name_company }}
-  {{ form.description }}
-  {{ form.referral_company }}
-  {{ form.website }}
   
   <button type="submit">Register</button>
 </form>

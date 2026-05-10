@@ -93,4 +93,3 @@ class SignUp_EmployerForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email']
-

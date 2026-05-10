@@ -4,15 +4,51 @@
 <h1>Створити вакансію</h1>
 <form method="POST">
 {% csrf_token %}
+<div class="mb-1">
+    <strong>Кого шукаєте?:</strong>
+</div>
 {{ form.title }}
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
 {{ form.description }}
-{{ form.cetagory }}
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
+{{ form.description1 }}
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
+{{ form.description2 }}
+<div class="mb-1">
+    <strong>Напрям:</strong>
+</div>
+{{ form.category }}
+<div class="mb-1">
+    <strong>Посилання на сайт:</strong>
+</div>
 {{ form.link }}
+<div class="mb-1">
+    <strong>Ціна від:</strong>
+</div>
 {{ form.price_start }}
+<div class="mb-1">
+    <strong>Ціна до:</strong>
+</div>
 {{ form.price_end }}
+<div class="mb-1">
+    <strong>Зображення:</strong>
+</div>
 {{ form.image }}
+<div class="mb-1">
+    <strong>Місто:</strong>
+</div>
 {{ form.city }}
+<div class="mb-1">
+    <strong>Вулиця:</strong>
+</div>
 {{ form.street }}
+
 <button type="submit">Зберегти</button>
 </form>
 

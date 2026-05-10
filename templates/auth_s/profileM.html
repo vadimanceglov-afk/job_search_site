@@ -8,15 +8,31 @@
 <a href="{% url 'job_creat' %}">
     Створити вакансію
 </a>
-<p>Знайдено заявок: {{ applications.count }}</p>
+
+<h3>Ваші вакансій:</h3>
+{% for job in jobs %}
+    <div class="vacancy-item">
+        <strong>{{ job.title }}</strong> | 
+        {{ job.category }} | 
+        {{ job.city }} |
+        <p>{{ job.description }}</p> </div>
+        <p>Заявок({{ job.applications.count }})</p>
+    
+{% empty %}
+    <p>Ви ще не створили жодної вакансії.</p>
+{% endfor %}
+
 <h3>Заявки на вакансії:</h3>
+<p>Знайдено заявок: {{ applications.count }}</p>
 {% for application in applications %}
         <p>Заявка від</p>{{ application.author.username }} <br>
         <p>На вакансію</p>{{ application.vacancy.title }} <br>
 
         {% if application.resume and application.resume.pk %}
+        <a href="{% url 'chat_room' application.id %}" class="btn">Відповісти кандидату</a>
             <a href="{% url 'job_resume' application.resume.pk %}">
                 Переглянути резюме
+            </a>
             </a>
         {% else %}
             <button disabled>Резюме не додано</button>

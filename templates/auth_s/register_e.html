@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h2>Register</h2>
+<form method="post">
+
+  {% csrf_token %}
+<div class="mb-1">
+    <strong>Логін:</strong>
+</div>
+  {{ form.username }}
+<div class="mb-1">
+    <strong>Електрона пошта:</strong>
+</div>
+  {{ form.email }}
+ 
+<div class="mb-1">
+    <strong>Назва компаній:</strong>
+</div>
+  {{ form.name_company }}
+  <div class="mb-1">
+    <strong>Про компанію:</strong>
+</div>
+  {{ form.description }}
+  <div class="mb-1">
+    <strong>Напрямок компаній:</strong>
+</div>
+  {{ form.referral_company }}
+<div class="mb-1">
+    <strong>Сайт компаній:</strong>
+</div>
+  {{ form.website }}
+  
+  <button type="submit">Register</button>
+</form>
+{% endblock %}

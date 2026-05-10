@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from project.views import apply_for_job
-from project.models import Application
+from project.models import Application, Vacancy, Resume
 
 def Choise(request):
     return render(request=request, template_name="auth_s/cho.html")
@@ -45,6 +45,13 @@ class Job_ProfileView(DetailView):
     def get_object(self):
         obj, created = UserProfile.objects.get_or_create(user=self.request.user)
         return obj
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['resumes'] = Resume.objects.filter(author=self.object.user)
+        
+        return context
+
 
 #Інфа про компанію
 class Job_EmployerView(DetailView):
@@ -53,17 +60,15 @@ class Job_EmployerView(DetailView):
     context_object_name = "employer"
     
     def get_object(self, queryset=None):
-        # Отримуємо або створюємо профіль для поточного юзера
         obj, created = EmployerProfile.objects.get_or_create(user=self.request.user)
         return obj
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Використовуємо self.object, щоб отримати заявки саме для цієї компанії
-        # Фільтруємо через вакансії (Vacancy), які належать цій компанії
         context['applications'] = Application.objects.filter(vacancy__company=self.object)
+        context['jobs'] = Vacancy.objects.filter(company=self.object)
+        
         return context
-
 
 #Реєстрація нового користувача
 class Job_singupView(CreateView):
@@ -93,7 +98,7 @@ class Job_singupView(CreateView):
 #Реєстрація нової компаній
 class Job_Emp_singupView(CreateView):
     form_class = SignUp_EmployerForm
-    template_name = 'auth_s/register.html'
+    template_name = 'auth_s/register_e.html'
     success_url = reverse_lazy('job_company')
 
     def form_valid(self, form):

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div style="padding: 20px;">
+    <h2>Чат по вакансії: {{ application.vacancy.title }}</h2>
+    <p>Кандидат: {{ application.author.username }} | Роботодавець: {{ application.vacancy.company.user.username }}</p>
+
+    <hr>
+
+    <div id="chat-panel" >
+        {% for msg in user_messages %}
+            <div class="msg" >
+                <div >
+                    <strong>{{ msg.sender.username }}:</strong> 
+                    <span>{{ msg.content }}</span>
+                    <br>
+                    <small>{{ msg.created_at|naturaltime }}</small>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="input-area">
+        <textarea id="message-input" rows="3" placeholder="Напишіть повідомлення..."></textarea>
+        <br>
+        <button id="message-send-btn" >Відправити</button>
+    </div>
+</div>
+
+{{ application_id|json_script:"app-id" }}
+
+<script>
+const appId = "{{ application_id }}";
+const chatPanel = document.getElementById('chat-panel'); // Переконайтеся, що у блоку з повідомленнями id="chat-panel"
+const messageInput = document.getElementById('message-input');
+const sendBtn = document.getElementById('message-send-btn');
+
+// Функція для додавання повідомлення в інтерфейс
+function constructMessage(data) {
+    // Перевіряємо, чи таке повідомлення вже є (щоб не дублювати)
+    const existingMessage = document.getElementById(`msg-${data.id}`);
+    if (existingMessage) return;
+
+    const div = document.createElement('div');
+    const isMe = data.sent === true;
+    
+    // Стилізація (можна змінити на класи вашого CSS)
+    div.style.marginBottom = "10px";
+    div.style.textAlign = isMe ? "right" : "left";
+    
+    div.innerHTML = `
+        <div style="display: inline-block; padding: 8px; border-radius: 10px; background: ${isMe ? '#dcf8c6' : '#fff'}; border: 1px solid #ddd; max-width: 80%;">
+            <strong>${data.sender}:</strong> 
+            <div style="word-wrap: break-word;">${data.content}</div>
+            <small style="color: gray; font-size: 0.7em;">${data.date_created}</small>
+        </div>
+    `;
+    chatPanel.appendChild(div);
+    chatPanel.scrollTop = chatPanel.scrollHeight; // Скрол до останнього повідомлення
+}
+
+// 1. ФУНКЦІЯ ВІДПРАВКИ (POST)
+sendBtn.onclick = function() {
+    const message = messageInput.value.trim();
+    if (!message) return;
+
+    fetch("{% url 'chatroom_ajax' application_id %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ "message": message })
+    })
+    .then(res => res.json())
+    .then(data => {
+        messageInput.value = ""; // Очищуємо поле
+        // Додаємо наші відправлені повідомлення в чат
+        data.forEach(msg => constructMessage(msg));
+    })
+    .catch(err => console.error("Помилка відправки:", err));
+};
+
+// 2. ФУНКЦІЯ АВТО-ОНОВЛЕННЯ (GET)
+function loadMessages() {
+    fetch("{% url 'chatroom_ajax' application_id %}")
+    .then(res => res.json())
+    .then(data => {
+        // Додаємо нові повідомлення від співрозмовника
+        data.forEach(msg => {
+            if (!msg.sent) {
+                constructMessage(msg);
+            }
+        });
+    })
+    .catch(err => console.error("Помилка завантаження:", err));
+}
+
+// ЗАПУСК: Опитувати сервер кожні 3 секунди
+setInterval(loadMessages, 3000);
+
+// Прокрутка вниз при першому завантаженні
+window.onload = () => { chatPanel.scrollTop = chatPanel.scrollHeight; };
+</script>
+{% endblock %}
