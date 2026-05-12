@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Surh</h1>
 <form action="{% url 'job_surh' %}" method="get">
     {{ search_form.q }}
     <button type="submit">Search</button>
