@@ -8,13 +8,13 @@ from .models import Vacancy, Like, Response, Resume, Application, Category, City
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form, Vacancy_SurchFrom, Vacancy_FilterFrom
 from django.contrib.auth.mixins import LoginRequiredMixin
 from project.mixins import UserJob
+from django.http import HttpResponseRedirect
 from django.db.models import Q
 
 
 def job_sursceh(request):
     search_form = Vacancy_SurchFrom(request.GET)
     filter_form = Vacancy_FilterFrom(request.GET)
-
     
     all_cities = City.objects.all()
     all_categories = Category.objects.all()
@@ -199,9 +199,34 @@ class Job_ResumeCreateView(CreateView):
         resume = form.save(commit=False)
         resume.author = self.request.user 
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        resume = self.get_object()
+        
+        # Знаходимо заявку від автора цього резюме до компанії поточного юзера
+        if self.request.user.is_authenticated:
+            application = Application.objects.filter(
+                author=resume.author, 
+                vacancy__company__user=self.request.user
+            ).first()
+            
+            context['application'] = application
+        return context
 
 #Видалити вакансію (може буде робитись автоматично)
 class Job_DeleteView(DeleteView):
     model = Vacancy
     template_name = "jobs/job_delete.html"
     success_url = reverse_lazy("job_list")
+
+class Job_CompleteView(View):
+    def post(self, request, *args, **kwargs):
+        appli = self.get_object()
+        appli.status = "under_review"
+        appli.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    
+    def get_object(self):
+        appli_id = self.kwargs.get("pk")
+        return get_object_or_404(Application, pk=appli_id)

@@ -82,12 +82,16 @@ class Job_singupView(CreateView):
         f_name = form.cleaned_data.get('first_name')
         l_name = form.cleaned_data.get('last_name')
         p_name = form.cleaned_data.get('patronymic')
+        date = form.cleaned_data.get('birth_date')
+        ref = form.cleaned_data.get('referral')
 
         UserProfile.objects.create(
             user=user,
             first_name=f_name,
             last_name=l_name,
             patronymic=p_name,
+            birth_date = date,
+            referral = ref,
         )
 
         login(self.request, user)

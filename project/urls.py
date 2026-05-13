@@ -15,4 +15,5 @@ urlpatterns = [
     path('like/response/<int:pk>/', views.Like_Response, name='Like_Response'),
     path('apply/<int:vacancy_id>/', views.apply_for_job, name='apply_for_job'),
     path('search/', views.job_sursceh, name='job_surh'),
+    path('complete/<int:pk>/', views.Job_CompleteView.as_view(), name='job_comp'),
 ]

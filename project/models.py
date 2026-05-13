@@ -61,7 +61,7 @@ class Application(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.SET_NULL, null=True, blank=True)
     res_file = models.FileField(upload_to='application_docs/', null=True, blank=True) # Ось воно!
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    status = models.CharField(choices=STATUS_CHOICES,max_length=50, null=True, blank=True)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=50, default='under_review')
 
     class Meta:
         constraints = [

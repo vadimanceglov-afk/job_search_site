@@ -5,6 +5,7 @@
 {% if already_applied and application %}
     <button disabled>Вже відгукнулися</button>
     <a href="{% url 'chat_room' application.id %}" class="btn">Чат з роботодавцем</a>
+    <p>статус: {{ application.status }}</p>
 {% else %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}

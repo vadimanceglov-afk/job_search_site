@@ -17,6 +17,10 @@
         {{ job.city }} |
         <p>{{ job.description }}</p> </div>
         <p>Заявок({{ job.applications.count }})</p>
+                <a href="{% url 'job_update' job.pk %}">
+            Редагувати мою вакансію
+        </a>
+        <a href="{% url 'job_delete' job.pk %}">delete</a>
     
 {% empty %}
     <p>Ви ще не створили жодної вакансії.</p>

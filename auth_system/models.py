@@ -42,9 +42,13 @@ class UserProfile(models.Model):
         )
 
 class EmployerProfile(models.Model):
-
+    TYPES_CHOICES = (
+        ('private', 'Приватна особа'),
+        ('company', 'Компанія'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employer')
 
+    employer_type = models.CharField(max_length=10, choices=TYPES_CHOICES, default='private')
     name_company = models.CharField(max_length=20)#назва компанії
     role = models.CharField(choices=ROLE_CHOICES, max_length=20, default='Employer')#
     description = models.TextField()#опис

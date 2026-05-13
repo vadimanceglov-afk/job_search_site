@@ -9,59 +9,47 @@
     <link rel="stylesheet" href="{% static 'css/stayle.css' %}">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-            </a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'job_list'%}">Головна</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'job_site'%}">Про нас</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
+    <header class="p-3" style="background: #FFBF00;"> 
+        <div class="container"> 
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"> 
+                    <a href="/">
+                        <img src="#" alt="Фото шапки" width="60" height="60" >
+                    </a>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"> 
+                    <li><a href="{% url 'job_list'%}" class="nav-link px-2 text-dark">Головна</a></li> 
+                    <li><a href="{% url 'job_site'%}" class="nav-link px-2 text-dark">Про нас</a></li> 
+                </ul> 
+                <div class="text-end"> 
                     {% if user.is_authenticated %}
                                 
                         {% if user.employer %} 
                             {# Якщо у користувача є профіль роботодавця #}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'job_company' %}">
+                                <a class="nav-link text-dark" href="{% url 'job_company' %}">
                                     Компанія: {{ user.employer.name_company }}
                                 </a>
-                            </li>
-                        
+
                         {% elif user.profile %} 
-                            {# Якщо у користувача є звичайний профіль #}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'job_profil' %}">
+                                <a class="nav-link text-dark" href="{% url 'job_profil' %}">
                                     Мій кабінет: {{ user.profile.first_name }}
                                 </a>
-                            </li>
-                        
                         {% else %}
-                            {# Для суперкористувачів або адмінів без створених профілів #}
-                            <li class="nav-item"><span class="nav-link">Адмін-панель</span></li>
+                            <span class="nav-link text-dark">Адмін-панель</span>
                         {% endif %}
-                        
-                        <li class="nav-item">
-                            <form action="{% url 'logout' %}" method="post" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="nav-link btn btn-link">Вийти</button>
-                            </form>
-                        </li>
-                    
+                </div>
+                    <div class="text-end">
+                        <a href="{% url 'logout' %}" class="btn-g me-3 text-dark">
+                            Вийти
+                        </a>
+                    </div>
+                
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'job_login' %}">Увійти</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'signup_cho' %}">Зареєструватися</a></li>
+                <div class="text-end"> 
+                    <a href="{% url 'job_login' %}" class="text-dark">Увійти</a>
+                    <a href="{% url 'signup_cho' %}" class="text-dark">Зареєструватися</a>
+                </div>
                     {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
+            </div> 
+        </div> 
     </header>
 
     <main>
@@ -70,9 +58,24 @@
         {% endblock %}
     </main>
 
-    <footer>
-
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"> 
+        <div class="col-md-4 d-flex align-items-center"> 
+            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1" aria-label="Bootstrap"> 
+                <a href="/">
+                    <img src="#" alt="Фото шапки" width="60" height="60" >
+                </a>
+            </a> 
+            <span class="mb-3 mb-md-0 text-body-secondary">© 2025 Company, Inc</span> 
+        </div> 
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex"> 
+            <li class="ms-3">
+                <a class="text-body-secondary" href="https://github.com/vadimanceglov-afk/Veer">
+                    <i class="bi bi-github fs-3"></i>
+                </a>
+            </li> 
+        </ul> 
     </footer>
+
     <script src="{% static 'js/stayle_js.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

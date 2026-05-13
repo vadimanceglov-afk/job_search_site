@@ -16,9 +16,12 @@ class SignUp_UserForm(UserCreationForm):
     patronymic = forms.CharField(label="По батькові", required=False)
     gender = forms.ChoiceField(label="Стать", choices=GENDER_CHOICES)
 
+    birth_date = forms.DateField(label="Дата народження", help_text="В")
+    referral = forms.ModelChoiceField(label="Звідки дізналися", queryset=Category.objects.all())
+
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'patronymic',  'gender', 'email']
+        fields = ['username', 'first_name', 'last_name', 'patronymic', 'birth_date',  'gender', 'referral', 'email', ]
         widget = {
             'username': forms.TextInput(attrs={             
                 'class': 'form-control',
@@ -41,6 +44,17 @@ class SignUp_UserForm(UserCreationForm):
             }),
 
             'gender': forms.Select(attrs={             
+                'class': 'form-control',
+                'placeholder': 'y'
+            }),
+
+            
+            'birth_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'y'
+            }),
+        
+            'referral': forms.Select(attrs={             
                 'class': 'form-control',
                 'placeholder': 'y'
             }),
