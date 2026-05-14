@@ -52,8 +52,8 @@ class Resume(models.Model):
     
 class Application(models.Model):
     STATUS_CHOICES = (
-        ('reject', 'Відхилено'),
         ('under_review', 'На розгляді'),
+        ('reject', 'Відхилено'),
         ('accepted', 'Прийнято'),
     )
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications")

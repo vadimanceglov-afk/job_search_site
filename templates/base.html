@@ -23,7 +23,6 @@
                     {% if user.is_authenticated %}
                                 
                         {% if user.employer %} 
-                            {# Якщо у користувача є профіль роботодавця #}
                                 <a class="nav-link text-dark" href="{% url 'job_company' %}">
                                     Компанія: {{ user.employer.name_company }}
                                 </a>

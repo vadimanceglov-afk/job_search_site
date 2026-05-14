@@ -158,6 +158,34 @@ class Job_ResumeView(DetailView):
     context_object_name = "resume"
     template_name = "jobs/job_resume.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Отримуємо поточне резюме
+        resume = self.get_object()
+        
+        # Знаходимо заявку (Application), де було використано це резюме.
+        # ВАЖЛИВО: якщо один юзер міг подати кілька заявок з цим резюме,
+        # треба уточнити логіку. Поки беремо останню актуальну для роботодавця.
+        application = Application.objects.filter(resume=resume).first()
+        
+        # Передаємо в шаблон саме під ім'ям 'appli'
+        context['appli'] = application
+        return context
+    
+#Редагувати вакансію
+class Resume_UpdateView(UpdateView):
+    model =Resume
+    form_class = Resume_CreatFrom
+    template_name = "jobs/job_creat_resume.html"
+    success_url = reverse_lazy("job_list")
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.user != request.user:
+            return redirect('job_list') 
+            
+        return super().get(request, *args, **kwargs)
+
 #Редагувати вакансію
 class Vacancy_UpdateView(UpdateView):
     model =Vacancy
@@ -202,17 +230,19 @@ class Job_ResumeCreateView(CreateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        resume = self.get_object()
         
-        # Знаходимо заявку від автора цього резюме до компанії поточного юзера
+        # ВИДАЛЯЄМО self.get_object(), бо об'єкта ще не існує!
+        
         if self.request.user.is_authenticated:
+            # Шукаємо заявку поточного юзера (кандидата)
             application = Application.objects.filter(
-                author=resume.author, 
-                vacancy__company__user=self.request.user
+                author=self.request.user, 
+                # vacancy__company__user=self.request.user # Це було б дивно, бо юзер не може подавати заявку сам собі
             ).first()
             
             context['application'] = application
         return context
+    
 
 #Видалити вакансію (може буде робитись автоматично)
 class Job_DeleteView(DeleteView):
@@ -220,13 +250,10 @@ class Job_DeleteView(DeleteView):
     template_name = "jobs/job_delete.html"
     success_url = reverse_lazy("job_list")
 
+
 class Job_CompleteView(View):
-    def post(self, request, *args, **kwargs):
-        appli = self.get_object()
-        appli.status = "under_review"
+    def post(self, request, pk, status, *args, **kwargs):
+        appli = get_object_or_404(Application, pk=pk)
+        appli.status = status
         appli.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-    
-    def get_object(self):
-        appli_id = self.kwargs.get("pk")
-        return get_object_or_404(Application, pk=appli_id)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

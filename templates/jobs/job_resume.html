@@ -6,7 +6,19 @@
         {{ resume.title }}|
         {{ resume.description }}|
 
-        <button>Прийняти</button>
-        <button>Відхиити</button>
+
+{% if user.employer %} 
+    <form action="{% url 'change_status' appli.id 'accepted' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Прийняти</button>
+    </form>
+
+    <form action="{% url 'change_status' appli.id 'rejected' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Відхилити</button>
+    </form>
+{% else %}
+--=--
+{% endif %}
 
 {% endblock %}
