@@ -6,6 +6,8 @@
         {{ resume.title }}|
         {{ resume.description }}|
 
+    <p>статус: {{ application.status }}</p>
+
 
 {% if user.employer %} 
     <form action="{% url 'change_status' appli.id 'accepted' %}" method="post">

@@ -251,9 +251,19 @@ class Job_DeleteView(DeleteView):
     success_url = reverse_lazy("job_list")
 
 
+
+
 class Job_CompleteView(View):
-    def post(self, request, pk, status, *args, **kwargs):
-        appli = get_object_or_404(Application, pk=pk)
-        appli.status = status
-        appli.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    def post(self, request, *args, **kwargs):
+        appli = self.get_object()
+        if appli.status == 'under_review':
+            appli.status = 'reject'
+            appli.save()
+        else:
+            appli.status = 'accepted'
+            appli.save()
+        return HttpResponseRedirect(reverse_lazy("job_list"))
+    
+    def get_object(self):
+        appli_id = self.kwargs.get("pk")
+        return get_object_or_404(Application, pk = appli_id)

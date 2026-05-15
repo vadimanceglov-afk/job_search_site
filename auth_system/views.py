@@ -129,3 +129,7 @@ class Profile_UpdateView(UpdateView):
     def get_object(self, queryset=None):
         # Це автоматично знайде профіль поточного юзера
         return UserProfile.objects.get_or_create(user=self.request.user)[0]
+    
+
+#def img_avatar():
+#    if user == 
