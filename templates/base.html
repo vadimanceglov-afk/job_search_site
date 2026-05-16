@@ -20,19 +20,17 @@
                     <li><a href="{% url 'job_site'%}" class="nav-link px-2 text-dark">Про нас</a></li> 
                 </ul> 
                 <div class="text-end"> 
-                    {% if user.is_authenticated %}
-                                
-                        {% if user.employer %} 
-                                <a class="nav-link text-dark" href="{% url 'job_company' %}">
-                                    Компанія: {{ user.employer.name_company }}
-                                </a>
-
-                        {% elif user.profile %} 
-                                <a class="nav-link text-dark" href="{% url 'job_profil' %}">
-                                    Мій кабінет: {{ user.profile.first_name }}
-                                </a>
+                    {% if user.is_authenticated %}    
+                        {% if user.profile.role == 'User' %}
+                            <a class="nav-link text-dark" href="{% url 'job_profile' %}">
+                                Мій кабінет: {{ user.profile.first_name }}
+                            </a>
+                        
                         {% else %}
-                            <span class="nav-link text-dark">Адмін-панель</span>
+                            <a class="nav-link text-dark" href="{% url 'job_company' %}">
+                                Компанія: {{ user.employer.name_company }}
+                            </a>
+                        
                         {% endif %}
                 </div>
                     <div class="text-end">

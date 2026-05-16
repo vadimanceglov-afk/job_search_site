@@ -7,8 +7,11 @@
     {{ profile.last_name }}|
     {{ profile.patronymic }}|
     {{ profile.gender }}|
+    {{ profile.op }}|
     {{ profile.bio }}|
     {{ profile.referral }}|
+    {{ profile.birth_date }}|
+    {{ profile.role }}|
 
 <a href="{% url 'job_creat_resume' %}">
     Створити резюме
@@ -20,10 +23,7 @@
         <strong>{{ resume.title }}</strong>
     </a>
  
-        
-
-    
 {% empty %}
-    <p>Ви ще не створили жодної вакансії.</p>
+    <p>Ви ще не створили жодної .</p>
 {% endfor %}
 {% endblock %}

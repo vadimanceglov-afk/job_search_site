@@ -10,8 +10,10 @@ from django.contrib.auth.models import User
 from project.views import apply_for_job
 from project.models import Application, Vacancy, Resume
 
+
 def Choise(request):
     return render(request=request, template_name="auth_s/cho.html")
+
 
 def user_logout(request):
     logout(request)
@@ -74,7 +76,7 @@ class Job_EmployerView(DetailView):
 class Job_singupView(CreateView):
     form_class = SignUp_UserForm
     template_name = 'auth_s/register.html'
-    success_url = reverse_lazy('job_profil')
+    success_url = reverse_lazy('job_profile')
 
     def form_valid(self, form):
         user = form.save()
@@ -107,7 +109,6 @@ class Job_Emp_singupView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        UserProfile.objects.create(user=user, role='Employer')
         EmployerProfile.objects.create(
             user=user,
             name_company=form.cleaned_data.get('name_company'),
@@ -124,12 +125,12 @@ class Profile_UpdateView(UpdateView):
     model = UserProfile
     template_name = "auth_s/profile_update.html"
     fields = ['patronymic', 'gender'] # вкажи потрібні поля
-    success_url = reverse_lazy('job_profil')
+    success_url = reverse_lazy('job_profile')
 
     def get_object(self, queryset=None):
         # Це автоматично знайде профіль поточного юзера
         return UserProfile.objects.get_or_create(user=self.request.user)[0]
-    
+
 
 #def img_avatar():
 #    if user.gender == Men:

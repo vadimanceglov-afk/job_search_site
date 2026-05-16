@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Emp</h1>
-    {{ employer.name_company }}|
+<h1>{{ employer.name_company }}</h1>
+
     {{ employer.description }}|
+    {{ employer.employer_type }}|
+    {{ employer.role }}|
+    {{ employer.referral_company }}|
+    {{ employer.website }}|
 
 <a href="{% url 'job_creat' %}">
     Створити вакансію
