@@ -132,4 +132,13 @@ class Profile_UpdateView(UpdateView):
     
 
 #def img_avatar():
-#    if user == 
+#    if user.gender == Men:
+#       if user.op == Yes:
+#           img="01.png"
+#       else:
+#           img="02/png"
+#   else:
+#       if user.op == Yes:
+#           img="01-w.png"
+#       else:
+#           img="02-w/png"

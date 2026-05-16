@@ -95,7 +95,6 @@ def apply_for_job(request, vacancy_id):
         })
 
 
-
 def Like_Response(request, pk):
     response = get_object_or_404(Response, id=pk)
     like_qs = Like.objects.filter(user=request.user, response=response)
@@ -108,7 +107,6 @@ def Like_Response(request, pk):
 #Інфа про сайт
 def Job_site_ListView(request):
     return render(request=request, template_name="jobs/job_site.html")
-
 
 
 #Виводе всі вакансій
@@ -163,13 +161,8 @@ class Job_ResumeView(DetailView):
         # Отримуємо поточне резюме
         resume = self.get_object()
         
-        # Знаходимо заявку (Application), де було використано це резюме.
-        # ВАЖЛИВО: якщо один юзер міг подати кілька заявок з цим резюме,
-        # треба уточнити логіку. Поки беремо останню актуальну для роботодавця.
-        application = Application.objects.filter(resume=resume).first()
-        
         # Передаємо в шаблон саме під ім'ям 'appli'
-        context['appli'] = application
+        context['appli'] = Application.objects.filter(resume=resume).first()
         return context
     
 #Редагувати вакансію
@@ -186,6 +179,7 @@ class Resume_UpdateView(UpdateView):
             
         return super().get(request, *args, **kwargs)
 
+
 #Редагувати вакансію
 class Vacancy_UpdateView(UpdateView):
     model =Vacancy
@@ -199,6 +193,7 @@ class Vacancy_UpdateView(UpdateView):
             return redirect('job_list') 
             
         return super().get(request, *args, **kwargs)
+
 
 #Створити вакансію
 class Job_CreateView(CreateView):
@@ -240,7 +235,7 @@ class Job_ResumeCreateView(CreateView):
                 # vacancy__company__user=self.request.user # Це було б дивно, бо юзер не може подавати заявку сам собі
             ).first()
             
-            context['application'] = application
+            context['appli'] = application
         return context
     
 
@@ -251,18 +246,14 @@ class Job_DeleteView(DeleteView):
     success_url = reverse_lazy("job_list")
 
 
-
-
+#Зміна статусу
 class Job_CompleteView(View):
     def post(self, request, *args, **kwargs):
         appli = self.get_object()
-        if appli.status == 'under_review':
-            appli.status = 'reject'
-            appli.save()
-        else:
-            appli.status = 'accepted'
-            appli.save()
-        return HttpResponseRedirect(reverse_lazy("job_list"))
+        appli.status = 'accepted'
+        appli.save()
+        messages.success(request, "статус змінено") 
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
     def get_object(self):
         appli_id = self.kwargs.get("pk")

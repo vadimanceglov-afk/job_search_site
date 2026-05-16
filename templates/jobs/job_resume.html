@@ -6,19 +6,21 @@
         {{ resume.title }}|
         {{ resume.description }}|
 
-    <p>статус: {{ application.status }}</p>
-
+<p>статус: <strong>{{ appli.status }}</strong></p>
 
 {% if user.employer %} 
-    <form action="{% url 'change_status' appli.id 'accepted' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-success">Прийняти</button>
-    </form>
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+<form action="{% url 'change_status' appli.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Прийняти</button>
+</form>
 
-    <form action="{% url 'change_status' appli.id 'rejected' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Відхилити</button>
-    </form>
 {% else %}
 --=--
 {% endif %}
