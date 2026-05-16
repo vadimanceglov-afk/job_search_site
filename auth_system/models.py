@@ -20,7 +20,9 @@ class UserProfile(models.Model):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    #
+    
+    avatar = models.ImageField(upload_to='imge_avatar', null=True, blank=True)
+    op = models.CharField(choices=OP_CHOICES, max_length=20, default='Yes', null=True, blank=True)#
     first_name = models.CharField(max_length=100,blank=True, verbose_name='first_name')#імя
     last_name = models.CharField(max_length=100,blank=True, verbose_name='last_name')#прізвище
     patronymic = models.CharField(max_length=100, blank=True, null=True, verbose_name='patronymic')#по батькові

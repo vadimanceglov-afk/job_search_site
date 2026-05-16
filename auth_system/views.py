@@ -136,9 +136,9 @@ class Profile_UpdateView(UpdateView):
 #       if user.op == Yes:
 #           img="01.png"
 #       else:
-#           img="02/png"
+#           img="02.png"
 #   else:
 #       if user.op == Yes:
 #           img="01-w.png"
 #       else:
-#           img="02-w/png"
+#           img="02-w.png"
