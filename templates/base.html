@@ -21,14 +21,14 @@
                 </ul> 
                 <div class="text-end"> 
                     {% if user.is_authenticated %}    
-                        {% if user.profile.role == 'User' %}
-                            <a class="nav-link text-dark" href="{% url 'job_profile' %}">
-                                Мій кабінет: {{ user.profile.first_name }}
+                        {% if user.employer %}
+                            <a class="nav-link text-dark" href="{% url 'job_company' %}">
+                                Компанія: {{ user.employer.name_company }}
                             </a>
                         
                         {% else %}
-                            <a class="nav-link text-dark" href="{% url 'job_company' %}">
-                                Компанія: {{ user.employer.name_company }}
+                            <a class="nav-link text-dark" href="{% url 'job_profile' %}">
+                                Мій кабінет: {{ user.profile.first_name }}
                             </a>
                         
                         {% endif %}

@@ -23,18 +23,26 @@ def user_logout(request):
 def login_user(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
+
         if form.is_valid():
             cd = form.cleaned_data
-            user = authenticate(request, 
-                                username=cd['username'], 
-                                password=cd['password'])
-            # Create the session for the user
+            user = authenticate(
+                request,
+                username=cd['username'],
+                password=cd['password']
+            )
+
             if user and user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse_lazy('job_list'))
+                if UserProfile.objects.filter(user=user).exists():
+                    return redirect('job_list')
+                
+
+                elif EmployerProfile.objects.filter(user=user).exists():
+                    return redirect('job_company')
     else:
         form = LoginForm()
-    
+
     return render(request, 'auth_s/login.html', {'form': form})
 
 
@@ -131,6 +139,16 @@ class Profile_UpdateView(UpdateView):
         # Це автоматично знайде профіль поточного юзера
         return UserProfile.objects.get_or_create(user=self.request.user)[0]
 
+                        #if user.gender == 'Men':
+                        #   if user.op == 'Yes':
+                        #       print("men op")
+                        #   else:
+                        #       print("men no op")
+                        #else:
+                        #   if user.op == 'Yes':
+                        #       print("women op")
+                        #   else:
+                        #       print("women  no op")
 
 #def img_avatar():
 #    if user.gender == Men:
