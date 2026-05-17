@@ -9,20 +9,36 @@
 <p>статус: <strong>{{ appli.status }}</strong></p>
 
 {% if user.employer %} 
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-<form action="{% url 'change_status' appli.pk %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Прийняти</button>
-</form>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
 
-{% else %}
---=--
+    <h3>Заявки по цьому резюме на ваші вакансії:</h3>
+    
+    {% for appli in applications %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+            <p><strong>Вакансія:</strong> {{ appli.vacancy.title }}</p>
+            <p>Статус: <strong>{{ appli.get_status_display|default:"На розгляді" }}</strong></p>
+            
+            <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="accepted">
+                <button type="submit" class="btn btn-success">Прийняти</button>
+            </form>
+
+            <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="reject">
+                <button type="submit" class="btn btn-danger">Відхилити</button>
+            </form>
+        </div>
+    {% empty %}
+        <p>На ваші вакансії по цьому резюме заявок поки немає.</p>
+    {% endfor %}
 {% endif %}
 
 {% endblock %}

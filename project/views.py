@@ -58,11 +58,13 @@ def job_sursceh(request):
 def apply_for_job(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
 
-    total_applications = Application.objects.filter(vacancy=vacancy).count()
-
-    application = Application.objects.filter(author=request.user, vacancy=vacancy).first()
-    already_applied = application is not None
+    application = Application.objects.filter(
+        author=request.user, 
+        vacancy=vacancy
+    ).first()
     
+    already_applied = application is not None
+
     if request.method == 'POST':
         if already_applied:
             messages.error(request, "You have already applied for this job.")
@@ -73,11 +75,12 @@ def apply_for_job(request, vacancy_id):
                 application = form.save(commit=False)
                 application.vacancy = vacancy
                 application.author = request.user
+                
                 if request.FILES.get('res_file'):
                     application.resume = None
-                else:
-                    if not application.resume:
-                        application.resume = Resume.objects.filter(author=request.user).last()
+                elif not application.resume:
+                    application.resume = Resume.objects.filter(author=request.user).last()
+                
                 application.save()
                 messages.success(request, "Application submitted successfully!")
                 return redirect('job_list') 
@@ -85,14 +88,14 @@ def apply_for_job(request, vacancy_id):
         form = Application_Form()
         if 'resume' in form.fields:
             form.fields['resume'].queryset = Resume.objects.filter(author=request.user)
-    
+
     return render(request, 'jobs/job_appl.html', {
         'form': form, 
         'already_applied': already_applied, 
-        'total_applications': total_applications,
-        'application': application,
+        'total_applications': vacancy.applications.count(), 
+        'application': application,         
         'vacancy': vacancy
-        })
+    })
 
 
 def Like_Response(request, pk):
@@ -158,11 +161,19 @@ class Job_ResumeView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Отримуємо поточне резюме
         resume = self.get_object()
         
-        # Передаємо в шаблон саме під ім'ям 'appli'
-        context['appli'] = Application.objects.filter(resume=resume).first()
+        # Якщо користувач - роботодавець, показуємо тільки його вакансії
+        if self.request.user.is_authenticated and hasattr(self.request.user, 'employer'):
+            # Фільтруємо заявки тільки по вакансіям цієї компанії
+            context['applications'] = Application.objects.filter(
+                resume=resume,
+                vacancy__company=self.request.user.employer   
+            ).select_related('vacancy')
+        else:
+            # Для кандидата або інших - можна показати порожньо або свої заявки
+            context['applications'] = Application.objects.none()
+        
         return context
     
 #Редагувати вакансію
@@ -247,14 +258,20 @@ class Job_DeleteView(DeleteView):
 
 
 #Зміна статусу
-class Job_CompleteView(View):
+class Job_StatusChangeView(View):
     def post(self, request, *args, **kwargs):
         appli = self.get_object()
-        appli.status = 'accepted'
-        appli.save()
-        messages.success(request, "статус змінено") 
+        
+        new_status = request.POST.get('status')
+        if new_status in ['accepted', 'reject']:
+            appli.status = new_status
+            appli.save()
+            messages.success(request, f"Статус змінено на: {appli.get_status_display()}")
+        else:
+            messages.error(request, "Невірний статус")
+            
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
     def get_object(self):
         appli_id = self.kwargs.get("pk")
-        return get_object_or_404(Application, pk = appli_id)
+        return get_object_or_404(Application, pk=appli_id)
