@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<form action="{% url 'job_surh' %}" method="get">
-    {{ search_form.q }}
-    <button type="submit">Search</button>
-</form>
+<div class="center mb-2">
+    <form action="{% url 'job_surh' %}" method="get" class="row row-cols-lg-auto g-3 align-items-center">
+        <div class="col-12">
+            {{ search_form.q }}
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Пошук</button>
+        </div>
+    </form>
+</div>
 <form action="{% url 'job_surh' %}" method="get">
     <input type="hidden" name="q" value="{{ query|default:'' }}">
         <div class="col-md-3">
@@ -52,8 +58,8 @@
         </div>
 
         <div>
-            <button type="submit">
-                Пошук
+            <button type="submit" class="btn btn-primary">
+                Фільтрувати
             </button>
         </div>
 
@@ -69,7 +75,7 @@
         {{ jo.city }}
 </a>
 {% empty %}
-<p>no</p>
+<h2>Не існує такої вакансій!</h2>
 {% endfor %}
 
 {% endblock %}

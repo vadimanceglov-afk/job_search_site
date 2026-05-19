@@ -9,46 +9,44 @@
     <link rel="stylesheet" href="{% static 'css/stayle.css' %}">
 </head>
 <body>
-    <header class="p-3" style="background: #FFBF00;"> 
+    <header class="p-3 bac-color" > 
         <div class="container"> 
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"> 
-                    <a href="/">
-                        <img src="#" alt="Фото шапки" width="60" height="60" >
-                    </a>
+            <div class="d-flex flex-wrap collapse navbar-collapse justify-content-center"> 
+                <a href="/" class="me-3">
+                    <img src="#" alt="Фото шапки" width="60" height="60" >
+                </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"> 
                     <li><a href="{% url 'job_list'%}" class="nav-link px-2 text-dark">Головна</a></li> 
                     <li><a href="{% url 'job_site'%}" class="nav-link px-2 text-dark">Про нас</a></li> 
                 </ul> 
                 <div class="text-end"> 
-                    {% if user.is_authenticated %}    
-                        {% if user.employer %}
-                            <a class="nav-link text-dark" href="{% url 'job_company' %}">
-                                Компанія: {{ user.employer.name_company }}
-                            </a>
-                        
-                        {% else %}
-                            <a class="nav-link text-dark" href="{% url 'job_profile' %}">
-                                Мій кабінет: {{ user.profile.first_name }}
-                            </a>
-                        
-                        {% endif %}
-                </div>
-                    <div class="text-end">
-                        <a href="{% url 'logout' %}" class="btn-g me-3 text-dark">
-                            Вийти
+                {% if user.is_authenticated %}    
+                    {% if user.employer %}
+                        <a class="nav-link text-dark me-3" href="{% url 'job_company' %}">
+                            Компанія: {{ user.employer.name_company }}
                         </a>
-                    </div>
-                
+                    {% else %}
+                        <a class="nav-link text-dark me-3" href="{% url 'job_profile' %}">
+                            Мій кабінет: {{ user.profile.first_name }}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="text-end">
+                    <a href="{% url 'logout' %}" class="btn-exit">
+                        Вийти
+                    </a>
+                </div>
+
+
                     {% else %}
                 <div class="text-end"> 
-                    <a href="{% url 'job_login' %}" class="text-dark">Увійти</a>
-                    <a href="{% url 'signup_cho' %}" class="text-dark">Зареєструватися</a>
+                    <a href="{% url 'job_login' %}" class="text-dark btn-yo">Увійти</a>
+                    <a href="{% url 'signup_cho' %}" class="text-dark btn-regi">Зареєструватися</a>
                 </div>
                     {% endif %}
             </div> 
         </div> 
     </header>
-
     <main>
         {% block content %}
 

@@ -2,10 +2,17 @@
 {% load static %}
 {% block content %}
 <title>Головна</title>
-<form action="{% url 'job_surh' %}" method="get">
-    {{ search_form.q }}
-    <button type="submit">Search</button>
-</form>
+<div class="center mb-2">
+    <form action="{% url 'job_surh' %}" method="get" class="row row-cols-lg-auto g-3 align-items-center">
+        <div class="col-12">
+            {{ search_form.q }}
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Пошук</button>
+        </div>
+    </form>
+</div>
+
 
 
 
@@ -32,7 +39,7 @@
     {% endif %}
 {% else %}
 
-<a href="{% url 'apply_for_job' jo.id %}">
+<a href="{% url 'apply_for_job' jo.id %}" class="text-dark btn-L">
     Подати заявку
 </a>
 {% endif %}
@@ -62,6 +69,7 @@
 
                 <p>{{ res.author }}</p>
                 <p>{{ res.content }}</p>
+                    {{ res.date }}
     <a href="{% url 'Like_Response' res.id %}">
         like {{ res.likes.count }}
     </a>

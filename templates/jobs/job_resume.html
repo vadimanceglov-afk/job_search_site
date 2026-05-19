@@ -7,22 +7,23 @@
         {{ resume.description }}|
 
 <p>статус: <strong>{{ appli.status }}</strong></p>
-
+<a href="{% url 'resume_update' resume.pk %}">Редагувати</a>
+<a href="{% url 'job_delete' resume.pk %}">delete</a>
 {% if user.employer %} 
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-<form action="{% url 'change_status' appli.pk %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Прийняти</button>
-</form>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form action="{% url 'change_status' appli.pk %}" method="post">
+      {% csrf_token %}
+      <button type="submit">Прийняти</button>
+  </form>
 
-{% else %}
-ww
+  {% else %}
+  ww
 {% endif %}
 
 {% endblock %}

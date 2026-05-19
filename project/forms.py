@@ -35,7 +35,7 @@ class Response_CreatFrom(forms.ModelForm):
 class Resume_CreatFrom(forms.ModelForm):
     class Meta:
         model = Resume
-        fields = ["title", "description", "file"]
+        fields = ["title", "description", "description1", "description2", "description3", "description4", "file"]
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -46,7 +46,31 @@ class Resume_CreatFrom(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Додайте детальний опис обов’язків та вимог',
                 'rows': 4
-            })
+            }),
+
+            'description1': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Додайте детальний опис обов’язків та вимог',
+                'rows': 4
+            }),
+
+            'description2': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Додайте детальний опис обов’язків та вимог',
+                'rows': 4
+            }),
+
+            'description3': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Додайте детальний опис обов’язків та вимог',
+                'rows': 4
+            }),
+
+            'description4': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Додайте детальний опис обов’язків та вимог',
+                'rows': 4
+            }),
         }
 
 

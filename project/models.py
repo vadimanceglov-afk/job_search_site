@@ -45,6 +45,10 @@ class Resume(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="resume")#автор
     title = models.CharField(max_length=256)#Заголовок
     description = models.TextField()#опис
+    description1 = models.TextField(null=True, blank=True)#опис
+    description2 = models.TextField(null=True, blank=True)#опис
+    description3 = models.TextField(null=True, blank=True)#опис
+    description4 = models.TextField(null=True, blank=True)#опис
     file = models.FileField(upload_to='resumes/',  null=True, blank=True)#файл   
 
     def __str__(self):
@@ -68,10 +72,6 @@ class Application(models.Model):
             models.UniqueConstraint(fields=['author', 'vacancy'], name='unique_user_application')
         ]
 
-    def __str__(self):
-        name = self.author.username if self.author else "Анонім"
-        target = self.vacancy.title if self.vacancy else "невідому вакансію"
-        return f"Заявка від {name} на {target}"
     
     def total_applications(self):
         return self.applications.count()
@@ -80,6 +80,7 @@ class Application(models.Model):
 class Response(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE, related_name="site_comment")#автор
     content = models.TextField()#опис
+    date = models.DateTimeField(auto_now_add=True)#дата створення
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

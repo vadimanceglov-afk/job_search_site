@@ -172,12 +172,6 @@ class Resume_UpdateView(UpdateView):
     template_name = "jobs/job_creat_resume.html"
     success_url = reverse_lazy("job_list")
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.user != request.user:
-            return redirect('job_list') 
-            
-        return super().get(request, *args, **kwargs)
 
 
 #Редагувати вакансію

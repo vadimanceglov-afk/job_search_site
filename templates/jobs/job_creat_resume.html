@@ -14,10 +14,29 @@
 </div>
 {{ form.description }}
 
-<button type="submit">Зберегти</button>
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
+{{ form.description1 }}
+
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
+{{ form.description2 }}
+
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
+{{ form.description3 }}
+
+<div class="mb-1">
+    <strong>Опис:</strong>
+</div>
+{{ form.description4 }}
+<button type="submit" class="btn btn-success">Зберегти</button>
 </form>
 
-<a href="{% url 'job_list' %}">
+<a href="{% url 'job_list' %}" class="btn btn-light">
     Назад
 </a>
 

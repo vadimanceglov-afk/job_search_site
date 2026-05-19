@@ -50,9 +50,9 @@ class EmployerProfile(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employer')
 
-    employer_type = models.CharField(max_length=10, choices=TYPES_CHOICES, default='private')
+    employer_type = models.CharField(max_length=10, choices=TYPES_CHOICES, default='private')#тип роботодавця
     name_company = models.CharField(max_length=20)#назва компанії
-    role = models.CharField(choices=ROLE_CHOICES, max_length=20, default='Employer')#
+    role = models.CharField(choices=ROLE_CHOICES, max_length=20, default='Employer')#роль
     description = models.TextField()#опис
     logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)#логотип
     referral_company = models.ForeignKey('project.Category', on_delete=models.SET_NULL, null=True)#направлення компаній

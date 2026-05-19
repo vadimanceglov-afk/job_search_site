@@ -4,12 +4,19 @@
 <h1>Інфа</h1>
 
 
-        {{ jobs.title }}|
+        <strong>{{ jobs.title }}</strong>|
         {{ jobs.description }}|
+        {{ jobs.description1 }}|
+        {{ jobs.description2 }}|
         {{ jobs.category }}|
-        {{ jobs.city }}
+        {{ jobs.city }}|
+        {{ jobs.link }}|
+        {{ jobs.price_start }}|
+        {{ jobs.price_end }}|
+        {{ jobs.date }}|
+        {{ jobs.company }}|
 
-<a href="{% url 'job_list' %}">
+<a href="{% url 'job_list' %}" class="btn-exit">
     Назад
 </a>
 
@@ -26,7 +33,7 @@
     {% endif %}
 {% else %}
 
-<a href="{% url 'apply_for_job' object.id %}">
+<a href="{% url 'apply_for_job' object.pk %}" class="text-dark btn-L">
     Подати заявку
 </a>
 {% endif %}
