@@ -9,19 +9,22 @@
     {{ employer.referral_company }}|
     {{ employer.website }}|
 
-<a href="{% url 'job_creat' %}">
+<a href="{% url 'job_creat' %}" class=" btn-L">
     Створити вакансію
 </a>
 
 <h3>Ваші вакансій:</h3>
 {% for job in jobs %}
+<a href="{% url 'job_datail' pk=job.id %}">
     <div class="vacancy-item">
         <strong>{{ job.title }}</strong> | 
         {{ job.category }} | 
         {{ job.city }} |
-        <p>{{ job.description }}</p> </div>
+        <p>{{ job.description }}</p> 
+    </div>
+</a>
         <p>Заявок({{ job.applications.count }})</p>
-                <a href="{% url 'job_update' job.pk %}" class="btn btn-L">
+                <a href="{% url 'job_update' job.pk %}" class="btn btn-warning">
             Редагувати мою вакансію
         </a>
         <a href="{% url 'job_delete' job.pk %}" class="btn btn-danger">delete</a>
@@ -37,8 +40,8 @@
         <p>На вакансію</p>{{ application.vacancy.title }} <br>
 
         {% if application.resume and application.resume.pk %}
-        <a href="{% url 'chat_room' application.id %}" class="btn">Відповісти кандидату</a>
-            <a href="{% url 'job_resume' application.resume.pk %}">
+        <a href="{% url 'chat_room' application.id %}" class="btn btn-primary">Відповісти кандидату</a>
+            <a href="{% url 'job_resume' application.resume.pk %}" class="btn btn-warning">
                 Переглянути резюме
             </a>
             </a>

@@ -12,21 +12,22 @@
     <header class="p-3 bac-color" > 
         <div class="container"> 
             <div class="d-flex flex-wrap collapse navbar-collapse justify-content-center"> 
-                <a href="/" class="me-3">
-                    <img src="#" alt="Фото шапки" width="60" height="60" >
+                <a href="/" class="me-1">
+                    <img src="{% static 'image/s-logo.png' %}" alt="Фото шапки" width="70" height="60" >
                 </a>
+                <h5 class="text-xl px-1 fw-bold text-white me-3">JobSearch</h5>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"> 
-                    <li><a href="{% url 'job_list'%}" class="nav-link px-2 text-dark">Головна</a></li> 
-                    <li><a href="{% url 'job_site'%}" class="nav-link px-2 text-dark">Про нас</a></li> 
+                    <li><a href="{% url 'job_list'%}" class="nav-link px-2 text-white">Головна</a></li> 
+                    <li><a href="{% url 'job_site'%}" class="nav-link px-2 text-white">Про нас</a></li> 
                 </ul> 
                 <div class="text-end"> 
                 {% if user.is_authenticated %}    
                     {% if user.employer %}
-                        <a class="nav-link text-dark me-3" href="{% url 'job_company' %}">
+                        <a class="nav-link text-white me-3" href="{% url 'job_company' %}">
                             Компанія: {{ user.employer.name_company }}
                         </a>
                     {% else %}
-                        <a class="nav-link text-dark me-3" href="{% url 'job_profile' %}">
+                        <a class="nav-link me-3" href="{% url 'job_profile' %}">
                             Мій кабінет: {{ user.profile.first_name }}
                         </a>
                     {% endif %}
@@ -40,8 +41,8 @@
 
                     {% else %}
                 <div class="text-end"> 
-                    <a href="{% url 'job_login' %}" class="text-dark btn-yo">Увійти</a>
-                    <a href="{% url 'signup_cho' %}" class="text-dark btn-regi">Зареєструватися</a>
+                    <a href="{% url 'job_login' %}" class=" btn-yo">Увійти</a>
+                    <a href="{% url 'signup_cho' %}" class=" btn-regi">Зареєструватися</a>
                 </div>
                     {% endif %}
             </div> 

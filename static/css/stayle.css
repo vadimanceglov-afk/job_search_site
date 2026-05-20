@@ -15,7 +15,7 @@ main {
 }
 
 .bac-color{
-    background-color: #FFBF00;
+    background-color: #ff9114;
 }
 
 .btn-exit {
@@ -35,7 +35,7 @@ main {
     display: inline-block;
     padding: 6px 14px;
     background-color: white;
-    color: #FFBF00;
+    color: #ff9114;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 500;
@@ -47,7 +47,7 @@ main {
 .btn-L {
     display: inline-block;
     padding: 6px 14px;
-    background-color: #FFBF00;
+    background-color: #ff9114;
     color: white;
     border-radius: 8px;
     text-decoration: none;
@@ -57,8 +57,12 @@ main {
     text-align: center;
 }
 
+.btn-L:hover {
+  background-color: #e18012; 
+}
+
 .btn-yo {
-  background-color: #FFBF00;
+  background-color: #ff9114;
   border: 2px solid white;
   border-radius: 0.375rem;
   color: white;
@@ -74,5 +78,5 @@ main {
 
 .btn-yo:hover {
   background-color: white; 
-  color: black;
+  color: #ff9114;
 }

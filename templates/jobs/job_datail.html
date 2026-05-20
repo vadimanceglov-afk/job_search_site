@@ -24,12 +24,10 @@
 
 {% if user.employer %} 
     {% if user == jobs.company.user %}
-<a href="{% url 'job_update' object.pk %}">
-    Редагувати вакансію
-</a>
-<a href="{% url 'job_delete' object.pk %}">delete</a>
-
-<p>Заявок({{ jobs.applications.count }})</p>
+        <a href="{% url 'job_update' object.pk %}" class="btn btn-warning">
+            Редагувати мою вакансію
+        </a>
+        <a href="{% url 'job_delete' object.pk %}" class="btn btn-danger">delete</a>
     {% endif %}
 {% else %}
 
