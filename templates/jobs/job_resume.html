@@ -7,8 +7,8 @@
         {{ resume.description }}|
 
 <p>статус: <strong>{{ appli.status }}</strong></p>
-<a href="{% url 'resume_update' resume.pk %}">Редагувати</a>
-<a href="{% url 'job_delete' resume.pk %}">delete</a>
+<a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
+<a href="{% url 'job_delete' resume.pk %}" class="btn btn-danger">delete</a>
 {% if user.employer %} 
   {% if messages %}
     <ul class="messages">

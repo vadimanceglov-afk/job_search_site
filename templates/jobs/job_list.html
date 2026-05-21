@@ -2,7 +2,8 @@
 {% load static %}
 {% block content %}
 <title>Головна</title>
-<div class="center mb-2">
+<section class="search-hero">
+<div class="d-grid gap-3 d-md-flex justify-content-md-center mb-2">
     <form action="{% url 'job_surh' %}" method="get" class="row row-cols-lg-auto g-3 align-items-center">
         <div class="col-12">
             {{ search_form.q }}
@@ -12,6 +13,8 @@
         </div>
     </form>
 </div>
+</section>
+
 
 
 

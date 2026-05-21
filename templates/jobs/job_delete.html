@@ -2,11 +2,11 @@
 {% load static %}
 {% block content %}
 <h1>Видалення</h1>
-<p>точно видалити?</p>
+<p>Ви точно хочете видалити?</p>
 <form method="post">
 {% csrf_token %}
-<button type="submit">yes</button>
-<a href="{% url 'job_list' %}">no</a>
+<button type="submit" class="btn btn-secondary">Так</button>
+<a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
 </form>
 
 {% endblock %}

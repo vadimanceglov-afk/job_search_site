@@ -15,7 +15,7 @@
                 <a href="/" class="me-1">
                     <img src="{% static 'image/s-logo.png' %}" alt="Фото шапки" width="70" height="60" >
                 </a>
-                <h5 class="text-xl px-1 fw-bold text-white me-3">JobSearch</h5>
+                <h3 class="text-xl px-1 fw-bold text-white me-3">JobSearch</h3>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"> 
                     <li><a href="{% url 'job_list'%}" class="nav-link px-2 text-white">Головна</a></li> 
                     <li><a href="{% url 'job_site'%}" class="nav-link px-2 text-white">Про нас</a></li> 
@@ -27,7 +27,7 @@
                             Компанія: {{ user.employer.name_company }}
                         </a>
                     {% else %}
-                        <a class="nav-link me-3" href="{% url 'job_profile' %}">
+                        <a class="nav-link fw-bold text-white me-3" href="{% url 'job_profile' %}">
                             Мій кабінет: {{ user.profile.first_name }}
                         </a>
                     {% endif %}

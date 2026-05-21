@@ -31,6 +31,10 @@ main {
     text-align: center;
 }
 
+.btn-exit:hover {
+  background-color: rgb(224, 223, 223); 
+}
+
 .btn-regi {
     display: inline-block;
     padding: 6px 14px;
@@ -42,6 +46,10 @@ main {
     border: none;
     cursor: pointer;
     text-align: center;
+}
+
+.btn-regi:hover {
+  background-color: rgb(224, 223, 223); 
 }
 
 .btn-L {
@@ -79,4 +87,14 @@ main {
 .btn-yo:hover {
   background-color: white; 
   color: #ff9114;
+}
+
+.search-hero{
+    background: #ff9114;
+    background-size:cover;
+    background-position:center;
+    padding-top:10px;
+    padding:30px 10px;
+    margin-bottom: 50px;
+
 }

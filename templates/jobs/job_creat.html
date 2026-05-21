@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Створити вакансію</h1>
+<h1>Створити вакансію</h1>{% if form.instance.pk %}Редагувати{% else %}Створити{% endif %} вакансію</h2>
 <form method="POST">
 {% csrf_token %}
 <div class="mb-1">
