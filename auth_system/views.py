@@ -119,6 +119,7 @@ class Job_Emp_singupView(CreateView):
         user = form.save()
         EmployerProfile.objects.create(
             user=user,
+            employer_type=form.cleaned_data['employer_type'],
             name_company=form.cleaned_data.get('name_company'),
             description=form.cleaned_data.get('description'),
             referral_company=form.cleaned_data.get('referral_company'),

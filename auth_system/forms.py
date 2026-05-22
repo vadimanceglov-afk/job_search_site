@@ -103,7 +103,28 @@ class SignUp_EmployerForm(UserCreationForm):
         required=False,
         widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://example.com'})
     )
+    
+    employer_type = forms.ChoiceField(
+        label='Тип реєстрації',
+        choices=[('private', 'Приватна особа (Рекрутер)'), ('company', 'Компанія')],
+        initial='private',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'employer_type', 'name_company', 'description', 'referral_company', 'website']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваш логін'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'company@mail.com'}),
+        }
+
+    # Валідація: якщо обрано "компанія", вимагаємо введення назви
+    def clean(self):
+        cleaned_data = super().clean()
+        employer_type = cleaned_data.get('employer_type')
+        name_company = cleaned_data.get('name_company')
+
+        if employer_type == 'company' and not name_company:
+            self.add_error('name_company', "Для типу реєстрації 'Компанія' це поле є обов'язковим.")
+        return cleaned_data

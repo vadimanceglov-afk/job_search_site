@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
@@ -252,3 +253,12 @@ class Job_CompleteView(View):
     def get_object(self):
         appli_id = self.kwargs.get("pk")
         return get_object_or_404(Application, pk = appli_id)
+    
+
+#send_mail(
+#    'Subject here',
+#    'Here is the message body.',
+#    'from@example.com',
+#    ['to@example.com'],
+#    fail_silently=False,
+#)

@@ -31,14 +31,18 @@ class UserProfile(models.Model):
     role = models.CharField(choices=ROLE_CHOICES, max_length=20, default='User')#
     bio = models.TextField(blank=True)#опис
     referral = models.ForeignKey('project.Category', on_delete=models.SET_NULL, null=True)#направлення
+    phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name="Номер телефону")
+    linkedin_url = models.URLField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"{self.last_name} {self.first_name} {self.patronymic}"
     
     @property
     def age(self):
+        # Безпечний розрахунок віку. Якщо birth_date == None, код не впаде в Error.
+        if not self.birth_date:
+            return None
         today = date.today()
-        # Обчислення віку: різниця років - 1, якщо день народження ще не настав
         return today.year - self.birth_date.year - (
             (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
         )
@@ -56,6 +60,7 @@ class EmployerProfile(models.Model):
     description = models.TextField()#опис
     logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)#логотип
     referral_company = models.ForeignKey('project.Category', on_delete=models.SET_NULL, null=True)#направлення компаній
+    hq_location = models.CharField(max_length=255, blank=True, null=True, verbose_name="Головний офіс (Місто, Країна)")
     website = models.URLField(max_length=200, null=True, blank=True)#посилання на сайт компаній
 
     def __str__(self):

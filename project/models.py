@@ -20,6 +20,22 @@ class Category(models.Model):
 
 #Вакансій роботи
 class Vacancy(models.Model):
+    EMPLOYMENT_CHOICES = [
+        ('full_time', 'Повна зайнятість'),
+        ('part_time', 'Неповна зайнятість'),
+    ]
+
+    EXPERIENCE_CHOICES = [
+        ('no_experience', 'Без досвіду'),
+        ('experience', 'Досвід роботи'),
+    ]
+
+    WORK_FORMAT_CHOICES = [
+        ('office', 'В офісі'),
+        ('remote', 'Віддалено'),
+        ('hybrid', 'Гібрид'),
+    ]
+
     title = models.CharField(max_length=256)#Заголовок
     description = models.TextField()#опис
     description1 = models.TextField(null=True, blank=True)#опис
@@ -30,10 +46,17 @@ class Vacancy(models.Model):
     price_start = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     price_end = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    employment_type = models.CharField(max_length=20, choices=EMPLOYMENT_CHOICES, default='full_time', verbose_name="Тип зайнятості")
+    work_format = models.CharField(max_length=20, choices=WORK_FORMAT_CHOICES, default='office', verbose_name="Формат роботи")
+    experience = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='no_experience', verbose_name="Досвід роботи")
     city = models.ForeignKey(City, on_delete=models.SET_NULL, related_name="vacancies", null=True)
     street = models.CharField(max_length=255, verbose_name="Вулиця")
     date = models.DateTimeField(auto_now_add=True)#дата створення
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата оновлення")
 
+    class Meta:
+        ordering = ['-date']
+        
     def total_applications(self):
         return self.applications.count()
     

@@ -4,7 +4,8 @@ from project.models import Vacancy, Response, Resume, Application, Category, Cit
 class Vacancy_CreatFrom(forms.ModelForm):
     class Meta:
         model = Vacancy
-        fields = ["title", "description", "description1", "description2", "category", "link", 
+        fields = ["title", "description", "description1", "description2", "category", 
+                  "experience", "employment_type", "work_format", "link", 
                   "price_start", "price_end", "image", "city", "street"]
         # widgets МАЮТЬ бути всередині Meta (з правильним відступом)
         widgets = {
@@ -13,6 +14,9 @@ class Vacancy_CreatFrom(forms.ModelForm):
             'description1': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'description2': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'category': forms.Select(attrs={'class': 'form-select'}),
+            'employment_type': forms.Select(attrs={'class': 'form-select'}),
+            'work_format': forms.Select(attrs={'class': 'form-select'}),
+            'experience': forms.Select(attrs={'class': 'form-select'}),
             'link': forms.URLInput(attrs={'class': 'form-control'}),
             'price_start': forms.NumberInput(attrs={'class': 'form-control'}),
             'price_end': forms.NumberInput(attrs={'class': 'form-control'}),

@@ -1,36 +1,97 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
-<h2>Register</h2>
-<form method="post">
 
-  {% csrf_token %}
-<div class="mb-1">
-    <strong>Логін:</strong>
-</div>
-  {{ form.username }}
-<div class="mb-1">
-    <strong>Електрона пошта:</strong>
-</div>
-  {{ form.email }}
- 
-<div class="mb-1">
-    <strong>Назва компаній:</strong>
-</div>
-  {{ form.name_company }}
-  <div class="mb-1">
-    <strong>Про компанію:</strong>
-</div>
-  {{ form.description }}
-  <div class="mb-1">
-    <strong>Напрямок компаній:</strong>
-</div>
-  {{ form.referral_company }}
-<div class="mb-1">
-    <strong>Сайт компаній:</strong>
-</div>
-  {{ form.website }}
-  
-  <button type="submit">Register</button>
+{% block content %}
+<h2>Реєстрація роботодавця</h2>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <p style="color: red;">{{ form.non_field_errors }}</p>
+    {% endif %}
+
+    <p>
+        <label><strong>Логін:</strong></label><br>
+        {{ form.username }}
+        {% if form.username.errors %}<br><span style="color: red;">{{ form.username.errors }}</span>{% endif %}
+    </p>
+
+    <p>
+        <label><strong>Електронна пошта:</strong></label><br>
+        {{ form.email }}
+        {% if form.email.errors %}<br><span style="color: red;">{{ form.email.errors }}</span>{% endif %}
+    </p>
+
+    <p>
+        <label><strong>Пароль:</strong></label><br>
+        {{ form.password1 }}
+        {% if form.password1.errors %}<br><span style="color: red;">{{ form.password1.errors }}</span>{% endif %}
+    </p>
+
+    <p>
+        <label><strong>Підтвердження паролю:</strong></label><br>
+        {{ form.password2 }}
+        {% if form.password2.errors %}<br><span style="color: red;">{{ form.password2.errors }}</span>{% endif %}
+    </p>
+
+    <hr>
+
+    <p>
+        <label><strong>Тип реєстрації:</strong></label><br>
+        {{ form.employer_type }}
+    </p>
+
+    <div id="company-name-block">
+        <p>
+            <label><strong>Назва компанії:</strong></label><br>
+            {{ form.name_company }}
+            {% if form.name_company.errors %}<br><span style="color: red;">{{ form.name_company.errors }}</span>{% endif %}
+        </p>
+    </div>
+
+    <p>
+        <label><strong>Напрямок діяльності:</strong></label><br>
+        {{ form.referral_company }}
+    </p>
+
+    <p>
+        <label><strong>Сайт компанії:</strong></label><br>
+        {{ form.website }}
+        {% if form.website.errors %}<br><span style="color: red;">{{ form.website.errors }}</span>{% endif %}
+    </p>
+
+    <p>
+        <label><strong>Про компанію / Про себе:</strong></label><br>
+        {{ form.description }}
+        {% if form.description.errors %}<br><span style="color: red;">{{ form.description.errors }}</span>{% endif %}
+    </p>
+
+    <p>
+        <button type="submit">Зареєструватися</button>
+    </p>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const typeSelect = document.getElementById("id_employer_type");
+        const companyBlock = document.getElementById("company-name-block");
+        const companyInput = document.getElementById("id_name_company");
+
+        function toggleCompanyField() {
+            if (typeSelect.value === "company") {
+                companyBlock.style.display = "block";
+            } else {
+                companyBlock.style.display = "none";
+                companyInput.value = ""; // Очищаємо інпут, якщо це приватна особа
+            }
+        }
+
+        // Перевірка при завантаженні сторінки
+        toggleCompanyField();
+
+        // Подія на зміну вибору користувача
+        typeSelect.addEventListener("change", toggleCompanyField);
+    });
+</script>
 {% endblock %}
