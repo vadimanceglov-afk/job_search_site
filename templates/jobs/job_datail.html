@@ -19,9 +19,6 @@
         {{ jobs.date }}|
         {{ jobs.company }}|
 
-<a href="{% url 'job_list' %}" class="btn-exit">
-    Назад
-</a>
 
 
 
@@ -31,11 +28,19 @@
             Редагувати мою вакансію
         </a>
         <a href="{% url 'job_delete' object.pk %}" class="btn btn-danger">delete</a>
+
+        <a href="{% url 'job_company' %}" class="btn-exit">
+            Назад
+        </a>
     {% endif %}
 {% else %}
 
 <a href="{% url 'apply_for_job' object.pk %}" class=" btn-L">
     Подати заявку
+</a>
+
+<a href="{% url 'job_list' %}" class="btn-exit">
+    Назад
 </a>
 {% endif %}
 
