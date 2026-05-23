@@ -59,8 +59,26 @@ class Job_ProfileView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['resumes'] = Resume.objects.filter(author=self.object.user)
+        context['user_applications'] = Application.objects.filter(author=self.request.user)
+        context['img_avatar'] = self.img_avatar()
         
         return context
+    
+
+    def img_avatar(self):
+        if self.object.avatar:
+            return self.object.avatar.url
+        
+        if self.object.gender == 'Men':
+            if self.object.op == 'Yes':
+                return '/static/image/men-op.png'
+            else:
+                return '/static/image/men.png'
+        else:
+            if self.object.op == 'Yes':
+                return '/static/image/women-op.png'
+            else:
+                return '/static/image/women.png'
 
 
 #Інфа про компанію
@@ -129,36 +147,37 @@ class Job_Emp_singupView(CreateView):
         login(self.request, user)
         return redirect(self.success_url)
 
-
+#Редагувати профіль користувача
 class Profile_UpdateView(UpdateView):
     model = UserProfile
-    template_name = "auth_s/profile_update.html"
-    fields = ['patronymic', 'gender'] # вкажи потрібні поля
+    template_name = "auth_s/profile_form.html"
+    fields = ['patronymic', 'gender', 'op'] # вкажи потрібні поля
     success_url = reverse_lazy('job_profile')
 
+    def get_object(self):
+        return self.request.user.profile
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Профіль успішно оновлено!')
+        return super().form_valid(form)
+    
+#Редагувати профіль компаній
+class Company_UpdateView(UpdateView):
+    model = EmployerProfile
+    template_name = "auth_s/profile_form.html"
+    fields = ['name_company', 'description'] # вкажи потрібні поля
+    success_url = reverse_lazy('job_company')
+
     def get_object(self, queryset=None):
-        # Це автоматично знайде профіль поточного юзера
-        return UserProfile.objects.get_or_create(user=self.request.user)[0]
+        # Безпечно дістаємо профіль компанії поточного юзера
+        obj, created = EmployerProfile.objects.get_or_create(user=self.request.user)
+        return obj
 
-                        #if user.gender == 'Men':
-                        #   if user.op == 'Yes':
-                        #       print("men op")
-                        #   else:
-                        #       print("men no op")
-                        #else:
-                        #   if user.op == 'Yes':
-                        #       print("women op")
-                        #   else:
-                        #       print("women  no op")
+    def form_valid(self, form):
+        messages.success(self.request, 'Дані компанії успішно оновлено!')
+        return super().form_valid(form)
 
-#def img_avatar():
-#    if user.gender == Men:
-#       if user.op == Yes:
-#           img="01.png"
-#       else:
-#           img="02.png"
-#   else:
-#       if user.op == Yes:
-#           img="01-w.png"
-#       else:
-#           img="02-w.png"
+    def get_success_url(self):
+        # Якщо твій урл 'job_company' не потребує id (бо бере юзера з request), залишай просто редірект.
+        # Якщо потребує pk, цей метод динамічно передасть його туди:
+        return reverse_lazy('job_company')

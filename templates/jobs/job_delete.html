@@ -7,6 +7,11 @@
 {% csrf_token %}
 <button type="submit" class="btn btn-secondary">Так</button>
 <a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
+{% if user.employer %} 
+<a href="{% url 'job_company' %}" class="btn btn-danger">Ні</a>
+{% else %}
+<a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
+{% endif %}
 </form>
 
 {% endblock %}

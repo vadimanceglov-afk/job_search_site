@@ -6,7 +6,9 @@
 <div class="d-grid gap-3 d-md-flex justify-content-md-center mb-2">
     <form action="{% url 'job_surh' %}" method="get" class="row row-cols-lg-auto g-3 align-items-center">
         <div class="col-12">
-            {{ search_form.q }}
+
+                {{ search_form.q }}
+
         </div>
         <div class="col-12">
             <button type="submit" class=" btn-exit">Пошук</button>

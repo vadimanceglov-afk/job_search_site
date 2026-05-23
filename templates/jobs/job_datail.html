@@ -39,9 +39,15 @@
     Подати заявку
 </a>
 
-<a href="{% url 'job_list' %}" class="btn-exit">
+{% if user.employer %} 
+    <a href="{% url 'job_company' %}" class="btn-exit">
+        Назад
+    </a>
+{% else %}
+<a href="{% url 'job_list' %}" class="btn btn-light">
     Назад
 </a>
+{% endif %}
 {% endif %}
 
 

@@ -8,11 +8,14 @@
     {{ employer.role }}|
     {{ employer.referral_company }}|
     {{ employer.website }}|
-
+{% if user.employer %}
+<a href="{% url 'update_company' %}" class="btn btn-secondary">
+    Редагувати профіль
+</a>
 <a href="{% url 'job_creat' %}" class=" btn-L">
     Створити вакансію
 </a>
-
+{% endif %}
 <h3>Ваші вакансій:</h3>
 {% for job in jobs %}
 <a href="{% url 'job_datail' pk=job.id %}">
@@ -23,34 +26,41 @@
         <p>{{ job.description }}</p> 
     </div>
 </a>
+{% if user.employer %}
         <p>Заявок({{ job.applications.count }})</p>
                 <a href="{% url 'job_update' job.pk %}" class="btn btn-warning">
             Редагувати мою вакансію
         </a>
         <a href="{% url 'job_delete' job.pk %}" class="btn btn-danger">delete</a>
-    
+{% endif %}
 {% empty %}
     <p>Ви ще не створили жодної вакансії.</p>
 {% endfor %}
 
-<h3>Заявки на вакансії:</h3>
-<p>Знайдено заявок: {{ applications.count }}</p>
-{% for application in applications %}
-        <p>Заявка від</p>{{ application.author.username }} <br>
-        <p>На вакансію</p>{{ application.vacancy.title }} <br>
+{% if user.employer %}
+    <h3>Заявки на вакансії:</h3>
+    <p>Знайдено заявок: {{ applications.count }}</p>
+    {% for application in applications %}
+            <p>Заявка від</p>{{ application.author.username }} <br>
+            <p>На вакансію</p>{{ application.vacancy.title }} <br>
 
-        {% if application.resume and application.resume.pk %}
-        <a href="{% url 'chat_room' application.id %}" class="btn btn-primary">Відповісти кандидату</a>
-            <a href="{% url 'job_resume' application.resume.pk %}" class="btn btn-warning">
-                Переглянути резюме
-            </a>
-            </a>
-        {% else %}
-            <button disabled>Резюме не додано</button>
-        {% endif %}
-    {% empty %}
-        <p>На ваші вакансії поки немає жодного відгуку.</p>
-{% endfor %}
+            {% if application.resume and application.resume.pk %}
+            <a href="{% url 'chat_room' application.id %}" class="btn btn-primary">Відповісти кандидату</a>
+                <a href="{% url 'job_resume' application.resume.pk %}" class="btn btn-warning">
+                    Переглянути резюме
+                </a>
+                </a>
+            {% else %}
+                <button disabled>Резюме не додано</button>
+            {% endif %}
+        {% empty %}
+            <p>На ваші вакансії поки немає жодного відгуку.</p>
+    {% endfor %}
+{% else %}
+<a href="{% url 'job_list' %}" class="btn btn-light">
+    Назад
+</a>
+{% endif %}
 
 
 

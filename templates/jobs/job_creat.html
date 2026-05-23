@@ -51,8 +51,13 @@
 
 <button type="submit" class="btn btn-secondary">Зберегти</button>
 </form>
-
+{% if user.employer %} 
+    <a href="{% url 'job_company' %}" class="btn-exit">
+        Назад
+    </a>
+{% else %}
 <a href="{% url 'job_list' %}" class="btn btn-light">
     Назад
 </a>
+{% endif %}
 {% endblock %}

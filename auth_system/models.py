@@ -13,11 +13,11 @@ GENDER_CHOICES = [
     ('Women', 'Жінка')
 ]
 
-class UserProfile(models.Model):
-    OP_CHOICES = [
+OP_CHOICES = [
         ('Yes', 'Так'),
         ('No', 'Ні')
     ]
+class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     

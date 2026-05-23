@@ -22,7 +22,7 @@
                 </ul> 
                 <div class="text-end"> 
                 {% if user.is_authenticated %}    
-                    {% if user.employer %}
+                    {% if user.employer.name_company %}
                         <a class="nav-link text-white me-3" href="{% url 'job_company' %}">
                             Компанія: {{ user.employer.name_company }}
                         </a>
@@ -39,12 +39,12 @@
                 </div>
 
 
-                    {% else %}
+                {% else %}
                 <div class="text-end"> 
                     <a href="{% url 'job_login' %}" class=" btn-yo">Увійти</a>
                     <a href="{% url 'signup_cho' %}" class=" btn-regi">Зареєструватися</a>
                 </div>
-                    {% endif %}
+                {% endif %}
             </div> 
         </div> 
     </header>

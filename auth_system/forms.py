@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile, EmployerProfile, GENDER_CHOICES
+from .models import GENDER_CHOICES, OP_CHOICES
 from project.models import Category
 
 class LoginForm(forms.Form):
@@ -15,13 +15,13 @@ class SignUp_UserForm(UserCreationForm):
     username = forms.CharField(label="Логін (або пошта)", help_text="Використовуйте для входу на сайт")
     patronymic = forms.CharField(label="По батькові", required=False)
     gender = forms.ChoiceField(label="Стать", choices=GENDER_CHOICES)
-
+    op = forms.ChoiceField(label="Опит", choices=OP_CHOICES)
     birth_date = forms.DateField(label="Дата народження", help_text="В")
     referral = forms.ModelChoiceField(label="Звідки дізналися", queryset=Category.objects.all())
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name','op', 'email', 'password1', 'password2']
         widgets = {
             'username': forms.TextInput(attrs={             
                 'class': 'form-control',
@@ -44,6 +44,11 @@ class SignUp_UserForm(UserCreationForm):
             }),
 
             'gender': forms.Select(attrs={             
+                'class': 'form-control',
+                'placeholder': 'y'
+            }),
+
+            'op': forms.Select(attrs={             
                 'class': 'form-control',
                 'placeholder': 'y'
             }),

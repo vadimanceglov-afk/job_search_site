@@ -6,9 +6,13 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+    <button type="submit" class="btn btn-success">Зберегти зміни</button>
 </form>
 
 <hr>
-<a href="{% url 'job_profil' %}">Назад до профілю</a>
+    {% if user.employer %} 
+        <a href="{% url 'job_company' %}" class="btn-exit">Назад до профілю</a>
+    {% else %}
+        <a href="{% url 'job_profile' %}" class="btn-exit">Назад до профілю</a>
+    {% endif %}
 {% endblock %}

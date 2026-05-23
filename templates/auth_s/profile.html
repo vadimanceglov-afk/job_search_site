@@ -3,6 +3,7 @@
 {% block content %}
 <h1>User</h1>
 
+<img src="{{ img_avatar }}" alt="Avatar" class="profile-img">
     {{ profile.first_name }}|
     {{ profile.last_name }}|
     {{ profile.patronymic }}|
@@ -13,6 +14,10 @@
     {{ profile.birth_date }}|
     {{ profile.role }}|
     {{ profile.referral }}
+
+<a href="{% url 'update_profile' %}" class="btn btn-secondary" >
+    Редагувати профіль
+</a>
 
 <a href="{% url 'job_creat_resume' %}" class="btn-L">
     Створити резюме
@@ -29,11 +34,10 @@
 {% endfor %}
 
 <h3>Ваші заявки</h3>
-{% for application in applications %}
-        <p>Заявка на вакансію</p>{{ application.vacancy.title }} <br>
-
-    {% empty %}
-        <p>Ви поки ще не подали жодної заявки!</p>
-        <p>Заявка на вакансію</p>{{ profile.application.vacancy.title }} <br>
+{% for application in user_applications %}
+<strong>Вакансія:</strong> {{ application.vacancy.title }} <br>
+            <strong>Статус:</strong> {{ application.get_status_display|default:"На розгляді" }}
+{% empty %}
+    <p>Ви поки ще не подали жодної заявки!</p>
 {% endfor %}
 {% endblock %}

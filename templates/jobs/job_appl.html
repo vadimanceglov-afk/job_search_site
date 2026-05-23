@@ -7,7 +7,8 @@
     <button disabled>Вже відгукнулися</button>
     <a href="{% url 'chat_room' application.id %}" class="btn">Чат з роботодавцем</a>
     
-    <p>Статус заявки: <strong>{{ application.status }}</strong></p>
+    <p>Статус заявки: <strong>{{ application.status|default:"under_review" }} 
+        ({{ application.get_status_display|default:"На розгляді" }})</strong></p>
 {% else %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -18,5 +19,5 @@
 {% endif %}
 <a href="{% url 'job_list' %}">
     Назад
-
+</a>
 {% endblock %}
