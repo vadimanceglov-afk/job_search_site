@@ -101,7 +101,7 @@ class Vacancy_SurchFrom(forms.Form):
         required=False,  # Додай це, щоб можна було зайти на сторінку без запиту
         widget=forms.TextInput(attrs={
             'class': 'form-control', 
-            'placeholder': 'Пошук вакансій...'
+            'placeholder': 'Пошук за вакансійями/ містом /сферою'
         })
     )
 class Vacancy_FilterFrom(forms.Form):

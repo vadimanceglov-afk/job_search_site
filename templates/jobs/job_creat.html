@@ -51,7 +51,7 @@
 
 <button type="submit" class="btn btn-secondary">Зберегти</button>
 </form>
-{% if user.employer %} 
+{% if user.employer.name_company %} 
     <a href="{% url 'job_company' %}" class="btn-exit">
         Назад
     </a>

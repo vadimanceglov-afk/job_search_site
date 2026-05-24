@@ -2,13 +2,15 @@
 {% load static %}
 {% block content %}
 <h1>{{ employer.name_company }}</h1>
-
+<img src="{{ employer.logo.url }}" alt="Avatar" 
+class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+style="max-width: 180px; height: 180px; object-fit: cover;">
     {{ employer.description }}|
     {{ employer.employer_type }}|
     {{ employer.role }}|
     {{ employer.referral_company }}|
     {{ employer.website }}|
-{% if user.employer %}
+{% if user.employer.name_company %}
 <a href="{% url 'update_company' %}" class="btn btn-secondary">
     Редагувати профіль
 </a>
@@ -26,18 +28,18 @@
         <p>{{ job.description }}</p> 
     </div>
 </a>
-{% if user.employer %}
+{% if user.employer.name_company %}
         <p>Заявок({{ job.applications.count }})</p>
                 <a href="{% url 'job_update' job.pk %}" class="btn btn-warning">
             Редагувати мою вакансію
         </a>
-        <a href="{% url 'job_delete' job.pk %}" class="btn btn-danger">delete</a>
+        <a href="{% url 'job_delete' job.pk %}" class="btn btn-danger">Видалити</a>
 {% endif %}
 {% empty %}
     <p>Ви ще не створили жодної вакансії.</p>
 {% endfor %}
 
-{% if user.employer %}
+{% if user.employer.name_company %}
     <h3>Заявки на вакансії:</h3>
     <p>Знайдено заявок: {{ applications.count }}</p>
     {% for application in applications %}

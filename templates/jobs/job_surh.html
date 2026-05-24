@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="center mb-2">
-    <form action="{% url 'job_surh' %}" method="get" class="row row-cols-lg-auto g-3 align-items-center">
-        <div class="col-12">
-            {{ search_form.q }}
+<section class="search-hero py-5 text-center text-white">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <form action="{% url 'job_surh' %}" method="get" class="d-flex gap-2">
+                    <div class="w-100">
+                        {{ search_form.q }}
+                    </div>
+                        <button type="submit" class="btn-exit text-nowrap">
+                            <i class="bi bi-search me-1"></i> Пошук
+                        </button>
+                </form>
+            </div>
         </div>
-        <div class="col-12">
-            <button type="submit" class=" btn-exit">Пошук</button>
-        </div>
-    </form>
-</div>
+    </div>
+</section>
+
 <form action="{% url 'job_surh' %}" method="get">
     <input type="hidden" name="q" value="{{ query|default:'' }}">
         <div class="col-md-3">
@@ -74,8 +81,23 @@
         {{ jo.category }}|
         {{ jo.city }}
 </a>
+{% if user.employer.name_company %} 
+    {% if user == jo.company.user %}
+        <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
+            Редагувати мою вакансію
+        </a>
+        <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
+
+        <p>Заявок({{ jo.applications.count }})</p>
+    {% endif %}
+{% else %}
+<a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
+    Подати заявку
+</a>
+{% endif %}
 {% empty %}
 <h2>Не існує такої вакансій!</h2>
 {% endfor %}
+
 
 {% endblock %}

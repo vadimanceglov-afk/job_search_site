@@ -5,12 +5,12 @@
 <p>Ви точно хочете видалити?</p>
 <form method="post">
 {% csrf_token %}
-<button type="submit" class="btn btn-secondary">Так</button>
-<a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
-{% if user.employer %} 
-<a href="{% url 'job_company' %}" class="btn btn-danger">Ні</a>
+    <button type="submit" class="btn btn-secondary">Так</button>
+    <a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
+{% if user.employer.name_company %} 
+    <a href="{% url 'job_company' %}" class="btn btn-danger">Ні</a>
 {% else %}
-<a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
+    <a href="{% url 'job_list' %}" class="btn btn-danger">Ні</a>
 {% endif %}
 </form>
 

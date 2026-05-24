@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>User</h1>
+<h1>{{ profile.first_name }} {{ profile.last_name }} {{ profile.patronymic }} </h1>
 
-<img src="{{ img_avatar }}" alt="Avatar" class="profile-img">
-    {{ profile.first_name }}|
-    {{ profile.last_name }}|
-    {{ profile.patronymic }}|
+<img src="{{ user.profile.img_avatar }}" alt="Avatar" 
+class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+style="max-width: 180px; height: 180px; object-fit: cover;">
     {{ profile.gender }}|
     {{ profile.op }}|
     {{ profile.bio }}|

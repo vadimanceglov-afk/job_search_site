@@ -2,21 +2,28 @@
 {% load static %}
 {% block content %}
 <title>Головна</title>
-<section class="search-hero">
-<div class="d-grid gap-3 d-md-flex justify-content-md-center mb-2">
-    <form action="{% url 'job_surh' %}" method="get" class="row row-cols-lg-auto g-3 align-items-center">
-        <div class="col-12">
 
-                {{ search_form.q }}
-
+<section class="search-hero py-5 text-center text-white">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Годі лежати — самий час роботу шукати!</h1>
+        <br>
+        <p class="text-body-tertiary mb-4 fs-4">Знайдіть бажану вакансію прямо зараз</p>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="hk">
+                <form action="{% url 'job_surh' %}" method="get" class="d-flex gap-2">
+                    <div class="w-100">
+                        {{ search_form.q }}
+                    </div>
+                        <button type="submit" class="btn-exit text-nowrap">
+                            <i class="bi bi-search me-1"></i> Пошук
+                        </button>
+                </form>
+                </div>
+            </div>
         </div>
-        <div class="col-12">
-            <button type="submit" class=" btn-exit">Пошук</button>
-        </div>
-    </form>
-</div>
+    </div>
 </section>
-
 
 
 
@@ -33,12 +40,12 @@
     </li>
 </ul>
 </a>
-{% if user.employer %} 
+{% if user.employer.name_company %} 
     {% if user == jo.company.user %}
-        <a href="{% url 'job_update' jo.pk %}">
+        <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
             Редагувати мою вакансію
         </a>
-        <a href="{% url 'job_delete' jo.pk %}">delete</a>
+        <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
 
         <p>Заявок({{ jo.applications.count }})</p>
     {% endif %}
@@ -53,8 +60,52 @@
 
 
 {% endfor %}
+<div class="container mt-5">
+    <div class="row justify-content-center"> 
+        <div class="col-md-10 col-lg-8"> 
+            <div class="card shadow-sm mb-3 border-0 rounded-4 overflow-hidden" style="min-height: 140px;">
+                <div class="row g-0 align-items-center h-100">
 
+                    <div class="col-md-9 px-4 py-3 d-flex align-items-center gap-3">
 
+                        <div class="card shadow-sm border-0 bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; flex-shrink: 0;">
+
+                        </div>
+                    
+                        <div>
+
+                        
+                            <div class="d-flex flex-column mb-1">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 px-4 py-3 text-end">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-8 col-lg-8"> 
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h1 class="fw-bold">o</h1>
+                    <div class="d-flex flex-column mb-3">
+                        <div class="mb-1">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% if user.is_authenticated %}
     {% if user_already_responded %}
         <p>Ви вже залишили відгук про наш сайт. Дякуємо!</p>
@@ -71,6 +122,48 @@
 <br>
 <div class="responses">
     {% for res in all_responses %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-8">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-start mb-2 mb-md-0">
+                            <div class="avatar-container mx-auto">
+                                <div class="d-flex flex-column mb-3">
+
+                                
+                                {% if res.author.profile %}
+                                    <img src="{{ res.author.profile.img_avatar }}" alt="Avatar" 
+                                         class="rounded-circle img-fluid border border-2 border-light shadow-sm me-2" 
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                {% else %}
+                                    <span class="fs-4 me-2">💼</span>
+                                {% endif %}
+                                <p>{{ res.author }}:</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="mb-4">
+                                        <p class="fs-5 mb-2">
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                {% if res.author.profile %}
+                    <img src="{{ res.author.profile.img_avatar }}" alt="Avatar" 
+                         class="rounded-circle img-fluid border border-2 border-light shadow-sm me-2" 
+                         style="width: 40px; height: 40px; object-fit: cover;">
+                {% else %}
+                    <span class="fs-4 me-2">💼</span>
+                {% endif %}
 
                 <p>{{ res.author }}</p>
                 <p>{{ res.content }}</p>

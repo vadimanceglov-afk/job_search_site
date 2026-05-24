@@ -1,3 +1,10 @@
+header {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
 html, body {
     height: 100%;  /* важливо! */
     margin: 0;
@@ -10,6 +17,7 @@ body {
 }
 
 main {
+    padding-top: 80px;
     flex: 1;
     background: rgba(236, 236, 236, 0.593);
 }
@@ -97,4 +105,42 @@ main {
     padding:30px 10px;
     margin-bottom: 50px;
 
+}
+
+.hk{
+  max-width:1290px;
+  padding: 10px 20px;
+
+  background: #ff9114;
+  border-radius: 18px;
+
+
+  z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* коли прилипає */
+.hk.fixed {
+  position: fixed;
+  top: 70px; /* відступ від шапки */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: 100%;
+  max-width: 650px;
+  margin: 0; /* прибираємо margin щоб не “підстрибувало” */
+  animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+}
+
+/* Анімація м'якого спуску */
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px); /* Починаємо трохи вище */
+        opacity: 0;                   /* Повністю прозорий */
+    }
+    to {
+        transform: translateY(0);     /* Стає на своє місце */
+        opacity: 1;                   /* Повністю видимий */
+    }
 }

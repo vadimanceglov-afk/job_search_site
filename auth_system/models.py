@@ -46,6 +46,24 @@ class UserProfile(models.Model):
         return today.year - self.birth_date.year - (
             (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
         )
+    
+    @property
+    def img_avatar(self):
+        # Перевіряємо, чи завантажив користувач свій аватар
+        if self.avatar:
+            return self.avatar.url
+        
+        # Якщо аватара немає, генеруємо дефолтний залежно від статі та опції
+        if self.gender == 'Men':
+            if self.op == 'Yes':
+                return '/static/image/men-op.png'
+            else:
+                return '/static/image/men.png'
+        else:
+            if self.op == 'Yes':
+                return '/static/image/women-op.png'
+            else:
+                return '/static/image/women.png'
 
 class EmployerProfile(models.Model):
     TYPES_CHOICES = (
@@ -65,3 +83,11 @@ class EmployerProfile(models.Model):
 
     def __str__(self):
         return self.name_company
+    
+    @property
+    def img_logo(self):
+        # Якщо компанія завантажила логотип — повертаємо його url
+        if self.logo:
+            return self.logo.url
+        # Якщо логотипу немає — повертаємо стандартну іконку-заглушку з папки static
+        return '/static/image/s-logo.png'

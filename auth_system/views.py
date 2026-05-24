@@ -60,25 +60,9 @@ class Job_ProfileView(DetailView):
         context = super().get_context_data(**kwargs)
         context['resumes'] = Resume.objects.filter(author=self.object.user)
         context['user_applications'] = Application.objects.filter(author=self.request.user)
-        context['img_avatar'] = self.img_avatar()
         
         return context
     
-
-    def img_avatar(self):
-        if self.object.avatar:
-            return self.object.avatar.url
-        
-        if self.object.gender == 'Men':
-            if self.object.op == 'Yes':
-                return '/static/image/men-op.png'
-            else:
-                return '/static/image/men.png'
-        else:
-            if self.object.op == 'Yes':
-                return '/static/image/women-op.png'
-            else:
-                return '/static/image/women.png'
 
 
 #Інфа про компанію

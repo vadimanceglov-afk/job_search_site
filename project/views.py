@@ -132,6 +132,8 @@ class Job_ListView(ListView):
         if self.request.user.is_authenticated:
             context['user_already_responded'] = user_already_responded
 
+            
+
         context['response_form'] = self.form_class() 
         return context
     

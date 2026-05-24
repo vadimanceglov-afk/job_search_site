@@ -22,7 +22,7 @@
 
 
 
-{% if user.employer %} 
+{% if user.employer.name_company %} 
     {% if user == jobs.company.user %}
         <a href="{% url 'job_update' object.pk %}" class="btn btn-warning">
             Редагувати мою вакансію
@@ -39,16 +39,11 @@
     Подати заявку
 </a>
 
-{% if user.employer %} 
-    <a href="{% url 'job_company' %}" class="btn-exit">
-        Назад
-    </a>
-{% else %}
 <a href="{% url 'job_list' %}" class="btn btn-light">
     Назад
 </a>
 {% endif %}
-{% endif %}
+
 
 
 {% endblock %}

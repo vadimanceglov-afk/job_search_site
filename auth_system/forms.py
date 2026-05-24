@@ -72,6 +72,7 @@ class SignUp_UserForm(UserCreationForm):
 
 
 class SignUp_EmployerForm(UserCreationForm):
+    logo = forms.ImageField(label='Аватар', required=False)
     username = forms.CharField(
         label="Логін",
         help_text="Використовуйте для входу на сайт",
@@ -118,7 +119,7 @@ class SignUp_EmployerForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'employer_type', 'name_company', 'description', 'referral_company', 'website']
+        fields = ['username', 'email', 'logo', 'employer_type', 'name_company', 'description', 'referral_company', 'website']
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ваш логін'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'company@mail.com'}),
