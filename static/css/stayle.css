@@ -144,3 +144,29 @@ main {
         opacity: 1;                   /* Повністю видимий */
     }
 }
+
+.button-like-mater {
+    background-color: white !important; 
+    color: green !important;
+    border: 2px solid green !important; 
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 6px 12px; 
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 5px;
+}
+
+/* Кнопка, коли лайк ВЖЕ стоїть */
+.button-like-mater.active {
+    background-color: green !important;
+    color: white !important;
+    border: 2px solid green !important; 
+}
+
+/* Ефект при наведенні (щоб було красиво) */
+.button-like-mater:hover {
+    opacity: 0.8;
+    background-color: rgb(2, 107, 2) !important; 
+    color: white !important;
+}
