@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
 from .models import Vacancy, Like, Response, Resume, Application, Category, City
+from auth_system.models import EmployerProfile
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form, Vacancy_SurchFrom, Vacancy_FilterFrom
 from django.contrib.auth.mixins import LoginRequiredMixin
 from project.mixins import UserJob
@@ -123,6 +124,8 @@ class Job_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['all_responses'] = Response.objects.all()
+        context['company_al'] = EmployerProfile.objects.all()
+        context['latest_objects'] = Vacancy.objects.order_by('-date')[:3]
         user_already_responded = False
         if self.request.user.is_authenticated:
             user_already_responded = Response.objects.filter(author=self.request.user).exists()
@@ -132,7 +135,7 @@ class Job_ListView(ListView):
         if self.request.user.is_authenticated:
             context['user_already_responded'] = user_already_responded
 
-            
+   
 
         context['response_form'] = self.form_class() 
         return context

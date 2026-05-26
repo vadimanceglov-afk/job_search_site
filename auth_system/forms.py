@@ -10,6 +10,8 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='Пороль', 
                                widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
+    class Meta:
+        fields = ['username', 'password']
 
 class SignUp_UserForm(UserCreationForm):
     username = forms.CharField(label="Логін (або пошта)", help_text="Використовуйте для входу на сайт")

@@ -25,45 +25,72 @@
     </div>
 </section>
 
+<h3 class="fw-bold text-center">Вакансії:</h3>
+    <div class="container mb-5">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
+            {% for jo in latest_objects %}
+                <div class="col">
+                    <div class="card h-100 mb-3 mx-auto">
+                      <h5 class="card-header">
+                        {{ jo.company }}
+                      </h5>
+                      <div class="card-body">
+                        <h5 class="card-title">{{ jo.title }}</h5>
+                        <p class="card-text">
+                            {{ jo.category }}
+                            {{ jo.city }}
+                        </p>
+                        <div class="text-start">
+                            {% if user.employer.name_company %} 
+                                {% if user == jo.company.user %}
+                                    <p>Заявок({{ jo.applications.count }})</p>
+                                    <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
+                                        Редагувати мою вакансію
+                                    </a>
+                                    <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
+                                    Подати заявку
+                                </a>
+                            {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>Свіжих вакансій поки немає.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
 
+
+
+<h3 class="fw-bold text-center">Компанії:</h3>
+<br>
 <div class="container">
-{% for jo in jobs %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    {% for comp in company_al %}
+        <div class="col"> 
+            <div class="card h-100 text-center mb-3">
+                <div class="card-body">
+                    <img src="{{ comp.img_logo }}" alt="Logo" 
+                         style="width: 40px; height: 40px; object-fit: cover;" 
+                         class="rounded-circle me-2">
 
-
-<a href="{% url 'job_datail' pk=jo.id %}">
-<ul>
-    <li>
-        {{ jo.company }}|
-        {{ jo.title }}|
-        {{ jo.category }}|
-        {{ jo.city }}
-    </li>
-</ul>
-</a>
-{% if user.employer.name_company %} 
-    {% if user == jo.company.user %}
-        <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
-            Редагувати мою вакансію
-        </a>
-        <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
-
-        <p>Заявок({{ jo.applications.count }})</p>
-    {% endif %}
-{% else %}
-
-<a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
-    Подати заявку
-</a>
+                    {{ comp.name_company }}
+                </div>
+            </div>
+            
+        </div>
+    {% empty %}
+        <div class="col-12 text-center text-muted">Профілів не знайдено.</div>
+    {% endfor %}
+    </div>
 </div>
-{% endif %}
-
-
-
-
-{% endfor %}
-
-
 {% if user.is_authenticated %}
 <div class="container">
     {% if user_already_responded %}
@@ -75,23 +102,18 @@
             </div>
             <button type="submit" class="btn btn-success">Опублікувати відгук</button>
         </form>
-</div>
+
     {% endif %}
 {% else %}
     <p>Будь ласка, увійдіть, щоб залишити відгук.</p>
 {% endif %}
 </div>
 <br>
-
-
+    <div class="container mt-4">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for res in all_responses %}
-
-
-    <div class="container">
-        <div class="row ">
-
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0">
+            <div class="col">
+                <div class="card mb-3 shadow-sm border-0">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
 
@@ -99,13 +121,13 @@
                                 {% if res.author.profile %}
                                     <img src="{{ res.author.profile.img_avatar }}" alt="Avatar" 
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                         style="width: 35px; height: 35px; object-fit: cover;">
                                 {% else %}
                                     <img src="{% static 'image/f-logo.png' %}" alt="Avatar" 
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                         style="width: 35px; height: 35px; object-fit: cover;">
                                 {% endif %}
-                                <p class="fw-bold mb-0">{{ res.author }}:</p>
+                                <p class="fw-bold mb-0 px-2">{{ res.author }}:</p>
                             </div>
 
                             <div class="text-end text-muted small">
@@ -118,19 +140,16 @@
 
                         <div class="text-end">
                             <a class="btn btn-outline-success" href="{% url 'Like_Response' res.id %}">
-                                like {{ res.likes.count }}
+                                Лайк {{ res.likes.count }}
                             </a>
                         </div>
 
                     </div>
                 </div>
             </div>
-            </div>
+    {% endfor %}
         </div>
     </div>
     <br>
-
-    {% endfor %}
-</div>
 
 {% endblock %}
