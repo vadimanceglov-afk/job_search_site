@@ -1,97 +1,149 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
-<h2>Реєстрація роботодавця</h2>
+<div class="container d-flex justify-content-center mt-5">
+  <div class="row w-100 d-flex justify-content-center"> 
+    <div class="col-12 d-flex justify-content-center">
+      <div class="card shadow border-0" style="width:100%; max-width:600px; border-radius:15px;">
+        <div class="card-body p-4">
+          <h3 class="fw-bold text-center mt-2 mb-4">Створити користувача</h3>
+          <form method="post" novalidate>
+            {% csrf_token %}
 
-<form method="post" novalidate>
-    {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger py-2" style="color: red;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
-    {% if form.non_field_errors %}
-        <p style="color: red;">{{ form.non_field_errors }}</p>
-    {% endif %}
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label><strong>Логін:</strong></label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <span class="d-block text-danger small" style="color: red;">{{ form.username.errors }}</span>
+                {% endif %}
+              </div>
+              <div class="col-md-6 mb-3">
+                <label><strong>Електронна пошта:</strong></label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <span class="d-block text-danger small" style="color: red;">{{ form.email.errors }}</span>
+                {% endif %}
+              </div>
+            </div>
 
-    <p>
-        <label><strong>Логін:</strong></label><br>
-        {{ form.username }}
-        {% if form.username.errors %}<br><span style="color: red;">{{ form.username.errors }}</span>{% endif %}
-    </p>
+            <hr class="my-4">
 
-    <p>
-        <label><strong>Електронна пошта:</strong></label><br>
-        {{ form.email }}
-        {% if form.email.errors %}<br><span style="color: red;">{{ form.email.errors }}</span>{% endif %}
-    </p>
+            <div class="mb-3">
+                <label><strong>Тип реєстрації:</strong></label>
+                {{ form.employer_type }}
+            </div>
 
-    <p>
-        <label><strong>Пароль:</strong></label><br>
-        {{ form.password1 }}
-        {% if form.password1.errors %}<br><span style="color: red;">{{ form.password1.errors }}</span>{% endif %}
-    </p>
+            <div id="company-name-block" class="mb-3">
+                <label><strong>Назва компанії:</strong></label>
+                {{ form.name_company }}
+                {% if form.name_company.errors %}
+                <div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3">
+                    <span class="d-block text-danger small" style="color: red;">{{ form.name_company.errors }}</span>
+                </div>
+                {% endif %}
+            </div>
 
-    <p>
-        <label><strong>Підтвердження паролю:</strong></label><br>
-        {{ form.password2 }}
-        {% if form.password2.errors %}<br><span style="color: red;">{{ form.password2.errors }}</span>{% endif %}
-    </p>
 
-    <hr>
+            <div class="row">
+                <div id="company-logo-block" class="col-md-6 mb-3">
+                    <label class="form-label"><strong>Логотип компанії:</strong></label>
+                    {{ form.logo }}
+                    {% if form.logo.errors %}
+                        <div class="text-danger small mt-1">{{ form.logo.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div id="referral-block" class="col-md-6 mb-3">
+                    <label class="form-label"><strong>Напрямок діяльності:</strong></label>
+                    {{ form.referral_company }}
+                </div>
+            </div>
+              <div id="company-website-block" class=" mb-3">
+                <label><strong>Сайт компанії:</strong></label>
+                {{ form.website }}
+                {% if form.website.errors %}
+                    <span class="d-block text-danger small" style="color: red;">{{ form.website.errors }}</span>
+                {% endif %}
+              </div>
+            <div class="mb-4">
+                <label><strong>Про компанію / Про себе:</strong></label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <span class="d-block text-danger small" style="color: red;">{{ form.description.errors }}</span>
+                {% endif %}
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <strong>Пароль:</strong>
+                {{ form.password1 }}
+              </div>
+              <div class="col-md-6 mb-4">
+                <strong>Повторіть пароль:</strong>
+                {{ form.password2 }}
+              </div>
+            </div>
 
-    <p>
-        <label><strong>Тип реєстрації:</strong></label><br>
-        {{ form.employer_type }}
-    </p>
-
-    <div id="company-name-block">
-        <p>
-            <label><strong>Назва компанії:</strong></label><br>
-            {{ form.name_company }}
-            {% if form.name_company.errors %}<br><span style="color: red;">{{ form.name_company.errors }}</span>{% endif %}
-        </p>
+            <button type="submit" class="btn-L w-100 py-2 fw-bold">Зареєструватися</button>
+          </form>
+        </div>
+      </div>
     </div>
-
-    <p>
-        <label><strong>Напрямок діяльності:</strong></label><br>
-        {{ form.referral_company }}
-    </p>
-
-    <p>
-        <label><strong>Сайт компанії:</strong></label><br>
-        {{ form.website }}
-        {% if form.website.errors %}<br><span style="color: red;">{{ form.website.errors }}</span>{% endif %}
-    </p>
-
-    <p>
-        <label><strong>Про компанію / Про себе:</strong></label><br>
-        {{ form.description }}
-        {% if form.description.errors %}<br><span style="color: red;">{{ form.description.errors }}</span>{% endif %}
-    </p>
-
-    <p>
-        <button type="submit" class="btn-L">Зареєструватися</button>
-    </p>
-</form>
+  </div>
+</div>
+<br><br>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const typeSelect = document.getElementById("id_employer_type");
-        const companyBlock = document.getElementById("company-name-block");
-        const companyInput = document.getElementById("id_name_company");
+        
+        // Блоки для приховування/показу
+        const nameBlock = document.getElementById("company-name-block");
+        const logoBlock = document.getElementById("company-logo-block");
+        const websiteBlock = document.getElementById("company-website-block");
+        const referralBlock = document.getElementById("referral-block");
 
-        function toggleCompanyField() {
+        // Самі інпути (для очищення)
+        const nameInput = document.getElementById("id_name_company");
+        const logoInput = document.getElementById("id_logo");
+        const websiteInput = document.getElementById("id_website");
+
+        function toggleCompanyFields() {
             if (typeSelect.value === "company") {
-                companyBlock.style.display = "block";
+                // Показуємо всі три блоки для компанії
+                if (nameBlock) nameBlock.style.display = "block";
+                if (logoBlock) logoBlock.style.display = "block";
+                if (websiteBlock) websiteBlock.style.display = "block";
+                
+                // Напрямок діяльності повертаємо на половину рядка
+                if (referralBlock) referralBlock.className = "col-md-6 mb-3";
             } else {
-                companyBlock.style.display = "none";
-                companyInput.value = ""; // Очищаємо інпут, якщо це приватна особа
+                // Ховаємо блоки для приватної особи
+                if (nameBlock) nameBlock.style.display = "none";
+                if (logoBlock) logoBlock.style.display = "none";
+                if (websiteBlock) websiteBlock.style.display = "none";
+                
+                // Напрямок діяльності розтягуємо на весь рядок, щоб не було порожнечі
+                if (referralBlock) referralBlock.className = "col-12 mb-3";
+                
+                // Очищаємо інпути
+                if (nameInput) nameInput.value = ""; 
+                if (logoInput) logoInput.value = ""; 
+                if (websiteInput) websiteInput.value = "";
             }
         }
 
         // Перевірка при завантаженні сторінки
-        toggleCompanyField();
+        toggleCompanyFields();
 
-        // Подія на зміну вибору користувача
-        typeSelect.addEventListener("change", toggleCompanyField);
+        // Слідкуємо за зміною типу реєстрації
+        typeSelect.addEventListener("change", toggleCompanyFields);
     });
 </script>
 {% endblock %}
