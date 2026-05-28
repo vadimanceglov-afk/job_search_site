@@ -5,8 +5,8 @@ class Vacancy_CreatFrom(forms.ModelForm):
     class Meta:
         model = Vacancy
         fields = ["title", "description", "description1", "description2", "category", 
-                  "experience", "employment_type", "work_format", "link", 
-                  "price_start", "price_end", "image", "city", "street"]
+                  "experience", "employment_type", "work_format", "link", "price_start", 
+                  "price_end", "image", "city", "street", "house_number"]
         # widgets МАЮТЬ бути всередині Meta (з правильним відступом)
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введіть заголовок...'}),
@@ -23,6 +23,7 @@ class Vacancy_CreatFrom(forms.ModelForm):
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'city': forms.Select(attrs={'class': 'form-control'}),
             'street': forms.TextInput(attrs={'class': 'form-control'}),
+            'house_number': forms.TextInput(attrs={'class': 'form-control',}),
         }
 
 class Response_CreatFrom(forms.ModelForm):

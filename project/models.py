@@ -51,6 +51,7 @@ class Vacancy(models.Model):
     experience = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='no_experience', verbose_name="Досвід роботи")
     city = models.ForeignKey(City, on_delete=models.SET_NULL, related_name="vacancies", null=True)
     street = models.CharField(max_length=255, verbose_name="Вулиця")
+    house_number = models.CharField(max_length=20, blank=True, null=True, verbose_name="Будинок / Офіс")
     date = models.DateTimeField(auto_now_add=True)#дата створення
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата оновлення")
 
@@ -73,6 +74,8 @@ class Resume(models.Model):
     description3 = models.TextField(null=True, blank=True)#опис
     description4 = models.TextField(null=True, blank=True)#опис
     file = models.FileField(upload_to='resumes/',  null=True, blank=True)#файл   
+    date = models.DateTimeField(auto_now_add=True, blank=True, null=True,)#дата створення
+    updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, verbose_name="Дата оновлення")
 
     def __str__(self):
         return self.title

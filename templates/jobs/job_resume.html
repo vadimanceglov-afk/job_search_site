@@ -42,6 +42,7 @@
         {{ resume.author }}|
         {{ resume.title }}|
         {{ resume.description }}|
+        <a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
 {% endif %}
 
 {% endblock %}

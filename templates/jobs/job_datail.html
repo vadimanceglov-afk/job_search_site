@@ -2,25 +2,128 @@
 {% load static %}
 {% block content %}
 <h1>Інфа</h1>
+<div class="container d-flex justify-content-center mt-5">
+    <div class="row w-100 d-flex justify-content-center">
+        <div class="col-12 d-flex justify-content-center">
+            <div class="card shadow border-0" style="width:100%; max-width:700px; border-radius:15px;">
+                <h3 class="card-header" style="border-radius:10px 20px">
+                    {{ jobs.company }}
+                </h3>
+                <div class="card-body">
+                    <div class="mb-2">
+                        Опубліковано: {{ jobs.date|date:"d.m.Y" }}
+                    </div>
+                    <h3 class="card-title"><strong>{{ jobs.title }}</strong></h3>
+                    <div class="d-flex flex-column mb-1">
+                        <h5 class="mb-2 fw-bold">
+
+                            від {{ jobs.price_start }} до {{ jobs.price_end }} грн
+                        </h5>
+                        <div class="mb-2">
+                            {{ jobs.category }}|
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.city }}|
+                            вулиця {{ jobs.street }}|
+                            {{ jobs.house_number }}|
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.get_employment_type_display }}|
+                            {{ jobs.get_work_format_display }}|
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.get_experience_display }}|
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.description }}|
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.description1 }}|
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.description2 }}
+                        </div>
+                        <div class="mb-2">
+                            {{ jobs.link }}|
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-        <strong>{{ jobs.title }}</strong>|
-        {{ jobs.description }}|
-        {{ jobs.description1 }}|
-        {{ jobs.description2 }}|
-        {{ jobs.category }}|
-        {{ jobs.city }}|
-        {{ jobs.link }}|
-        {{ jobs.employment_type }}|
-        {{ jobs.work_format }}|
-        {{ jobs.experience }}|
-        {{ jobs.price_start }}|
-        {{ jobs.price_end }}|
-        {{ jobs.date }}|
-        {{ jobs.company }}|
+<div class="container my-5" style="max-width: 800px;">
+    <div class="border-bottom pb-3 mb-4">
+        <h1 class="display-5 fw-bold">{{ jobs.title }}</h1>
+        <div class="d-flex justify-content-between align-items-center text-muted">
+            <h4>{{ jobs.company }}</h4>
+            <small>Опубліковано: {{ jobs.date|date:"d.m.Y" }}</small>
+        </div>
+    </div>
 
+    <div class="bg-light p-4 rounded mb-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h3 class="text-success fw-bold">
+                    {% if jobs.price_start or jobs.price_end %}
+                        {% if jobs.price_start %}від {{ jobs.price_start }} {% endif %}
+                        {% if jobs.price_end %}до {{ jobs.price_end }} {% endif %} грн
+                    {% else %}
+                        Зарплата не вказана
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="badge bg-secondary p-2">{{ jobs.category }}</span>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="d-flex flex-wrap gap-2">
+            <span class="badge bg-primary p-2">📍 {{ jobs.city }}</span>
+            <span class="badge bg-info text-dark p-2">💼 {{ jobs.get_work_format_display }}</span>
+            <span class="badge bg-warning text-dark p-2">⏱️ {{ jobs.get_employment_type_display }}</span>
+            <span class="badge bg-dark p-2">🎓 {{ jobs.get_experience_display }}</span>
+        </div>
+    </div>
 
+    <div class="job-description mb-5">
+        <div class="mb-4">
+            <h5>Опис вакансії</h5>
+            <p>{{ jobs.description|linebreaks }}</p>
+        </div>
+        
+        {% if jobs.description1 %}
+        <div class="mb-4">
+            <h5>Вимоги та обов'язки</h5>
+            <p>{{ jobs.description1|linebreaks }}</p>
+        </div>
+        {% endif %}
 
+        {% if jobs.description2 %}
+        <div class="mb-4">
+            <h5>Що ми пропонуємо</h5>
+            <p>{{ jobs.description2|linebreaks }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card p-4 text-center bg-light">
+        <h5>Зацікавила вакансія?</h5>
+        <p class="text-muted">Подайте відгук прямо зараз або перейдіть на сайт компанії.</p>
+        
+        <div class="d-flex justify-content-center gap-3 mt-3">
+            {% if jobs.link %}
+                <a href="{{ jobs.link }}" target="_blank" class="btn btn-outline-secondary">
+                    Сайт компанії 🔗
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 {% if user.employer.name_company %} 
     {% if user == jobs.company.user %}

@@ -159,7 +159,7 @@ class Job_DatailView(DetailView):
     template_name = "jobs/job_datail.html"
 
 
-#Інформація про вакансію
+#Інформація про резюме
 class Job_ResumeView(DetailView):
     model = Resume
     context_object_name = "resume"
@@ -182,13 +182,12 @@ class Job_ResumeView(DetailView):
         
         return context
     
-#Редагувати вакансію
+#Редагувати резюме
 class Resume_UpdateView(UpdateView):
     model =Resume
     form_class = Resume_CreatFrom
     template_name = "jobs/job_creat_resume.html"
-    success_url = reverse_lazy("job_list")
-
+    success_url = reverse_lazy("job_profile")
 
 
 #Редагувати вакансію

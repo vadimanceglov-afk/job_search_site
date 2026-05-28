@@ -54,6 +54,9 @@
                                     Подати заявку
                                 </a>
                             {% endif %}
+                        <a href="{% url 'job_datail' pk=jo.id %}" class="btn btn-warning px-4 fw-bold shadow-sm">
+                            Переглянути
+                        </a>
                         </div>
                       </div>
                     </div>
@@ -65,8 +68,6 @@
             {% endfor %}
         </div>
     </div>
-
-
 
 
 <h3 class="fw-bold text-center">Компанії:</h3>

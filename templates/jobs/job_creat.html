@@ -1,63 +1,115 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Створити вакансію</h1>{% if form.instance.pk %}Редагувати{% else %}Створити{% endif %} вакансію</h2>
-<form method="POST">
-{% csrf_token %}
-<div class="mb-1">
-    <strong>Кого шукаєте?:</strong>
-</div>
-{{ form.title }}
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description }}
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description1 }}
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description2 }}
-<div class="mb-1">
-    <strong>Напрям:</strong>
-</div>
-{{ form.category }}
-<div class="mb-1">
-    <strong>Посилання на сайт:</strong>
-</div>
-{{ form.link }}
-<div class="mb-1">
-    <strong>Ціна від:</strong>
-</div>
-{{ form.price_start }}
-<div class="mb-1">
-    <strong>Ціна до:</strong>
-</div>
-{{ form.price_end }}
-<div class="mb-1">
-    <strong>Зображення:</strong>
-</div>
-{{ form.image }}
-<div class="mb-1">
-    <strong>Місто:</strong>
-</div>
-{{ form.city }}
-<div class="mb-1">
-    <strong>Вулиця:</strong>
-</div>
-{{ form.street }}
+<div class="container mt-4">
+  <div class="row justify-content-center"> 
+    <div class="text-start">
+        {% if user.employer.name_company %} 
+            <a href="{% url 'job_company' %}" class="btn btn-light ">
+                Назад до компанії
+            </a>
+        {% else %}
+            <a href="{% url 'job_list' %}" class="btn btn-light w-100 py-2 fw-bold rounded-3 border">
+                Назад до списку
+            </a>
+        {% endif %}
+    </div>
+    <div class="col-12 text-center mb-4">
+      <h2 class="fw-bold">{% if form.instance.pk %}Редагувати{% else %}Створити{% endif %} вакансію</h2>
+    </div>
+    
+    <div class="col-12 d-flex justify-content-center">
+        <div class="card shadow border-0" style="width:100%; max-width:720px; border-radius:15px;">
+            <div class="card-body p-4">
+                <form method="POST" class="mb-3">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Кого шукаєте?:</label>
+                    {{ form.title }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Категорія:</label>
+                    {{ form.category }}
+                </div>
+                
+                <div class="row">
+                    <div class="mb-3 col-sm">
+                        <label class="form-label fw-bold">Досвід роботи:</label>
+                        {{ form.experience }}
+                    </div>
+                    <div class="mb-3 col-sm">
+                        <label class="form-label fw-bold">Формат роботи:</label>
+                        {{ form.work_format }}
+                    </div>
+                    <div class="mb-3 col-sm">
+                        <label class="form-label fw-bold">Тип зайнятості:</label>
+                        {{ form.employment_type }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Зображення:</label>
+                    {{ form.image }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Опишіть роботу:</label>
+                    {{ form.description }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Кого шукайте:</label>
+                    {{ form.description1 }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Що натомість пропонуєте:</label>
+                    {{ form.description2 }}
+                </div>
+                
+                <div class="row align-items-center mb-3">
+                    <div class="col-md">
+                        <label class="form-label fw-bold">Ціна від:</label>
+                        {{ form.price_start }}
+                    </div>
+                    
+                    <div class="col-auto text-muted pt-4 d-none d-md-block" style="font-size: 1.5rem; line-height: 1;">
+                        —
+                    </div>
+                    
+                    <div class="col-md">
+                        <label class="form-label fw-bold">Ціна до:</label>
+                        {{ form.price_end }}
+                    </div>
+                </div>
+                
+                <div class="row mb-2">
+                    <div class="mb-3 col-sm">
+                        <label class="form-label fw-bold">Місто:</label>
+                        {{ form.city }}
+                    </div>
+                    <div class="mb-3 col-sm">
+                        <label class="form-label fw-bold">Вулиця:</label>
+                        {{ form.street }}
+                    </div>
+                    <div class="mb-3 col-sm">
+                        <label class="form-label fw-bold">Буд./Офіс:</label>
+                        {{ form.house_number }}
+                    </div>
+                </div>
 
-<button type="submit" class="btn btn-secondary">Зберегти</button>
-</form>
-{% if user.employer.name_company %} 
-    <a href="{% url 'job_company' %}" class="btn-exit">
-        Назад
-    </a>
-{% else %}
-<a href="{% url 'job_list' %}" class="btn btn-light">
-    Назад
-</a>
-{% endif %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Посилання на сайт:</label>
+                    {{ form.link }}
+                </div>
+                <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3">Зберегти вакансію</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<br><br>
 {% endblock %}

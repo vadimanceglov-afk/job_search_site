@@ -1,43 +1,59 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Створити резюме</h1>
-
-<form method="POST">
-{% csrf_token %}
-<div class="mb-1">
-    <strong>Заголовок:</strong>
+<div class="container mt-4">
+  <div class="row justify-content-center"> 
+    <div class="text-start">
+        <a href="{% url 'job_profile' %}" class="btn btn-light">
+            Назад
+        </a>
+    </div>
+    <div class="col-12 text-center mb-4">
+      <h2 class="fw-bold">{% if form.instance.pk %}Редагувати{% else %}Створити{% endif %} резюме</h2>
+    </div>
+    <div class="col-12 d-flex justify-content-center">
+        <div class="card shadow border-0" style="width:100%; max-width:720px; border-radius:15px;">
+            <div class="card-body p-4">
+                <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Дайте назву резюме:</label>
+                    {{ form.title }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">На яку посаду притендуєте:</label>
+                    {{ form.description1 }}
+                </div>
+                <hr>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Про себе:</label>
+                    {{ form.description }}
+                </div>
+                
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Досвід роботи:</label>
+                    {{ form.description2 }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Навички:</label>
+                    {{ form.description3 }}
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Освіта:</label>
+                    {{ form.description4 }}
+                </div>
+                
+                <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mt-2">Зберегти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
 </div>
-{{ form.title }}
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description }}
-
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description1 }}
-
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description2 }}
-
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description3 }}
-
-<div class="mb-1">
-    <strong>Опис:</strong>
-</div>
-{{ form.description4 }}
-<button type="submit" class="btn btn-success">Зберегти</button>
-</form>
-
-<a href="{% url 'job_list' %}" class="btn btn-light">
-    Назад
-</a>
-
+<br><br>
 {% endblock %}
