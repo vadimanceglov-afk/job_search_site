@@ -86,7 +86,7 @@ class Application_Form(forms.ModelForm):
         widgets = {
             'resume': forms.Select(attrs={
                 'class': 'form-select',
-                'style': 'border: 2px solid #ffc107;'  # Твій фірмовий жовтий акцент
+                'style': 'form-control'  # Твій фірмовий жовтий акцент
             }),
             'res_file': forms.FileInput(attrs={
                 'class': 'form-control',

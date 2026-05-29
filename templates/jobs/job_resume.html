@@ -3,16 +3,13 @@
 {% block content %}
 {% if user.employer %} 
 <h1>Resume</h1>
-        {{ resume.author }}|
-        {{ resume.title }}|
-        {{ resume.description }}|
-    {% if messages %}
+{% if messages %}
       <ul class="messages">
         {% for message in messages %}
           <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
       </ul>
-    {% endif %}
+{% endif %}
 
     <h3>Заявки по цьому резюме на ваші вакансії:</h3>
     
@@ -39,9 +36,29 @@
 
 {% else %}
 <h1>Resume</h1>
-        {{ resume.author }}|
-        {{ resume.title }}|
-        {{ resume.description }}|
+<div class="container mt-4">
+  <div class="row justify-content-center"> 
+    <div class="text-start">
+        <div class="col-12 d-flex justify-content-center">
+            <div class="card shadow border-0" style="width:100%; max-width:720px; border-radius:15px;">
+                <div class="card-body p-4">
+                    {% for resume in profil %}
+                        {{ resume.first_name }}
+                        {{ resume.age }}
+                    {% endfor %}
+                    {{ resume.author }}|
+                    {{ resume.title }}|
+                    {{ resume.description }}|
+                    {{ resume.description1 }}
+                    {{ resume.description2 }}
+                    {{ resume.description3 }}
+                    {{ resume.description4 }}
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
         <a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
 {% endif %}
 

@@ -1,23 +1,61 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h2>Відгукнутися на вакансію: {{ vacancy.title }}</h2>
+<div class="container mt-4">
+  <div class="text-start mt-3">
+    <a href="{% url 'job_list' %}" class="text-muted text-decoration-none small">
+        <i class="bi bi-arrow-left"></i> Назад до вакансій
+    </a>
+  </div>
+    <div class="row justify-content-center">
+        <div class="col-12 d-flex justify-content-center">
+            <div class="card shadow-sm border-0" style="width:100%; max-width:540px; border-radius:15px;">
+                <div class="card-body p-4 p-sm-5">
+                    <div class="">
+                      <h2 class="text-center fw-bold">Відгук на вакансію:</h2>
+                      <h4 class="text-center fw-bold text-site"> {{ vacancy.title }}</h4>
+                      <p class="text-center text-secondary">Оберить сопосіб відгуку</p>
+                      {% if already_applied and application %}
+                      <div class="d-grid gap-2">
+                      <div class="text-center">
+                        <p class="fw-bold">Статус заявки:</p>
+                        <span class="badge text-bg-warning text-dark px-3 py-2 fs-6 mb-2">{{ application.get_status_display }}</span>
+                      </div>
+                            <p class="text-secondary mb-4 text-center">Ви вже надіслали свій відгук на цю вакансію.</p>
+                            <button class="btn btn-light fw-bold rounded-3 py-2" disabled>
+                              Відгук надіслано
+                            </button>
+                          <a href="{% url 'chat_room' application.id %}" class="btn-L px-3 fw-bold">
+                            <i class="bi bi-chat-left-dots-fill me-2"></i> Перейти до чату компанії
+                          </a>
+                        </div>
+                      {% else %}
+                        <form method="post" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                            <label class="form-label fw-bold">
+                              <i class="bi bi-file-earmark-person text-site"></i> 
+                              Обрати стоверні резюме:
+                            </label>
+                            {{ form.resume }}
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label fw-bold">
+                              <i class="bi bi-paperclip text-site"></i>
+                              Прикріпити файли резюме:
+                            </label>
+                            {{ form.res_file }}
+                          </div>
+                          <button type="submit" class="btn-L w-100 fw-bold rounded-3 mt-3">Надіслати заявку</button>
+                        </form>
+                      {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% if already_applied and application %}
-    <button disabled>Вже відгукнулися</button>
-    <a href="{% url 'chat_room' application.id %}" class="btn">Чат з роботодавцем</a>
-    
-    <p>Статус заявки: <strong>{{ application.status|default:"under_review" }} 
-        ({{ application.get_status_display|default:"На розгляді" }})</strong></p>
-{% else %}
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.resume }}
-    {{ form.res_file }}
-    <button type="submit">Надіслати заявку</button>
-  </form>
-{% endif %}
-<a href="{% url 'job_list' %}">
-    Назад
-</a>
+
+
 {% endblock %}

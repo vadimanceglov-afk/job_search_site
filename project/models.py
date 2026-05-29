@@ -93,10 +93,12 @@ class Application(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, max_length=50, default='under_review')
 
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['author', 'vacancy'], name='unique_user_application')
         ]
+        ordering = ['-created_at']
 
     
     def total_applications(self):

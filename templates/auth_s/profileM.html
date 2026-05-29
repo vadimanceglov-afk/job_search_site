@@ -2,9 +2,15 @@
 {% load static %}
 {% block content %}
 <h1>{{ employer.name_company }}</h1>
-<img src="{{ employer.logo.url }}" alt="Avatar" 
-class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-style="max-width: 180px; height: 180px; object-fit: cover;">
+{% if res.author.profile %}
+    <img src="{{ employer.logo.url }}" alt="Avatar" 
+    class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+    style="max-width: 180px; height: 180px; object-fit: cover;">
+{% else %}
+    <img src="{% static 'image/s-logo.png' %}" alt="Avatar" 
+         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+         style="width: 180px; height: 180px; object-fit: cover;">
+{% endif %}
     {{ employer.description }}|
     {{ employer.employer_type }}|
     {{ employer.role }}|

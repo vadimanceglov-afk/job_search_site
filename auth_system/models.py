@@ -21,6 +21,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     
+    email = models.EmailField(max_length=254, blank=True, null=True)
     avatar = models.ImageField(upload_to='imge_avatar', null=True, blank=True)
     op = models.CharField(choices=OP_CHOICES, max_length=20, default='Yes', null=True, blank=True)#
     first_name = models.CharField(max_length=100,blank=True, verbose_name='first_name')#імя
@@ -74,6 +75,7 @@ class EmployerProfile(models.Model):
 
     employer_type = models.CharField(max_length=10, choices=TYPES_CHOICES, default='private')#тип роботодавця
     name_company = models.CharField(max_length=20)#назва компанії
+    email = models.EmailField(max_length=254, blank=True, null=True)
     role = models.CharField(choices=ROLE_CHOICES, max_length=20, default='Employer')#роль
     description = models.TextField()#опис
     logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)#логотип

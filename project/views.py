@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from project_system import settings
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView, View
 from .models import Vacancy, Like, Response, Resume, Application, Category, City
-from auth_system.models import EmployerProfile
+from auth_system.models import EmployerProfile, UserProfile
 from project.forms import Vacancy_CreatFrom, Response_CreatFrom, Resume_CreatFrom, Application_Form, Vacancy_SurchFrom, Vacancy_FilterFrom
 from django.contrib.auth.mixins import LoginRequiredMixin
 from project.mixins import UserJob
@@ -59,15 +60,28 @@ def job_sursceh(request):
 @login_required
 def apply_for_job(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
-
     application = Application.objects.filter(
         author=request.user, 
         vacancy=vacancy
     ).first()
+
+    application_a = Application.objects.filter(vacancy__company__user=request.user).order_by('-created_at')
     
     already_applied = application is not None
 
     if request.method == 'POST':
+        subject = f"Новий відгук на вакансію: {vacancy.title}"
+        message = f"Привіт! На твою вакансію '{vacancy.title}' відгукнувся користувач {request.user.username}.\nПеревір свій кабінет на сайті!"
+        from_email = settings.EMAIL_HOST_USER  # Твоя пошта Gmail з settings.py
+        recipient_list = [vacancy.company.email]
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=from_email,
+            recipient_list=recipient_list,
+            fail_silently=False, # Якщо False, то у разі помилки Django покаже її в консолі
+        )
         if already_applied:
             messages.error(request, "You have already applied for this job.")
             return redirect('job_datail', vacancy_id=vacancy.id)
@@ -95,7 +109,8 @@ def apply_for_job(request, vacancy_id):
         'form': form, 
         'already_applied': already_applied, 
         'total_applications': vacancy.applications.count(), 
-        'application': application,         
+        'application': application,  
+        'application_a': application_a,       
         'vacancy': vacancy
     })
 
@@ -168,7 +183,7 @@ class Job_ResumeView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         resume = self.get_object()
-        
+        context['profil'] = UserProfile.objects.all()
         # Якщо користувач - роботодавець, показуємо тільки його вакансії
         if self.request.user.is_authenticated and hasattr(self.request.user, 'employer'):
             # Фільтруємо заявки тільки по вакансіям цієї компанії
@@ -265,6 +280,17 @@ class Job_StatusChangeView(View):
         if new_status in ['accepted', 'reject']:
             appli.status = new_status
             appli.save()
+            subject = f"На вашу заявку відгукнулись"
+            message = f"Статус заявки:{appli.get_status_display()}"
+            from_email = settings.EMAIL_HOST_USER  # Твоя пошта Gmail з settings.py
+
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=from_email,
+                recipient_list=[appli.author.email],
+                fail_silently=False, # Якщо False, то у разі помилки Django покаже її в консолі
+            )
             messages.success(request, f"Статус змінено на: {appli.get_status_display()}")
         else:
             messages.error(request, "Невірний статус")
@@ -274,12 +300,3 @@ class Job_StatusChangeView(View):
     def get_object(self):
         appli_id = self.kwargs.get("pk")
         return get_object_or_404(Application, pk = appli_id)
-    
-
-#send_mail(
-#    'Subject here',
-#    'Here is the message body.',
-#    'from@example.com',
-#    ['to@example.com'],
-#    fail_silently=False,
-#)
