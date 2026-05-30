@@ -53,7 +53,6 @@ class UserProfile(models.Model):
         # Перевіряємо, чи завантажив користувач свій аватар
         if self.avatar:
             return self.avatar.url
-        
         # Якщо аватара немає, генеруємо дефолтний залежно від статі та опції
         if self.gender == 'Men':
             if self.op == 'Yes':
@@ -88,8 +87,12 @@ class EmployerProfile(models.Model):
     
     @property
     def img_logo(self):
-        # Якщо компанія завантажила логотип — повертаємо його url
-        if self.logo:
-            return self.logo.url
-        # Якщо логотипу немає — повертаємо стандартну іконку-заглушку з папки static
-        return '/static/image/s-logo.png'
+        if self.employer_type == 'company':
+        # Перевіряємо, чи завантажив користувач свій аватар
+            if self.logo:
+                return self.logo.url
+        # Якщо аватара немає, генеруємо дефолтний залежно від статі та опції
+            else:
+                return '/static/image/e-logo.png'
+        else:
+            return '/static/image/i-logo.png'

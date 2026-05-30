@@ -2,6 +2,21 @@ from django.db import models
 from django.contrib.auth.models import User
 from auth_system.models import EmployerProfile
 
+EMPLOYMENT_CHOICES = [
+        ('full_time', 'Повна зайнятість'),
+        ('part_time', 'Неповна зайнятість'),
+    ]
+
+EXPERIENCE_CHOICES = [
+        ('no_experience', 'Без досвіду'),
+        ('experience', 'Досвід роботи'),
+    ]
+
+WORK_FORMAT_CHOICES = [
+        ('office', 'В офісі'),
+        ('remote', 'Віддалено'),
+        ('hybrid', 'Гібрид'),
+    ]
 
 #Міста
 class City(models.Model):
@@ -20,21 +35,6 @@ class Category(models.Model):
 
 #Вакансій роботи
 class Vacancy(models.Model):
-    EMPLOYMENT_CHOICES = [
-        ('full_time', 'Повна зайнятість'),
-        ('part_time', 'Неповна зайнятість'),
-    ]
-
-    EXPERIENCE_CHOICES = [
-        ('no_experience', 'Без досвіду'),
-        ('experience', 'Досвід роботи'),
-    ]
-
-    WORK_FORMAT_CHOICES = [
-        ('office', 'В офісі'),
-        ('remote', 'Віддалено'),
-        ('hybrid', 'Гібрид'),
-    ]
 
     title = models.CharField(max_length=256)#Заголовок
     description = models.TextField()#опис

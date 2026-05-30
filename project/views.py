@@ -26,6 +26,8 @@ def job_sursceh(request):
     query = request.GET.get("q")
     city_id = request.GET.get('city')
     cat_id = request.GET.get('category')
+    ex_id = request.GET.get('experience')
+    em_id = request.GET.get('employment_type')
     p_start = request.GET.get("price_start")
     p_end = request.GET.get("price_end")
 
@@ -40,6 +42,10 @@ def job_sursceh(request):
         vac = vac.filter(city_id=city_id)
     if cat_id:
         vac = vac.filter(category_id=cat_id)
+    if ex_id:
+        vac = vac.filter(experience_id=ex_id)
+    if em_id:
+        vac = vac.filter(employment_type_id=ex_id)
     if p_start:
         vac = vac.filter(price_start__gte=p_start)
     if p_end:
@@ -114,7 +120,7 @@ def apply_for_job(request, vacancy_id):
         'vacancy': vacancy
     })
 
-
+@login_required
 def Like_Response(request, pk):
     response = get_object_or_404(Response, id=pk)
     like_qs = Like.objects.filter(user=request.user, response=response)
@@ -149,8 +155,6 @@ class Job_ListView(ListView):
         
         if self.request.user.is_authenticated:
             context['user_already_responded'] = user_already_responded
-
-   
 
         context['response_form'] = self.form_class() 
         return context

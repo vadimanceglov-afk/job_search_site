@@ -25,13 +25,17 @@
     </div>
 </section>
 
-<h3 class="fw-bold text-center">Вакансії:</h3>
+    <h3 class="fw-bold text-center">Вакансії:</h3>
     <div class="container mb-5">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
             {% for jo in latest_objects %}
-                <div class="col">
+                <div class="col position-relative">
+                    <a href="{% url 'job_datail' pk=jo.id %}" class="stretched-link text-decoration-none ">
                     <div class="card h-100 mb-3 mx-auto">
                       <h5 class="card-header">
+                        <img src="{{ jo.company.img_logo }}" alt="Avatar" 
+                             class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                             style="width: 35px; height: 35px; object-fit: cover;">
                         {{ jo.company }}
                       </h5>
                       <div class="card-body">
@@ -54,12 +58,10 @@
                                     Подати заявку
                                 </a>
                             {% endif %}
-                        <a href="{% url 'job_datail' pk=jo.id %}" class="btn btn-warning px-4 fw-bold shadow-sm">
-                            Переглянути
-                        </a>
                         </div>
                       </div>
                     </div>
+                    </a>
                 </div>
             {% empty %}
                 <div class="col-12 text-center">
@@ -68,7 +70,25 @@
             {% endfor %}
         </div>
     </div>
+    <style>
+        /* Змінюємо колір і прибираємо підкреслення для всіх посилань */
+        a {
+            color: black; /* Ваш бажаний колір (наприклад, помаранчевий) */
+            text-decoration: none; /* Прибирає підкреслення */
+        }
 
+        /* Додаємо зміну кольору при наведенні мишкою (за бажанням) */
+        a:hover {
+            color: black; /* Колір при наведенні */
+            text-decoration: none; /* Повертає підкреслення при наведенні, якщо потрібно */
+        }
+        .card-link {
+          display: block;
+          text-decoration: none; /* Прибираємо стандартне підкреслення */
+          color: inherit;         /* Зберігаємо оригінальні кольори тексту */
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+    </style>
 
 <h3 class="fw-bold text-center">Компанії:</h3>
 <br>
@@ -98,6 +118,7 @@
         <p>Ви вже залишили відгук про наш сайт. Дякуємо!</p>
     {% else %}
         <form method="POST" action="" class=" gap-2">
+            {% csrf_token %}
             <div style="height: 150px; max-width: 400px;">
                 {{ response_form.as_p }}
             </div>
@@ -124,7 +145,7 @@
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                                          style="width: 35px; height: 35px; object-fit: cover;">
                                 {% else %}
-                                    <img src="{% static 'image/f-logo.png' %}" alt="Avatar" 
+                                    <img src="{{ res.author.employer.img_logo }}" alt="Avatar" 
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                                          style="width: 35px; height: 35px; object-fit: cover;">
                                 {% endif %}
@@ -152,5 +173,7 @@
         </div>
     </div>
     <br>
+
+    
 
 {% endblock %}

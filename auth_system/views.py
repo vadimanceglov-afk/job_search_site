@@ -149,7 +149,7 @@ class Profile_UpdateView(UpdateView):
 class Company_UpdateView(UpdateView):
     model = EmployerProfile
     template_name = "auth_s/profile_form.html"
-    fields = ['name_company', 'description'] # вкажи потрібні поля
+    fields = ['name_company', 'description', 'employer_type'] # вкажи потрібні поля
     success_url = reverse_lazy('job_company')
 
     def get_object(self, queryset=None):

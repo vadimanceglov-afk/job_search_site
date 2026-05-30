@@ -19,56 +19,18 @@
 </section>
 
 <form action="{% url 'job_surh' %}" method="get">
-    <input type="hidden" name="q" value="{{ query|default:'' }}">
-        <div class="col-md-3">
-            <div class="form-floating">
-                <select name="city" class="form-select" id="city_select">
-                    <option value="">Всі міста</option>
-                    {% for c in cities %}
-                        <option value="{{ c.id }}" {% if selected_city == c.id|stringformat:"i" %}selected{% endif %}>
-                            {{ c.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <label for="city_select">Місто</label>
-            </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="form-floating">
-                <select name="category" class="form-select" id="cat_select">
-                    <option value="">Всі категорії</option>
-                    {% for cat in categories %}
-                        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"i" %}selected{% endif %}>
-                            {{ cat.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <label for="cat_select">Категорія</label>
-            </div>
-        </div>
+                {{ search_form.city }}
+                {{ search_form.category }}
+                {{ search_form.experience }}
+                {{ search_form.employment_type }}
+                {{ search_form.price_start }}
+                {{ search_form.price_end }}
 
-        <div class="col-md-2">
-            <div class="form-floating">
-                <input type="number" name="price_start" class="form-control" id="price_start" 
-                       value="{{ price_start }}" placeholder="Ціна від">
-                <label for="price_start">Ціна від</label>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="form-floating">
-                <input type="number" name="price_end" class="form-control" id="price_end" 
-                       value="{{ price_end }}" placeholder="Ціна до">
-                <label for="price_end">Ціна до</label>
-            </div>
-        </div>
-
-        <div>
             <button type="submit" class=" btn-exit">
                 Фільтрувати
             </button>
-        </div>
+
 
 
 </form>
@@ -77,41 +39,65 @@
 
 <div class="container mt-5">
     <div class="row d-flex justify-content-center"> 
-         <div class="col-md-10 col-lg-8"> 
-{% for jo in vac %}
-            <div class="card w-75 mb-3 mx-auto">
-              <h5 class="card-header">
-                {{ jo.company }}
-              </h5>
-              <div class="card-body">
-                <h5 class="card-title">{{ jo.title }}</h5>
-                <p class="card-text">
-                    {{ jo.category }}
-                    {{ jo.city }}
-                </p>
-                    <div class=" text-start">
-                        {% if user.employer.name_company %} 
-                            {% if user == jo.company.user %}
-                                <p>Заявок({{ jo.applications.count }})</p>
-                                <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
-                                    Редагувати мою вакансію
+        {% for jo in vac %}
+            <div class="col-md-10 col-lg-8 position-relative"> 
+                <a href="{% url 'job_datail' pk=jo.id %}" class="stretched-link text-decoration-none ">
+                <div class="card w-75 mb-3 mx-auto">
+                  <h5 class="card-header">
+                    <img src="{{ jo.company.img_logo }}" alt="Avatar" 
+                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                         style="width: 35px; height: 35px; object-fit: cover;">
+                    {{ jo.company }}
+                  </h5>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ jo.title }}</h5>
+                    <p class="card-text">
+                        {{ jo.category }}
+                        {{ jo.city }}
+                    </p>
+                        <div class=" text-start">
+                            {% if user.employer.name_company %} 
+                                {% if user == jo.company.user %}
+                                    <p>Заявок({{ jo.applications.count }})</p>
+                                    <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
+                                        Редагувати мою вакансію
+                                    </a>
+                                    <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
+                                {% endif %}
+                            {% else %}
+                                
+                                <a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
+                                    Подати заявку
                                 </a>
-                                <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
                             {% endif %}
-                        {% else %}
-                            
-                            <a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
-                                Подати заявку
-                            </a>
-                        {% endif %}
-                    </div>
-              </div>
-            </div>
-{% empty %}
-<h2>Не існує такої вакансій!</h2>
-{% endfor %}
+                        </div>
+                  </div>
+                </div>
+            </a>
         </div>
+        {% empty %}
+        <h2>Не існує такої вакансій!</h2>
+        {% endfor %}
     </div>
 </div>
 
+    <style>
+        /* Змінюємо колір і прибираємо підкреслення для всіх посилань */
+        a {
+            color: black; /* Ваш бажаний колір (наприклад, помаранчевий) */
+            text-decoration: none; /* Прибирає підкреслення */
+        }
+
+        /* Додаємо зміну кольору при наведенні мишкою (за бажанням) */
+        a:hover {
+            color: black; /* Колір при наведенні */
+            text-decoration: none; /* Повертає підкреслення при наведенні, якщо потрібно */
+        }
+        .card-link {
+          display: block;
+          text-decoration: none; /* Прибираємо стандартне підкреслення */
+          color: inherit;         /* Зберігаємо оригінальні кольори тексту */
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+    </style>
 {% endblock %}

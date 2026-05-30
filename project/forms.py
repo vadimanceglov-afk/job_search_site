@@ -1,5 +1,5 @@
 from django import forms
-from project.models import Vacancy, Response, Resume, Application, Category, City
+from project.models import Vacancy, Response, Resume, Application, Category, City, EMPLOYMENT_CHOICES, EXPERIENCE_CHOICES
 
 class Vacancy_CreatFrom(forms.ModelForm):
     class Meta:
@@ -105,6 +105,57 @@ class Vacancy_SurchFrom(forms.Form):
             'placeholder': 'Пошук за вакансійями/ містом /сферою'
         })
     )
+    # 2. Вибір міста (Динамічний з бази даних)
+    city = forms.ModelChoiceField(
+        queryset=City.objects.all(),
+        label='Місто',
+        required=False,
+        empty_label='Усі міста',  # Перший порожній пункт
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    # 3. Вибір категорії (Динамічний з бази даних)
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        label='Категорія',
+        required=False,
+        empty_label='Усі сфери',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    employment_type = forms.ChoiceField(
+        choices=EMPLOYMENT_CHOICES,
+        label='Тип зайнятості',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    experience = forms.ChoiceField(
+        choices=EXPERIENCE_CHOICES,
+        label='Досвід роботи',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    # 6. Зарплата "ВІД" (число)
+    price_start = forms.IntegerField(
+        label='Зарплата від',
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Від'
+        })
+    )
+    
+    # 7. Зарплата "ДО" (число)
+    price_end = forms.IntegerField(
+        label='Зарплата до',
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'До'
+        })
+    )
+
 class Vacancy_FilterFrom(forms.Form):
 # Поля для вибору зі списку (ForeignKey)
     city = forms.ModelChoiceField(

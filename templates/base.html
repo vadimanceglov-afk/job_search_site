@@ -26,20 +26,12 @@
                 <div class="text-end"> 
                 {% if user.is_authenticated %}    
                     {% if user.employer.name_company %}
-                        {% if profile.avatar %}
-                            <a class="nav-link text-white me-3" href="{% url 'job_company' %}">
-                                <img src="{{ user.employer.img_logo }}" 
-                                 alt="Аватар" 
-                                 class="rounded-circle img-fluid border border-3 border-light shadow-sm"
-                                 style="max-width: 40px; height: 40px; object-fit: cover;">
-                                 {{ user.employer.name_company }}
-                        {% else %}
-                            <img src="{% static 'image/p-logo.png' %}" 
-                                 alt="Аватар за замовчуванням" 
-                                 class="rounded-circle img-fluid border border-3 border-light shadow-sm"
-                                 style="max-width: 40px; height: 40px; object-fit: cover;">
-                            </a>
-                        {% endif %}
+                        <a class="nav-link text-white me-3" href="{% url 'job_company' %}">
+                            <img src="{{ user.employer.img_logo }}" 
+                             alt="Аватар" 
+                             class="rounded-circle img-fluid border border-3 border-light shadow-sm"
+                             style="max-width: 40px; height: 40px; object-fit: cover;">
+                             {{ user.employer.name_company }}
                     {% else %}
                         <a class="nav-link fw-bold text-white me-3" href="{% url 'job_profile' %}">
                             <img src="{{ user.profile.img_avatar }}" 
