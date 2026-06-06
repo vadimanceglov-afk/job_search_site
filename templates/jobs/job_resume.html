@@ -1,65 +1,129 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{% if user.employer %} 
-<h1>Resume</h1>
-{% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+{% if user.employer.name_company %} 
+    <h1>Resume</h1>
+    {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+          </ul>
+    {% endif %}
+                        {% for resume in profil %}
+                            {{ resume.first_name }}
+                            {{ resume.age }}
+                        {% endfor %}
+                        {{ resume.author }}|
+                        {{ resume.title }}|
+                        {{ resume.description }}|
+                        {{ resume.description1 }}
+                        {{ resume.description2 }}
+                        {{ resume.description3 }}
+                        {{ resume.description4 }}
+        <h3>Заявки по цьому резюме на ваші вакансії:</h3>
+      
+        {% for appli in applications %}
+            <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
+                <p><strong>Вакансія:</strong> {{ appli.vacancy.title }}</p>
+                <p>Статус: <strong>{{ appli.get_status_display|default:"На розгляді" }}</strong></p>
+
+                <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="accepted">
+                    <button type="submit" class="btn btn-success">Прийняти</button>
+                </form>
+
+                <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="reject">
+                    <button type="submit" class="btn btn-danger">Відхилити</button>
+                </form>
+            </div>
+        {% empty %}
+            <p>На ваші вакансії по цьому резюме заявок поки немає.</p>
         {% endfor %}
-      </ul>
-{% endif %}
-
-    <h3>Заявки по цьому резюме на ваші вакансії:</h3>
-    
-    {% for appli in applications %}
-        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
-            <p><strong>Вакансія:</strong> {{ appli.vacancy.title }}</p>
-            <p>Статус: <strong>{{ appli.get_status_display|default:"На розгляді" }}</strong></p>
-            
-            <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="accepted">
-                <button type="submit" class="btn btn-success">Прийняти</button>
-            </form>
-
-            <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="reject">
-                <button type="submit" class="btn btn-danger">Відхилити</button>
-            </form>
-        </div>
-    {% empty %}
-        <p>На ваші вакансії по цьому резюме заявок поки немає.</p>
-    {% endfor %}
 
 {% else %}
-<h1>Resume</h1>
-<div class="container mt-4">
-  <div class="row justify-content-center"> 
-    <div class="text-start">
-        <div class="col-12 d-flex justify-content-center">
-            <div class="card shadow border-0" style="width:100%; max-width:720px; border-radius:15px;">
-                <div class="card-body p-4">
-                    {% for resume in profil %}
-                        {{ resume.first_name }}
-                        {{ resume.age }}
-                    {% endfor %}
-                    {{ resume.author }}|
-                    {{ resume.title }}|
-                    {{ resume.description }}|
-                    {{ resume.description1 }}
-                    {{ resume.description2 }}
-                    {{ resume.description3 }}
-                    {{ resume.description4 }}
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="row align-items-center">
+  <div class="col-md-4">
+    <img src="p-logo.png" class="img-fluid" alt="Приклад">
+  </div>
+  <div class="col-md-8">
+    <p>Ваш текст знаходиться тут. Він буде розміщений справа від картинки на великих екранах.</p>
   </div>
 </div>
-        <a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
+<div class="d-flex align-items-center">
+  <div class="flex-shrink-0">
+    <img src="p-logo.png" class="img-fluid" alt="Приклад" style="width: 100px;">
+  </div>
+  <div class="flex-grow-1 ms-3">
+    <p>Текст автоматично займає решту простору праворуч від картинки.</p>
+  </div>
+</div>
+    <h1>Resume</h1>
+    <div class="container mt-4">
+      <div class="row justify-content-center"> 
+            <div class="col-12 d-flex justify-content-center">
+                <div class="card shadow border-0" style="width:100%; max-width:720px; border-radius:15px;">
+                    <div class="card-body p-4">
+                        <div class="mb-2">
+                            <h3 class="text-center fw-bold">Резюме: {{ resume.title }}</h3>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                            <img src="{{ user.profile.img_avatar }}" alt="Avatar" 
+                            class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                            style="max-width: 150px; height: 150px; object-fit: cover;">
+                            </div>
+                        {% for resume in profil %}
+                        <h4 >
+                            {{ resume.first_name }}
+                            {{ resume.last_name }}
+                            {{ resume.patronymic }}
+                        </h4>
+                            <div class="mb-2 flex-grow-1 ms-3">
+                                <label class="fw-bold">Вік:</label> {{ resume.age }}
+                            </div>
+                            <div class="mb-2 flex-grow-1 ms-3">
+                                <label class="fw-bold">Дата народження:</label> {{ resume.birth_date }}
+                            </div>
+                            <div class="mb-2">
+                                <label class="fw-bold">Телефон:</label> {{ resume.phone_number }}
+                            </div>
+                            <div class="mb-4">
+                                <label class="fw-bold">Пошта:</label> {{ resume.email }}
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                            <div class="mb-2">
+                                <label class="fw-bold">Я притендую на:</label>
+                                {{ resume.description1 }}                                
+                            </div>
+                            <hr>
+                            <label class="fw-bold">Про мене:</label>
+                            <div class="mb-2">
+                                {{ resume.description }}                                
+                            </div>
+                            <label class=" fw-bold">Досвід роботи:</label>
+                            <div class="mb-2">
+                                {{ resume.description2 }}                                
+                            </div>
+                            <label class=" fw-bold">Корисні навички:</label>
+                            <div class="mb-2">
+                                {{ resume.description3 }}                                
+                            </div>
+                            <label class=" fw-bold">Освіта:</label>
+                            <div class="mb-2">
+                                {{ resume.description4 }}                                
+                            </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+    </div>
+            <a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
 {% endif %}
 
 {% endblock %}

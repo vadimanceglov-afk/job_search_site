@@ -16,39 +16,38 @@
             <div class="card-body p-4">
                 <form method="POST">
                 {% csrf_token %}
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Дайте назву резюме:</label>
-                    {{ form.title }}
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold">На яку посаду притендуєте:</label>
-                    {{ form.description1 }}
-                </div>
-                <hr>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Про себе:</label>
-                    {{ form.description }}
-                </div>
-                
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Досвід роботи:</label>
-                    {{ form.description2 }}
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Навички:</label>
-                    {{ form.description3 }}
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Освіта:</label>
-                    {{ form.description4 }}
-                </div>
-                
-                <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mt-2">Зберегти</button>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Дайте назву або номер резюме:</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">На яку посаду притендуєте:</label>
+                        {{ form.description1 }}
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Про себе:</label>
+                        {{ form.description }}
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Досвід роботи:</label>
+                        {{ form.description2 }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Навички:</label>
+                        {{ form.description3 }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Освіта:</label>
+                        {{ form.description4 }}
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mt-2">Зберегти</button>
                 </form>
             </div>
         </div>

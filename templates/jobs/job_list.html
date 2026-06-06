@@ -36,7 +36,7 @@
                         <img src="{{ jo.company.img_logo }}" alt="Avatar" 
                              class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                              style="width: 35px; height: 35px; object-fit: cover;">
-                        {{ jo.company }}
+                        <a href="{% url 'job_company' %}">{{ jo.company }}</a>
                       </h5>
                       <div class="card-body">
                         <h5 class="card-title">{{ jo.title }}</h5>
