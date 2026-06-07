@@ -2,128 +2,179 @@
 {% load static %}
 {% block content %}
 {% if user.employer.name_company %} 
-    <h1>Resume</h1>
-    {% if messages %}
-          <ul class="messages">
-            {% for message in messages %}
-              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-          </ul>
-    {% endif %}
-                        {% for resume in profil %}
-                            {{ resume.first_name }}
-                            {{ resume.age }}
-                        {% endfor %}
-                        {{ resume.author }}|
-                        {{ resume.title }}|
-                        {{ resume.description }}|
-                        {{ resume.description1 }}
-                        {{ resume.description2 }}
-                        {{ resume.description3 }}
-                        {{ resume.description4 }}
+
+
+
+    <div class="container mt-5 mb-5">
+        <div class="row gx-5 justify-content-center"> 
+            <div class="col-auto d-flex justify-content-center">
+                <div class="card shadow border-0" style="width:100%; max-width:600px; border-radius:15px;">
+                    <div class="card-body p-4">
+                        <div class="mb-2">
+                            <h3 class="text-center fw-bold mb-4">Резюме: {{ resume.title }}</h3>
+                        </div>
+                        <div class="d-flex flex-sm-row align-items-center align-items-sm-start gap-4 mb-4">
+                            <div class="mb-2">
+                                <img src="{{ resume.author.profile.img_avatar }}" alt="Avatar" 
+                                class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                style="max-width: 140px; height: 140px; object-fit: cover;">
+                            </div>
+                            <div class="d-flex flex-column align-items-cente">
+                                <h5 class="fw-bold">
+                                    {{ resume.author.first_name }} 
+                                    {{ resume.author.last_name }}
+                                    {{ resume.author.profile.patronymic }}
+                                </h5>
+                                <div class="mb-2 flex-grow-1">
+                                    <label class="fw-bold text-body-tertiary"><i class="bi bi-cake"></i> Вік:</label> 
+                                    <p class="fw-bold d-inline">{{ resume.author.profile.age }}</p>
+                                </div>
+                                <div class="mb-2 flex-grow-1">
+                                    <label class="fw-bold text-body-tertiary"><i class="bi bi-buildings"></i> Місто:</label> 
+                                    <p class="fw-bold d-inline">{{ resume.city.name }}</p>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="fw-bold text-body-tertiary"><i class="bi bi-telephone"></i> Телефон:</label> 
+                                    <p class="fw-bold d-inline">{{ resume.phone_res }}</p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="fw-bold text-body-tertiary"><i class="bi bi-envelope"></i> Пошта:</label> 
+                                    <p class="fw-bold d-inline">{{ resume.author.profile.email }}</p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                            <div class="mb-2">
+                                <label class="fw-bold ">Я претендую на:</label>
+                                <p class="text-site d-inline ms-1 mb-0">{{ resume.description1 }} </p>                               
+                            </div>
+                            <hr>
+                            <label class="fw-bold text-site"><i class="bi bi-card-list"></i> Про мене:</label>
+                            <div class="mb-2 ms-4">
+                                {{ resume.description }}                                
+                            </div>
+                            <label class=" fw-bold text-site"><i class="bi bi-briefcase"></i> Досвід роботи:</label>
+                            <div class="mb-2 ms-4">
+                                {{ resume.description2 }}                                
+                            </div>
+                            <label class=" fw-bold text-site"><i class="bi bi-lightbulb"></i> Корисні навички:</label>
+                            <div class="mb-2 ms-4">
+                                {{ resume.description3 }}                                
+                            </div>
+                            <label class="fw-bold text-site"><i class="bi bi-mortarboard"></i> Освіта:</label>
+                            <div class="mb-4 ms-4">
+                                {{ resume.description4 }}                                
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+        <div class="col-auto justify-content-end">
         <h3>Заявки по цьому резюме на ваші вакансії:</h3>
-      
+        {% if messages %}
+              <ul class="messages">
+                {% for message in messages %}
+                  <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+              </ul>
+        {% endif %}
         {% for appli in applications %}
-            <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
-                <p><strong>Вакансія:</strong> {{ appli.vacancy.title }}</p>
-                <p>Статус: <strong>{{ appli.get_status_display|default:"На розгляді" }}</strong></p>
-
-                <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="accepted">
-                    <button type="submit" class="btn btn-success">Прийняти</button>
-                </form>
-
-                <form action="{% url 'change_status' appli.pk %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="reject">
-                    <button type="submit" class="btn btn-danger">Відхилити</button>
-                </form>
+            <div class="card shadow border-0 mb-3" style="width:100%; max-width:600px; border-radius:15px;">
+                <div class="card-body p-4">
+                    
+                        <p><strong>Резюме на вакансію:</strong> <strong class="text-site">{{ appli.vacancy.title }}</strong></p>
+                        <p><strong>Статус: </strong><span class="badge text-bg-warning">{{ appli.get_status_display|default:"На розгляді" }}</span></p>
+                        <hr>
+                    <div class="d-grid gap-2 d-md-flex">
+                        <form action="{% url 'change_status' appli.pk %}" method="post" class="flex-grow-1" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="accepted">
+                            <button type="submit" class="btn btn-success fw-bold w-100">Прийняти</button>
+                        </form>
+                    
+                        <form action="{% url 'change_status' appli.pk %}" method="post" class="flex-grow-1" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="reject">
+                            <button type="submit" class="btn btn-danger fw-bold w-100">Відхилити</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         {% empty %}
             <p>На ваші вакансії по цьому резюме заявок поки немає.</p>
         {% endfor %}
 
+        </div>
+      </div>
+    </div>
 {% else %}
-<div class="row align-items-center">
-  <div class="col-md-4">
-    <img src="p-logo.png" class="img-fluid" alt="Приклад">
-  </div>
-  <div class="col-md-8">
-    <p>Ваш текст знаходиться тут. Він буде розміщений справа від картинки на великих екранах.</p>
-  </div>
-</div>
-<div class="d-flex align-items-center">
-  <div class="flex-shrink-0">
-    <img src="p-logo.png" class="img-fluid" alt="Приклад" style="width: 100px;">
-  </div>
-  <div class="flex-grow-1 ms-3">
-    <p>Текст автоматично займає решту простору праворуч від картинки.</p>
-  </div>
-</div>
-    <h1>Resume</h1>
-    <div class="container mt-4">
+    <div class="container mt-4 mb-5">
       <div class="row justify-content-center"> 
             <div class="col-12 d-flex justify-content-center">
-                <div class="card shadow border-0" style="width:100%; max-width:720px; border-radius:15px;">
+                <div class="card shadow border-0" style="width:100%; max-width:600px; border-radius:15px;">
                     <div class="card-body p-4">
                         <div class="mb-2">
-                            <h3 class="text-center fw-bold">Резюме: {{ resume.title }}</h3>
+                            <h3 class="text-center fw-bold mb-4">Резюме: {{ resume.title }}</h3>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                            <img src="{{ user.profile.img_avatar }}" alt="Avatar" 
-                            class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-                            style="max-width: 150px; height: 150px; object-fit: cover;">
-                            </div>
-                        {% for resume in profil %}
-                        <h4 >
-                            {{ resume.first_name }}
-                            {{ resume.last_name }}
-                            {{ resume.patronymic }}
-                        </h4>
-                            <div class="mb-2 flex-grow-1 ms-3">
-                                <label class="fw-bold">Вік:</label> {{ resume.age }}
-                            </div>
-                            <div class="mb-2 flex-grow-1 ms-3">
-                                <label class="fw-bold">Дата народження:</label> {{ resume.birth_date }}
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-end text-muted small">
+                                {{ resume.date|date:"d, Y, H:i" }}
                             </div>
                             <div class="mb-2">
-                                <label class="fw-bold">Телефон:</label> {{ resume.phone_number }}
+                                <img src="{{ user.profile.img_avatar }}" alt="Avatar" 
+                                class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                style="max-width: 160px; height: 160px; object-fit: cover;">
                             </div>
-                            <div class="mb-4">
-                                <label class="fw-bold">Пошта:</label> {{ resume.email }}
+                            <div class="d-flex flex-column ">
+                                <h5>
+                                    {{ request.user.first_name }} 
+                                    {{ request.user.last_name }}
+                                    {{ user.profile.patronymic }}
+                                </h5>
+                                <div class="mb-2 flex-grow-1">
+                                    <label class="fw-bold"><i class="bi bi-cake"></i> Вік:</label> {{ user.profile.age }}
+                                </div>
+                                <div class="mb-2 flex-grow-1">
+                                    <label class="fw-bold"><i class="bi bi-buildings"></i> Місто:</label> {{ resume.city.name }}
+                                </div>
+                                <div class="mb-2">
+                                    <label class="fw-bold"><i class="bi bi-telephone"></i> Телефон:</label> {{ resume.phone_res }}
+                                </div>
+                                <div class="mb-4">
+                                    <label class="fw-bold"><i class="bi bi-envelope"></i> Пошта:</label> {{ user.profile.email }}
+                                </div>
                             </div>
+                            
                         </div>
-                        {% endfor %}
-
                             <div class="mb-2">
-                                <label class="fw-bold">Я притендую на:</label>
-                                {{ resume.description1 }}                                
+                                <label class="fw-bold ">Я претендую на:</label>
+                                <p class="text-site d-inline ms-1 mb-0">{{ resume.description1 }} </p>                               
                             </div>
                             <hr>
-                            <label class="fw-bold">Про мене:</label>
-                            <div class="mb-2">
+                            <label class="fw-bold text-site"><i class="bi bi-card-list"></i> Про мене:</label>
+                            <div class="mb-2 ms-4">
                                 {{ resume.description }}                                
                             </div>
-                            <label class=" fw-bold">Досвід роботи:</label>
-                            <div class="mb-2">
+                            <label class=" fw-bold text-site"><i class="bi bi-briefcase"></i> Досвід роботи:</label>
+                            <div class="mb-2 ms-4">
                                 {{ resume.description2 }}                                
                             </div>
-                            <label class=" fw-bold">Корисні навички:</label>
-                            <div class="mb-2">
+                            <label class=" fw-bold text-site"><i class="bi bi-lightbulb"></i> Корисні навички:</label>
+                            <div class="mb-2 ms-4">
                                 {{ resume.description3 }}                                
                             </div>
-                            <label class=" fw-bold">Освіта:</label>
-                            <div class="mb-2">
+                            <label class="fw-bold text-site"><i class="bi bi-mortarboard"></i> Освіта:</label>
+                            <div class="mb-4 ms-4">
                                 {{ resume.description4 }}                                
                             </div>
+                                <a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
+
                     </div>
                 </div>
             </div>
       </div>
     </div>
-            <a href="{% url 'resume_update' resume.pk %}" class="btn btn-warning">Редагувати</a>
+            
 {% endif %}
 
 {% endblock %}

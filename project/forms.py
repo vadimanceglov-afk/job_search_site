@@ -40,12 +40,19 @@ class Response_CreatFrom(forms.ModelForm):
 class Resume_CreatFrom(forms.ModelForm):
     class Meta:
         model = Resume
-        fields = ["title", "description", "description1", "description2", "description3", "description4", "file"]
+        fields = ["title", "city", "phone_res", "description", "description1", "description2", "description3", "description4", "file"]
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Введіть заголовок вакансії...'
+                'placeholder': 'Введіть заголовок резюме...'
             }),
+
+            'phone_res': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введіть номер телефону...'
+            }),
+
+            'city': forms.Select(attrs={'class': 'form-control'}),
 
             'description': forms.Textarea(attrs={
                 'class': 'form-control',

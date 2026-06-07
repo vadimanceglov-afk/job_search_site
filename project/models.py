@@ -68,6 +68,8 @@ class Vacancy(models.Model):
 class Resume(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="resume")#автор
     title = models.CharField(max_length=256)#Заголовок
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True)
+    phone_res = models.CharField(max_length=20, blank=True, null=True, verbose_name="Номер телефону")
     description = models.TextField()#опис
     description1 = models.TextField(null=True, blank=True)#опис
     description2 = models.TextField(null=True, blank=True)#опис

@@ -101,7 +101,11 @@
                             </div>
                             <div class="text-truncate-custom">
                                 <strong>Від:</strong>
-                                <span>{{ application.author.username }}</span>
+                                <span>                                   
+                                    {{ application.author.first_name }} 
+                                    {{ application.author.last_name }}
+                                    {{ application.author.profile.patronymic }}
+                                </span>
                             </div>
                         </div>
                     </div>
