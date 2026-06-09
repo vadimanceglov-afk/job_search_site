@@ -31,20 +31,33 @@
             {% for jo in latest_objects %}
                 <div class="col position-relative">
                     <a href="{% url 'job_datail' pk=jo.id %}" class="stretched-link text-decoration-none ">
-                    <div class="card h-100 mb-3 mx-auto">
-                      <h5 class="card-header">
-                        <img src="{{ jo.company.img_logo }}" alt="Avatar" 
+                    <div class="card h-100 mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
+
+                      <h5 class="card-header d-flex justify-content-between align-items-center">
+    <div>
+                                    <img src="{{ jo.company.img_logo }}" alt="Avatar" 
                              class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                              style="width: 35px; height: 35px; object-fit: cover;">
-                        <a href="{% url 'job_company' %}">{{ jo.company }}</a>
-                      </h5>
+        <a href="{% url 'job_company' %}">{{ jo.company }}</a>
+    </div>
+    <div class="text-muted">{{ jo.date|date:"d.m.Y" }}</div>
+</h5>
+
                       <div class="card-body">
-                        <h5 class="card-title">{{ jo.title }}</h5>
-                        <p class="card-text">
-                            {{ jo.category }}
-                            {{ jo.city }}
+                        <h5 class=" fw-bold card-title">{{ jo.title }}</h5>
+                        <div class="mb-1  text-site">
+                            від {{ jo.price_start }} - {{ jo.price_end }} грн
+                        </div>
+                        <p class="mb-1">
+                            <p class="fs-6">{{ jo.city }}</p>
                         </p>
-                        <div class="text-start">
+
+                        <div class="mb-4 text-truncate">
+                            {{ jo.description }}
+                        </div>
+                        <div class="mb-2">
+                            {{ jo.date|date:"d.m.Y" }}
+                        </div>
                             {% if user.employer.name_company %} 
                                 {% if user == jo.company.user %}
                                     <p>Заявок({{ jo.applications.count }})</p>
@@ -54,11 +67,14 @@
                                     <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
                                 {% endif %}
                             {% else %}
+
                                 <a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
                                     Подати заявку
                                 </a>
+
+                            
                             {% endif %}
-                        </div>
+
                       </div>
                     </div>
                     </a>

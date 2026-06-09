@@ -6,47 +6,56 @@
     <div class="row w-100 d-flex justify-content-center">
         <div class="col-12 d-flex justify-content-center">
             <div class="card shadow border-0" style="width:100%; max-width:700px; border-radius:15px;">
-                <h3 class="card-header" style="border-radius:10px 20px">
+                <h3 class="card-header">
+                    <img src="{{ user.employer.img_logo }}" alt="Avatar" 
+                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                         style="width: 55px; height: 55px; object-fit: cover;">
                     {{ jobs.company }}
                 </h3>
                 <div class="card-body">
                     <div class="mb-2">
-                        Опубліковано: {{ jobs.date|date:"d.m.Y" }}
+                        
+                        <a href="{% url 'apply_for_job' object.pk %}" class="btn-L mb-3">
+                            Подати заявку
+                        </a>
+                        <div class="text-end">{{ jobs.date|date:"d.m.Y" }}</div>
                     </div>
                     <h3 class="card-title"><strong>{{ jobs.title }}</strong></h3>
                     <div class="d-flex flex-column mb-1">
-                        <h5 class="mb-2 fw-bold">
-
+                        <div class="mb-2 fw-bold text-site">
                             від {{ jobs.price_start }} до {{ jobs.price_end }} грн
-                        </h5>
-                        <div class="mb-2">
-                            {{ jobs.category }}|
                         </div>
                         <div class="mb-2">
-                            {{ jobs.city }}|
-                            вулиця {{ jobs.street }}|
-                            {{ jobs.house_number }}|
+                            Місто: {{ jobs.city }},
+                            вулиця: {{ jobs.street }},
+                            {{ jobs.house_number }}
                         </div>
                         <div class="mb-2">
-                            {{ jobs.get_employment_type_display }}|
-                            {{ jobs.get_work_format_display }}|
+                            {{ jobs.get_employment_type_display }}
+                            {{ jobs.get_work_format_display }}
                         </div>
                         <div class="mb-2">
-                            {{ jobs.get_experience_display }}|
+                            {{ jobs.get_experience_display }}
                         </div>
+                        <label class="fw-bold mb-1"> Опис:</label>
                         <div class="mb-2">
-                            {{ jobs.description }}|
+                            {{ jobs.description }}
                         </div>
+                        <label class="fw-bold mb-1"> Вимоги та обов'язки:</label>
                         <div class="mb-2">
-                            {{ jobs.description1 }}|
+                            {{ jobs.description1 }}
                         </div>
+                        <label class="fw-bold mb-1"> Що ми пропонуємо:</label>
                         <div class="mb-2">
                             {{ jobs.description2 }}
                         </div>
-                        <div class="mb-2">
-                            {{ jobs.link }}|
+                        <div class="mb-4">
+                            {{ jobs.link }}
                         </div>
                     </div>
+                    <a href="{% url 'apply_for_job' object.pk %}" class=" btn-L">
+                        Подати заявку
+                    </a>
                 </div>
             </div>
         </div>
