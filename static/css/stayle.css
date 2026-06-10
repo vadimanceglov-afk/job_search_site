@@ -74,7 +74,8 @@ main {
 }
 
 .btn-L:hover {
-  background-color: #e18012; 
+  background-color: #e18012;
+  color: white; 
 }
 
 .btn-yo {
@@ -173,5 +174,20 @@ main {
 
 .text-site{
     color:#ff9114;
+}
+
+/* Робимо посилання блоком, щоб воно займало всю площу картки */
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Вимикаємо обробку кліків для самої картки, щоб вони проходили крізь неї */
+
+
+/* Повертаємо можливість натискати на кнопку всередині */
+.card-btn {
+  pointer-events: auto;
 }
 

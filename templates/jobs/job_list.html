@@ -26,66 +26,72 @@
 </section>
 
     <h3 class="fw-bold text-center">Вакансії:</h3>
-    <div class="container mb-5">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
-            {% for jo in latest_objects %}
-                <div class="col position-relative">
-                    <a href="{% url 'job_datail' pk=jo.id %}" class="stretched-link text-decoration-none ">
-                    <div class="card h-100 mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
-
-                      <h5 class="card-header d-flex justify-content-between align-items-center">
-    <div>
-                                    <img src="{{ jo.company.img_logo }}" alt="Avatar" 
+<div class="container mb-5">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
+        {% for jo in latest_objects %}
+            <div class="col position-relative">
+                
+                <div class="card h-100 mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
+                  <h5 class="card-header ">
+                    <div class="row gx-5">
+                        <div class="col position-relative" style="z-index: 2;">
+                            <img src="{{ jo.company.img_logo }}" alt="Avatar" 
                              class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                              style="width: 35px; height: 35px; object-fit: cover;">
-        <a href="{% url 'job_company' %}">{{ jo.company }}</a>
-    </div>
-    <div class="text-muted">{{ jo.date|date:"d.m.Y" }}</div>
-</h5>
-
-                      <div class="card-body">
-                        <h5 class=" fw-bold card-title">{{ jo.title }}</h5>
-                        <div class="mb-1  text-site">
-                            від {{ jo.price_start }} - {{ jo.price_end }} грн
+                            <a href="{% url 'job_company' %}">{{ jo.company }}</a>
                         </div>
-                        <p class="mb-1">
-                            <p class="fs-6">{{ jo.city }}</p>
-                        </p>
-
-                        <div class="mb-4 text-truncate">
-                            {{ jo.description }}
+                        <div class="col">
+                            <div class="text-end fs-6">{{ jo.date|date:"d.m.Y" }}</div>
                         </div>
-                        <div class="mb-2">
-                            {{ jo.date|date:"d.m.Y" }}
-                        </div>
-                            {% if user.employer.name_company %} 
-                                {% if user == jo.company.user %}
-                                    <p>Заявок({{ jo.applications.count }})</p>
-                                    <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
-                                        Редагувати мою вакансію
-                                    </a>
-                                    <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
-                                {% endif %}
-                            {% else %}
-
-                                <a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
-                                    Подати заявку
-                                </a>
-
-                            
-                            {% endif %}
-
-                      </div>
                     </div>
-                    </a>
+                  </h5>
+
+                  <div class="card-body">
+                    <h5 class="mb-2 fw-bold card-title">
+                        <a href="{% url 'job_datail' pk=jo.id %}" class="stretched-link text-site text-decoration-none ">
+                            Шукаємо {{ jo.title }}
+                        </a>
+                    </h5>
+                    <div class="mb-2 fw-bold">
+                        від {{ jo.price_start }} - {{ jo.price_end }} грн
+                    </div>
+                    <div class="mb-1">
+                        <p class="fs-6">{{ jo.city }}</p>
+                    </div>
+
+                    <div class="mb-4 text-truncate">
+                        {{ jo.description }}
+                    </div>
+                                 <div class="position-relative mt-auto" style="z-index: 2;">          
+                        {% if user.employer.name_company %} 
+                            {% if user == jo.company.user %}
+                                <div class="d-flex flex-column gap-2 mt-2 ">
+                                    <p class="mb-1 fw-bold">Заявок <span class="badge bg-primary">{{ jo.applications.count }}</span></p>
+                                    <div class="d-flex gap-2">
+                                    <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning fw-bold">
+                                        Редагувати
+                                    </a>
+                                    <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger fw-bold">Видалити</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'apply_for_job' jo.id %}" class="btn-L card-btn ">
+                                Подати заявку
+                            </a>
+                        {% endif %}
+                        </div> 
+                  </div>
                 </div>
-            {% empty %}
-                <div class="col-12 text-center">
-                    <p>Свіжих вакансій поки немає.</p>
-                </div>
-            {% endfor %}
-        </div>
+                
+            </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p>Свіжих вакансій поки немає.</p>
+            </div>
+        {% endfor %}
     </div>
+</div>
     <style>
         /* Змінюємо колір і прибираємо підкреслення для всіх посилань */
         a {
@@ -98,12 +104,10 @@
             color: black; /* Колір при наведенні */
             text-decoration: none; /* Повертає підкреслення при наведенні, якщо потрібно */
         }
-        .card-link {
-          display: block;
-          text-decoration: none; /* Прибираємо стандартне підкреслення */
-          color: inherit;         /* Зберігаємо оригінальні кольори тексту */
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+/* ФІКС ДЛЯ ТВОГО КОЛЬОРУ: заголовок з класом .text-site завжди тримає свій колір */
+    a.text-site, a.text-site:hover {
+        color: #ff9114 !important;
+    }
     </style>
 
 <h3 class="fw-bold text-center">Компанії:</h3>
@@ -160,12 +164,21 @@
                                     <img src="{{ res.author.profile.img_avatar }}" alt="Avatar" 
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                                          style="width: 35px; height: 35px; object-fit: cover;">
-                                {% else %}
+                                <p class="fw-bold mb-0 px-2">
+                                    {{ res.author.first_name }} {{ res.author.last_name }}:
+                                </p>
+                                {% elif res.author.employer %}
                                     <img src="{{ res.author.employer.img_logo }}" alt="Avatar" 
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                                          style="width: 35px; height: 35px; object-fit: cover;">
+                                                                         <p class="fw-bold mb-0 px-2">
+                                    {{ res.author.employer.name_company }}:
+                                </p>
+                                {% else %}
+                                <p>Admin:</p>
                                 {% endif %}
-                                <p class="fw-bold mb-0 px-2">{{ res.author }}:</p>
+
+                                    
                             </div>
 
                             <div class="text-end text-muted small">
