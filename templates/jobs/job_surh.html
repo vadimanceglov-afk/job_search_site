@@ -35,78 +35,11 @@
 
 </form>
 
-
-
-<div class="container mt-5">
-    <div class="row d-flex justify-content-center"> 
+<div class="container mb-5">
+    <div class="row flex-column align-items-center g-4"> 
         {% for jo in vac %}
-            <div class="col-md-10 col-lg-8 position-relative"> 
-                <a href="{% url 'job_datail' pk=jo.id %}" class="stretched-link text-decoration-none ">
-                <div class="card w-75 mb-3 mx-auto">
-                  <h5 class="card-header">
-                    <img src="{{ jo.company.img_logo }}" alt="Avatar" 
-                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-                         style="width: 35px; height: 35px; object-fit: cover;">
-                    {{ jo.company }}
-                  </h5>
-                  <div class="card-body">
-                    <h5 class="card-title">{{ jo.title }}</h5>
-                    <p class="card-text">
-                        {{ jo.category }}
-                        {{ jo.city }}
-                    </p>
-                        <div class=" text-start">
-                            {% if user.employer.name_company %} 
-                                {% if user == jo.company.user %}
-                                    <p>Заявок({{ jo.applications.count }})</p>
-                                    <a href="{% url 'job_update' jo.pk %}" class="btn btn-warning">
-                                        Редагувати мою вакансію
-                                    </a>
-                                    <a href="{% url 'job_delete' jo.pk %}" class="btn btn-danger">Видалити</a>
-                                {% endif %}
-                            {% else %}
-                                
-                                <a href="{% url 'apply_for_job' jo.id %}" class="btn-L">
-                                    Подати заявку
-                                </a>
-                            {% endif %}
-                        </div>
-                  </div>
-                </div>
-            </a>
-        </div>
-        {% empty %}
-        <h2>Не існує такої вакансій!</h2>
-        {% endfor %}
-    </div>
-</div>
-
-
-    <style>
-        /* Змінюємо колір і прибираємо підкреслення для всіх посилань */
-        a {
-            color: black; /* Ваш бажаний колір (наприклад, помаранчевий) */
-            text-decoration: none; /* Прибирає підкреслення */
-        }
-
-        /* Додаємо зміну кольору при наведенні мишкою (за бажанням) */
-        a:hover {
-            color: black; /* Колір при наведенні */
-            text-decoration: none; /* Повертає підкреслення при наведенні, якщо потрібно */
-        }
-        .card-link {
-          display: block;
-          text-decoration: none; /* Прибираємо стандартне підкреслення */
-          color: inherit;         /* Зберігаємо оригінальні кольори тексту */
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-    </style>
-    <div class="container mb-5">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
-        {% for jo in latest_objects %}
-            <div class="col position-relative">
-                
-                <div class="card h-100 mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
+            <div class="col col-9 col-lg-5 position-relative">
+                <div class="card h-100  mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
                   <h5 class="card-header ">
                     <div class="row gx-5">
                         <div class="col position-relative" style="z-index: 2;">
@@ -131,7 +64,7 @@
                         від {{ jo.price_start }} - {{ jo.price_end }} грн
                     </div>
                     <div class="mb-1">
-                        <p class="fs-6">{{ jo.city }}</p>
+                        <p class="fs-6">{{ jo.category }}, {{ jo.city }}</p>
                     </div>
 
                     <div class="mb-4 text-truncate">
@@ -161,9 +94,7 @@
                 
             </div>
         {% empty %}
-            <div class="col-12 text-center">
-                <p>Свіжих вакансій поки немає.</p>
-            </div>
+        <h2 class="text-center"><i class="bi bi-briefcase"></i> Не існує такої вакансій!</h2>
         {% endfor %}
     </div>
 </div>

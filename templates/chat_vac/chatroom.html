@@ -2,6 +2,8 @@
 {% load humanize %}
 
 {% block content %}
+
+
 <div style="padding: 20px;">
     <h2>Чат по вакансії: {{ application.vacancy.title }}</h2>
     <p>Кандидат: {{ application.author.username }} | Роботодавець: {{ application.vacancy.company.user.username }}</p>

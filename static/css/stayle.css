@@ -191,3 +191,10 @@ main {
   pointer-events: auto;
 }
 
+.card-w {
+  width: 1521px;
+  height: 150px;
+  background-color: #c4c2c2;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
