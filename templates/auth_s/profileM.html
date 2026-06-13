@@ -8,11 +8,11 @@
 </div>
 
 
-<div stayle="padding-top: 50px;">
+<div class="container">
     <img src="{{ user.employer.img_logo }}" alt="Avatar" 
-    class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-    style="max-width: 180px; height: 180px; object-fit: cover;">
-</div>
+    class="rounded-circle img-fluid border border-3 border-light shadow-sm " 
+    style="max-width: 180px; height: 180px; object-fit: cover; margin-top: -100px;">
+
 <h1>{{ employer.name_company }}</h1>
     {{ employer.description }}|
     {{ employer.employer_type }}|
@@ -28,7 +28,7 @@
 </a>
 
 {% endif %}
-
+</div>
 <div class="container mb-5">
     <h3>Ваші вакансій:</h3>
     <div class="row flex-column align-items-start g-4"> 
