@@ -32,12 +32,82 @@
 <br>
 <p>Ми віримо, що ідеальна робота існує для кожного, і працюємо над тим, щоб шлях до неї займав лічені хвилини. 
     Приєднуйтесь до нас сьогодні та будуйте своє майбутнє разом із нами!</p>
+
+
+<hr>
+{% if user.is_authenticated %}
+<div class="container">
+    {% if user_already_responded %}
+        <p>Ви вже залишили відгук про наш сайт. Дякуємо!</p>
+    {% else %}
+        <form method="POST" action="" class=" gap-2">
+            {% csrf_token %}
+            <div style="height: 150px; max-width: 400px;">
+                {{ response_form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-success">Опублікувати відгук</button>
+        </form>
+
+    {% endif %}
+{% else %}
+    <p class="text-center">Будь ласка, увійдіть, щоб залишити відгук.</p>
+{% endif %}
+</div>
+<br>
+    <div class="container mt-4">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for res in responses %}
+            <div class="col">
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div class="d-flex align-items-center">
+                                {% if res.author.profile %}
+                                    <img src="{{ res.author.profile.img_avatar }}" alt="Avatar" 
+                                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                         style="width: 35px; height: 35px; object-fit: cover;">
+                                <p class="fw-bold mb-0 px-2">
+                                    {{ res.author.first_name }} {{ res.author.last_name }}:
+                                </p>
+                                {% elif res.author.employer %}
+                                    <img src="{{ res.author.employer.img_logo }}" alt="Avatar" 
+                                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                         style="width: 35px; height: 35px; object-fit: cover;">
+                                                                         <p class="fw-bold mb-0 px-2">
+                                    {{ res.author.employer.name_company }}:
+                                </p>
+                                {% else %}
+                                <p>Admin:</p>
+                                {% endif %}
+
+                                    
+                            </div>
+
+                            <div class="text-end text-muted small">
+                                {{ res.date|date:"d, Y, H:i" }}
+                            </div>
+
+                        </div>
+
+                        <p class="card-text mt-3">{{ res.content }}</p>
+
+                        <div class="text-end">
+                            <a class="btn btn-outline-success" href="{% url 'Like_Response' res.id %}">
+                                Лайк {{ res.likes.count }}
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+        </div>
+    </div>
+    <br>
+
 <h3>Сайт зробив:</h3>
 <h2>Янчеглов Вадим</h2>
 <p>Для цього використав</p>
 <p>перелік що використав</p>
-
-
-<hr>
-
 {% endblock %}

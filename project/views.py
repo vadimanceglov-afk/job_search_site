@@ -131,32 +131,32 @@ def Like_Response(request, pk):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 #Інфа про сайт
-def Job_site_ListView(request):
-    return render(request=request, template_name="jobs/job_site.html")
+class Job_site_ListView(ListView):
+    model = Response
+    form_class = Response_CreatFrom   
+    context_object_name = "responses"
+    template_name = "jobs/job_site.html"
+
 
 
 #Виводе всі вакансій
 class Job_ListView(ListView):
-    model = Vacancy
-    form_class = Response_CreatFrom   
+    model = Vacancy  
     context_object_name = "jobs"
     template_name = "jobs/job_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['all_responses'] = Response.objects.all()
         context['company_al'] = EmployerProfile.objects.all()
+        context['categories'] = Category.objects.all()
         context['latest_objects'] = Vacancy.objects.order_by('-date')[:3]
         user_already_responded = False
-        if self.request.user.is_authenticated:
-            user_already_responded = Response.objects.filter(author=self.request.user).exists()
 
         context['search_form'] = Vacancy_SurchFrom() 
         
         if self.request.user.is_authenticated:
             context['user_already_responded'] = user_already_responded
 
-        context['response_form'] = self.form_class() 
         return context
     
     def post(self, request, *args, **kwargs):

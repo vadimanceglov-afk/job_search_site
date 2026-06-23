@@ -25,14 +25,14 @@
     </div>
 </section>
 
-<h3 class="fw-bold text-center">Вакансії:</h3>
+<h3 class="fw-bold text-center">Свіжі вакансії:</h3>
 <div class="container mb-5">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
         {% for jo in latest_objects %}
             <div class="col position-relative">
                 
                 <div class="card h-100 mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
-                  <h5 class="card-header ">
+                  <h5 class="card-header text-site">
                     <div class="row gx-5">
                         <div class="col position-relative" style="z-index: 2;">
                             <img src="{{ jo.company.img_logo }}" alt="Avatar" 
@@ -56,7 +56,7 @@
                         від {{ jo.price_start }} - {{ jo.price_end }} грн
                     </div>
                     <div class="mb-1">
-                        <p class="fs-6">{{ jo.category }}, {{ jo.city }}</p>
+                        <p class="fs-6"><i class="bi bi-geo-alt-fill"></i> {{ jo.city }}, {{ jo.category }}</p>
                     </div>
 
                     <div class="mb-4 text-truncate">
@@ -91,7 +91,9 @@
             </div>
         {% endfor %}
     </div>
+
 </div>
+
     <style>
         /* Змінюємо колір і прибираємо підкреслення для всіх посилань */
         a {
@@ -113,10 +115,10 @@
 <h3 class="fw-bold text-center">Компанії:</h3>
 <br>
 <div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+<div class="card-group">
     {% for comp in company_al %}
-        <div class="col"> 
-            <div class="card h-100 text-center mb-3">
+            
+            <div class="card h-100 text-center mb-3 shadow-sm mb-3 border-0 ">
                 <div class="card-body">
                     <img src="{{ comp.img_logo }}" alt="Logo" 
                          style="width: 40px; height: 40px; object-fit: cover;" 
@@ -125,84 +127,35 @@
                     {{ comp.name_company }}
                 </div>
             </div>
-            
-        </div>
+                            
+
     {% empty %}
         <div class="col-12 text-center text-muted">Профілів не знайдено.</div>
     {% endfor %}
-    </div>
 </div>
-{% if user.is_authenticated %}
-<div class="container">
-    {% if user_already_responded %}
-        <p>Ви вже залишили відгук про наш сайт. Дякуємо!</p>
-    {% else %}
-        <form method="POST" action="" class=" gap-2">
-            {% csrf_token %}
-            <div style="height: 150px; max-width: 400px;">
-                {{ response_form.as_p }}
-            </div>
-            <button type="submit" class="btn btn-success">Опублікувати відгук</button>
-        </form>
-
-    {% endif %}
-{% else %}
-    <p class="text-center">Будь ласка, увійдіть, щоб залишити відгук.</p>
-{% endif %}
-</div>
-<br>
-    <div class="container mt-4">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for res in all_responses %}
-            <div class="col">
-                <div class="card mb-3 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-
-                            <div class="d-flex align-items-center">
-                                {% if res.author.profile %}
-                                    <img src="{{ res.author.profile.img_avatar }}" alt="Avatar" 
-                                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-                                         style="width: 35px; height: 35px; object-fit: cover;">
-                                <p class="fw-bold mb-0 px-2">
-                                    {{ res.author.first_name }} {{ res.author.last_name }}:
-                                </p>
-                                {% elif res.author.employer %}
-                                    <img src="{{ res.author.employer.img_logo }}" alt="Avatar" 
-                                         class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
-                                         style="width: 35px; height: 35px; object-fit: cover;">
-                                                                         <p class="fw-bold mb-0 px-2">
-                                    {{ res.author.employer.name_company }}:
-                                </p>
-                                {% else %}
-                                <p>Admin:</p>
-                                {% endif %}
-
-                                    
-                            </div>
-
-                            <div class="text-end text-muted small">
-                                {{ res.date|date:"d, Y, H:i" }}
-                            </div>
-
+<h2 class="fw-bold text-center mb-4">Популярні категорії</h2>
+<section class="py-5 bg-white border-top">
+    <div class="container">
+        <div class="row row-cols-2 row-cols-md-4 g-3">
+            
+            {% for cat in categories %}
+                <div class="col">
+                    <a href="{% url 'job_surh' %}?category={{ cat.id }}" class="card h-100 text-center p-3 border-0 shadow-sm rounded-3 text-decoration-none text-dark hover-card" style="transition: transform 0.2s;">
+                        <div class="fs-2 text-site mb-2">
+                            <i class="bi bi-briefcase-fill"></i> 
                         </div>
-
-                        <p class="card-text mt-3">{{ res.content }}</p>
-
-                        <div class="text-end">
-                            <a class="btn btn-outline-success" href="{% url 'Like_Response' res.id %}">
-                                Лайк {{ res.likes.count }}
-                            </a>
-                        </div>
-
-                    </div>
+                        <div class="fw-bold small">{{ cat.name }}</div>
+                    </a>
                 </div>
-            </div>
-    {% endfor %}
+            {% empty %}
+                <div class="col-12 text-center text-muted">Категорій поки немає.</div>
+            {% endfor %}
+
         </div>
     </div>
-    <br>
+</section>
 
-    
+<br>
+
 
 {% endblock %}
