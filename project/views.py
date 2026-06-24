@@ -148,7 +148,7 @@ class Job_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company_al'] = EmployerProfile.objects.all()
-        context['categories'] = Category.objects.all()
+        context['categories'] = Category.objects.all()[:8]
         context['latest_objects'] = Vacancy.objects.order_by('-date')[:3]
         user_already_responded = False
 

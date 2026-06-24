@@ -3,38 +3,95 @@
 {% block content %}
 <section class="search-hero py-5 text-center text-white">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <form action="{% url 'job_surh' %}" method="get" class="d-flex gap-2">
-                    <div class="w-100">
-                        {{ search_form.q }}
+<div class="row justify-content-center text-dark">
+                <div class="col-lg-11 col-xl-10">
+                <form action="{% url 'job_surh' %}" method="get">
+                    <div class="row g-1 align-items-center justify-content-center">
+
+                    <div class="col-md-8">
+    <div class="input-group shadow-sm bg-white rounded-3 overflow-hidden">
+        
+        <span class="input-group-text bg-white border-end-0 text-muted ps-3">
+            <i class="bi bi-search"></i>
+        </span>
+        <input type="text" 
+               name="{{ search_form.q.name }}" 
+               id="{{ search_form.q.id_for_label }}" 
+               placeholder="Посада, професія або компанія" 
+               class="form-control border-start-0 rounded-start-0 me-0">
+        
+        <div style="max-width: 200px;" class="d-flex align-items-center">
+            <span class="input-group-text bg-white border-end-0 border-start text-muted ps-2 rounded-0 h-100">
+                <i class="bi bi-geo-alt"></i>
+            </span>
+            <input type="text" 
+                   name="{{ search_form.city.name }}" 
+                   id="{{ search_form.city.id_for_label }}" 
+                   placeholder="Місто" 
+                   class="form-control border-start-0 border-end-0 rounded-0 h-100">
+        </div>
+
+    </div>
+</div>
+                    <div class="col-md-auto">
+                    <button type="submit" class="btn-yo">
+                        <i class="bi bi-search me-1 fw-bold"></i> Пошук
+                    </button>
                     </div>
-                        <button type="submit" class="btn-exit text-nowrap">
-                            <i class="bi bi-search me-1"></i> Пошук
-                        </button>
+                    </div>
                 </form>
-            </div>
+                    </div>
+                    
+
         </div>
     </div>
 </section>
-
+<div class="container text-center">
+  
 <form action="{% url 'job_surh' %}" method="get">
+    <div class="row">
+    <div class="col">
 
+    
                 {{ search_form.city }}
-                {{ search_form.category }}
-                {{ search_form.experience }}
-                {{ search_form.employment_type }}
-                {{ search_form.price_start }}
-                {{ search_form.price_end }}
+    </div>
+        <div class="col">
 
-            <button type="submit" class=" btn-exit">
+    
+                {{ search_form.category }}
+    </div>
+        <div class="col">
+
+    
+                {{ search_form.experience }}
+    </div>
+            <div class="col">
+
+    
+                {{ search_form.employment_type }}
+    </div>
+        <div class="col">
+                {{ search_form.price_start }}
+    </div>
+        <div class="col">
+        {{ search_form.price_end }}
+    </div>
+
+                
+    
+        <div class="col">
+                    <button type="submit" class=" btn-exit">
                 Фільтрувати
             </button>
+    </div>
 
 
+  </div>
 
 </form>
 
+</div>
+<br><br>
 <div class="container mb-5">
     <div class="row flex-column align-items-center g-4"> 
         {% for jo in vac %}
@@ -64,7 +121,7 @@
                         від {{ jo.price_start }} - {{ jo.price_end }} грн
                     </div>
                     <div class="mb-1">
-                        <p class="fs-6">{{ jo.category }}, {{ jo.city }}</p>
+                        <p class="fs-6"><i class="bi bi-geo-alt-fill"></i> {{ jo.city }}, {{ jo.category }}</p>
                     </div>
 
                     <div class="mb-4 text-truncate">

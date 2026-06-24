@@ -8,24 +8,55 @@
         <h1 class="display-5 fw-bold">Годі лежати — самий час роботу шукати!</h1>
         <br>
         <p class="text-body-tertiary mb-4 fs-4">Знайдіть бажану вакансію прямо зараз</p>
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="hk">
-                <form action="{% url 'job_surh' %}" method="get" class="d-flex gap-2">
-                    <div class="w-100">
-                        {{ search_form.q }}
+                
+<div class="row justify-content-center text-dark">
+                <div class="col-lg-11 col-xl-10">
+                <form action="{% url 'job_surh' %}" method="get">
+                    <div class="row g-1 align-items-center justify-content-center">
+
+                    <div class="col-md-8">
+    <div class="input-group shadow-sm bg-white rounded-3 overflow-hidden">
+        
+        <span class="input-group-text bg-white border-end-0 text-muted ps-3">
+            <i class="bi bi-search"></i>
+        </span>
+        <input type="text" 
+               name="{{ search_form.q.name }}" 
+               id="{{ search_form.q.id_for_label }}" 
+               placeholder="Посада, професія або компанія" 
+               class="form-control border-start-0 rounded-start-0 me-0">
+        
+        <div style="max-width: 200px;" class="d-flex align-items-center">
+            <span class="input-group-text bg-white border-end-0 border-start text-muted ps-2 rounded-0 h-100">
+                <i class="bi bi-geo-alt"></i>
+            </span>
+            <input type="text" 
+                   name="{{ search_form.city.name }}" 
+                   id="{{ search_form.city.id_for_label }}" 
+                   placeholder="Місто" 
+                   class="form-control border-start-0 border-end-0 rounded-0 h-100">
+        </div>
+
+    </div>
+</div>
+                    <div class="col-md-auto">
+                    <button type="submit" class="btn-yo">
+                        <i class="bi bi-search me-1 fw-bold"></i> Пошук
+                    </button>
                     </div>
-                        <button type="submit" class="btn-exit text-nowrap">
-                            <i class="bi bi-search me-1"></i> Пошук
-                        </button>
+                    </div>
                 </form>
-                </div>
-            </div>
+                    </div>
+                    
+
         </div>
     </div>
 </section>
 
-<h3 class="fw-bold text-center">Свіжі вакансії:</h3>
+
+        
+
+<h3 class="fw-bold text-center mb-3">Свіжі вакансії:</h3>
 <div class="container mb-5">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"> 
         {% for jo in latest_objects %}
@@ -111,39 +142,36 @@
         color: #ff9114 !important;
     }
     </style>
-
-<h3 class="fw-bold text-center">Компанії:</h3>
-<br>
+<br><br>
+<h3 class="fw-bold text-center mb-3">Компанії:</h3>
 <div class="container">
-<div class="card-group">
-    {% for comp in company_al %}
-            
-            <div class="card h-100 text-center mb-3 shadow-sm mb-3 border-0 ">
-                <div class="card-body">
-                    <img src="{{ comp.img_logo }}" alt="Logo" 
-                         style="width: 40px; height: 40px; object-fit: cover;" 
-                         class="rounded-circle me-2">
+    <div class="card-group">
+        {% for comp in company_al %}
 
-                    {{ comp.name_company }}
+                <div class="card h-100 text-center mb-3 shadow-sm mb-3 border-0 ">
+                    <div class="card-body">
+                        <img src="{{ comp.img_logo }}" alt="Logo" 
+                             style="width: 40px; height: 40px; object-fit: cover;" 
+                             class="rounded-circle me-2">
+
+                        {{ comp.name_company }}
+                    </div>
                 </div>
-            </div>
-                            
 
-    {% empty %}
-        <div class="col-12 text-center text-muted">Профілів не знайдено.</div>
-    {% endfor %}
-</div>
+
+        {% empty %}
+            <div class="col-12 text-center text-muted">Профілів не знайдено.</div>
+        {% endfor %}
+    </div>
+<br><br>
 <h2 class="fw-bold text-center mb-4">Популярні категорії</h2>
-<section class="py-5 bg-white border-top">
+
     <div class="container">
-        <div class="row row-cols-2 row-cols-md-4 g-3">
+        <div class="d-flex gap-3">
             
             {% for cat in categories %}
                 <div class="col">
-                    <a href="{% url 'job_surh' %}?category={{ cat.id }}" class="card h-100 text-center p-3 border-0 shadow-sm rounded-3 text-decoration-none text-dark hover-card" style="transition: transform 0.2s;">
-                        <div class="fs-2 text-site mb-2">
-                            <i class="bi bi-briefcase-fill"></i> 
-                        </div>
+                    <a href="{% url 'job_surh' %}?category={{ cat.id }}" class="card h-100 text-center p-3 border-0 shadow-sm rounded-3 text-decoration-none text-white hover-card" style="background-color: silver; transition: transform 0.2s;">
                         <div class="fw-bold small">{{ cat.name }}</div>
                     </a>
                 </div>
@@ -153,9 +181,9 @@
 
         </div>
     </div>
-</section>
 
-<br>
 
+<br><br>
+</div>
 
 {% endblock %}
