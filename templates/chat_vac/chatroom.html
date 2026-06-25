@@ -4,43 +4,72 @@
 {% block content %}
 
 
-<div style="padding: 20px;">
-    <h2>Чат по вакансії: {{ application.vacancy.title }}</h2>
-    <p>Кандидат: {{ application.author.username }} | Роботодавець: {{ application.vacancy.company.user.username }}</p>
 
-    <hr>
+    <div class="container mt-5 mb-5">
+    <div class="row gx-5 justify-content-center"> 
+        <div class="col-auto d-flex justify-content-center w-100">
+            <div class="card shadow border-0" style="width: 100%; max-width: 650px; border-radius: 15px;">
+                <div class="card-body p-4">
+                    <div style="padding: 20px;">
+                        <h2>Чат по вакансії: {{ application.vacancy.title }}</h2>
+                        <p>Кандидат: {{ application.author.username }} | Роботодавець: {{ application.vacancy.company.user.username }}</p>
 
-    <div id="chat-panel" >
-        {% for msg in user_messages %}
-            <div class="msg" >
-                <div >
-                    <strong>{{ msg.sender.username }}:</strong> 
-                    <span>{{ msg.content }}</span>
-                    <br>
-                    <small>{{ msg.created_at|naturaltime }}</small>
+                        <hr>
+
+                        <div id="chat-panel" style="height: 370px; overflow-y: auto; padding-right: 5px; margin-bottom: 15px;">
+                            {% for msg in user_messages %}
+                                {% if msg.sender == request.user %}
+                                    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                                        <div style="background: #ddedd1; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
+                                            <small style="color: #555; display: block;">Вы</small>
+                                            <span style="word-break: break-all;">{{ msg.content }}</span>
+                                            <small style="color: #666; display: block; text-align: right; font-size: 10px;">{{ msg.created_at|naturaltime }}</small>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div style="display: flex; justify-content: flex-start; margin-bottom: 10px;">
+                                        <div style="background: #fff; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
+                                            <small style="color: #888; display: block;">{{ msg.sender.username }}</small>
+                                            <span style="word-break: break-all;">{{ msg.content }}</span>
+                                            <small style="color: #bbb; display: block; text-align: right; font-size: 10px;">{{ msg.created_at|naturaltime }}</small>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div>
+                            <div id="django-input-wrapper">
+                                {{ c_form.content }}
+                            </div>
+                            <br>
+                            <button type="button" id="message-send-btn" class="btn-L w-100">Відправити</button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
-
-    <div id="input-area">
-        <textarea id="message-input" rows="3" placeholder="Напишіть повідомлення..."></textarea>
-        <br>
-        <button id="message-send-btn" >Відправити</button>
+        </div>
     </div>
 </div>
 
 {{ application_id|json_script:"app-id" }}
 
 <script>
-    const appId = "{{ application_id }}";
     const chatPanel = document.getElementById('chat-panel');
-    const messageInput = document.getElementById('message-input');
     const sendBtn = document.getElementById('message-send-btn');
+    
+    // ВИПРАВЛЕННЯ: Шукаємо інпут всередині обгортки Django, оскільки його ID нам наперед невідомий
+    const messageInput = document.querySelector('#django-input-wrapper textarea') || document.querySelector('#django-input-wrapper input');
+    
+    // Додаємо інпуту базовий клас Bootstrap, якщо його немає з forms.py
+    if (messageInput) {
+        messageInput.classList.add('form-control');
+        messageInput.placeholder = "Напишіть повідомлення...";
+    }
 
     function constructMessage(data) {
         try {
-            // Перевіряємо, чи такий блок вже є на сторінці
             const msgId = `msg-${data.id || Math.random()}`; 
             if (document.getElementById(msgId)) return;
 
@@ -67,16 +96,17 @@
         }
     }
 
-    // ВІДПРАВКА ПОСЛАННЯ
+    // ВІДПРАВКА ПОВІДОМЛЕННЯ
     sendBtn.onclick = function(e) {
-        e.preventDefault(); // Запобігаємо перезавантаженню сторінки
+        e.preventDefault();
+        if (!messageInput) return;
+
         const message = messageInput.value.trim();
         if (!message) return;
 
-        // Блокуємо кнопку, поки йде відправка
         sendBtn.disabled = true;
 
-        fetch("{% url 'chatroom_ajax' application_id %}", {
+        fetch("{% url 'chatroom_ajax' application.id %}", { // Виправлено url параметр
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -86,9 +116,11 @@
         })
         .then(res => res.json())
         .then(data => {
-            messageInput.value = ""; // Очищуємо поле
+            messageInput.value = ""; 
             if (Array.isArray(data)) {
                 data.forEach(msg => constructMessage(msg));
+            } else if (data.content) { // Якщо бекенд поверне одне повідомлення, а не масив
+                constructMessage(data);
             }
         })
         .catch(err => {
@@ -96,14 +128,14 @@
             alert("Не вдалося відправити повідомлення");
         })
         .finally(() => {
-            sendBtn.disabled = false; // Розблоковуємо кнопку
-            messageInput.focus();     // Повертаємо фокус на поле
+            sendBtn.disabled = false;
+            messageInput.focus();
         });
     };
 
     // АВТООНОВЛЕННЯ (Polling)
     function loadMessages() {
-        fetch("{% url 'chatroom_ajax' application_id %}")
+        fetch("{% url 'chatroom_ajax' application.id %}")
         .then(res => res.json())
         .then(data => {
             if (Array.isArray(data)) {
@@ -115,10 +147,10 @@
         .catch(err => console.error("Помилка при оновленні:", err));
     }
 
-    // Запуск таймера
+    // Запуск таймера оновлення кожні 3 секунди
     setInterval(loadMessages, 3000);
     
-    // Скрол вниз при завантаженні
+    // Скрол вниз при початковому завантаженні сторінки
     chatPanel.scrollTop = chatPanel.scrollHeight;
 </script>
 {% endblock %}

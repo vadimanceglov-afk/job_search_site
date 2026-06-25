@@ -108,7 +108,7 @@ class Vacancy_SurchFrom(forms.Form):
         max_length=100, 
         required=False,  # Додай це, щоб можна було зайти на сторінку без запиту
         widget=forms.TextInput(attrs={
-            'class': 'form-control', 
+            'class': 'form-control form-control-sm border-0 shadow-none', 
             'placeholder': 'Пошук за вакансійями/ містом /сферою'
         })
     )
@@ -118,7 +118,7 @@ class Vacancy_SurchFrom(forms.Form):
         label='Місто',
         required=False,
         empty_label='Усі міста',  # Перший порожній пункт
-        widget=forms.Select(attrs={'class': 'form-select'})
+        widget=forms.Select(attrs={'class': 'form-select form-select-sm border-0 shadow-none'})
     )
     
     # 3. Вибір категорії (Динамічний з бази даних)

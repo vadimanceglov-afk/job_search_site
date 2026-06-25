@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib.auth.models import User
+from chat.forms import FormChat
 import json
 
 # Імпортуємо твої моделі
@@ -13,33 +14,48 @@ from auth_system.models import EmployerProfile, UserProfile
 
 @login_required
 def chatroom(request, application_id):
-    # Отримуємо заявку по ID
-    application = get_object_or_404(Application, id=application_id)
-    
-    # Отримуємо або створюємо чат для цієї заявки
-    chat, created = Chat.objects.get_or_create(application=application)
 
-    # ПЕРЕВІРКА ПРАВ ДОСТУПУ:
+    # Отримуємо заявку по ID
+
+    application = get_object_or_404(Application, id=application_id)
+        # ПЕРЕВІРКА ПРАВ ДОСТУПУ:
     # 1. Чи це кандидат (автор заявки)?
     is_candidate = (request.user == application.author)
     # 2. Чи це роботодавець (власник компанії, яка розмістила вакансію)?
     is_employer = (request.user == application.vacancy.company.user)
-
     if not (is_candidate or is_employer):
         # Якщо лівий юзер намагається зайти — викидаємо його
         return redirect('homepage') 
+    # Отримуємо або створюємо чат для цієї заявки
+    chat, created = Chat.objects.get_or_create(application=application)
+
+    if request.method == 'POST':
+        c_form = FormChat(request.POST)
+        if c_form.is_valid():
+            # Тут твій код збереження повідомлення, наприклад:
+            message = c_form.save(commit=False)
+            message.chat = chat
+            message.sender = request.user
+            message.save()
+            # Після POST-запиту дуже рекомендується робити редирект на ту саму сторінку,
+            # щоб при оновленні сторінки F5 повідомлення не відправлялося вдруге!
+            return redirect('chatroom', application_id=application_id)
+    else:
+        # ОСЬ ТУТ ТВОЇЙ ELSE! Користувач просто зайшов на сторінку — даємо йому порожню форму
+        c_form = FormChat()
 
     # Отримуємо повідомлення
     messages_history = chat.messages.all()
-    
     # Позначаємо повідомлення від іншої сторони як прочитані
     messages_history.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
+
 
     context = {
         "chat": chat,
         "application": application,
         "user_messages": messages_history,
-        "application_id": application_id 
+        "application_id": application_id, 
+        "c_form": c_form
     }
     
     return render(request, "chat_vac/chatroom.html", context)
@@ -63,11 +79,14 @@ def ajax_load_messages(request, application_id):
 
     # 1. Обробка відправки (POST)
     if request.method == "POST":
+
         try:
+            
             data = json.loads(request.body)
             user_message = data.get('message')
             
             if user_message:
+                
                 m = ChatMessage.objects.create(
                     chat=chat, 
                     sender=request.user, 
