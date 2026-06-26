@@ -5,13 +5,17 @@
   <div class="row justify-content-center"> 
     <div class="text-start">
         {% if user.employer.name_company %} 
-            <a href="{% url 'job_company' %}" class="btn btn-light ">
-                Назад до компанії
-            </a>
+  <div class="text-start mt-3">
+    <a href="{% url 'job_company' %}" class="text-muted text-decoration-none small">
+        <i class="bi bi-arrow-left"></i> Назад до компаній
+    </a>
+  </div>
         {% else %}
-            <a href="{% url 'job_list' %}" class="btn btn-light w-100 py-2 fw-bold rounded-3 border">
-                Назад до списку
-            </a>
+  <div class="text-start mt-3">
+    <a href="{% url 'job_list' %}" class="text-muted text-decoration-none small">
+        <i class="bi bi-arrow-left"></i> Назад на головну
+    </a>
+  </div>
         {% endif %}
     </div>
     <div class="col-12 text-center mb-4">

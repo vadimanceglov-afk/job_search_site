@@ -2,6 +2,8 @@
 {% load static %}
 {% block content %}
 <title>Про нас</title>
+
+
 <div class="container">
 <h1 class="text-center">Вітаю на моєму сайті з пошуку роботи</h1>
 <div class="text-center">
@@ -61,7 +63,7 @@
         <form method="POST" action="" class=" gap-2">
             {% csrf_token %}
             <div style="height: 150px; max-width: 400px;">
-                {{ response_form.as_p }}
+                {{ form.content }}
             </div>
             <button type="submit" class="btn btn-success">Опублікувати відгук</button>
         </form>
@@ -86,7 +88,7 @@
                                          class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                                          style="width: 35px; height: 35px; object-fit: cover;">
                                 <p class="fw-bold mb-0 px-2">
-                                    {{ res.author.first_name }} {{ res.author.last_name }}:
+                                    {{ res.author.profile.first_name }} {{ res.author.profile.last_name }}:
                                 </p>
                                 {% elif res.author.employer %}
                                     <img src="{{ res.author.employer.img_logo }}" alt="Avatar" 

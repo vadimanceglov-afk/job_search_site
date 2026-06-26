@@ -3,11 +3,11 @@
 {% block content %}
 <div class="container mt-4">
   <div class="row justify-content-center"> 
-    <div class="text-start">
-        <a href="{% url 'job_profile' %}" class="btn btn-light">
-            Назад
-        </a>
-    </div>
+  <div class="text-start mt-3">
+    <a href="{% url 'job_list' %}" class="text-muted text-decoration-none small">
+        <i class="bi bi-arrow-left"></i> Назад до вакансій
+    </a>
+  </div>
     <div class="col-12 text-center mb-4">
       <h2 class="fw-bold">{% if form.instance.pk %}Редагувати{% else %}Створити{% endif %} резюме</h2>
     </div>

@@ -6,26 +6,40 @@
     <div class="row w-100 d-flex justify-content-center">
         <div class="col-12 d-flex justify-content-center">
             <div class="card shadow border-0" style="width:100%; max-width:750px; border-radius:15px;">
-                <h3 class="card-header">
+                <h3 class="card-header bac-site shadow-none" style=" border-radius:15px 15px 1px 1px">
                     <div class="row gx-5">
                         <div class="col">
                             <img src="{{ jobs.company.img_logo }}" alt="Avatar" 
                              class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                              style="width: 55px; height: 55px; object-fit: cover;">
-                            <a href="{% url 'job_company' %}">{{ jobs.company }}</a>
+                            <a href="#" class="text-white">{{ jobs.company }}</a>
                         </div>
                         <div class="col">
-                            <div class="text-end fs-6">{{ jobs.date|date:"d.m.Y" }}</div>
+                            <div class="text-end fs-6 text-white">{{ jobs.date|date:"d.m.Y" }}</div>
                         </div>
                     </div>
                 </h3>
                 <div class="card-body">
+                    {% if user.employer.name_company %} 
+                        {% if user == jobs.company.user %}
+                        <div class="row gx-5">
+                            <div class="col">
+                                <h2 class="card-title mb-3"><strong class="text-site">Шукаємо {{ jobs.title }}</strong></h2>
+                            </div>
+                            <div class="col text-end">
+                                <p class="mb-1 fw-bold">Заявок <span class="badge bg-primary">{{ jobs.applications.count }}</span></p>
+                            </div>                            
+                        </div>
+                        
+                        {% endif %}
+                    {% else %}
                         <a href="{% url 'apply_for_job' object.pk %}" class="btn-L mb-3">
                             Подати заявку
                         </a>
-                        
+                        <h2 class="card-title mb-3"><strong class="text-site">Шукаємо {{ jobs.title }}</strong></h2>
+                    {% endif %}
 
-                    <h2 class="card-title mb-3"><strong class="text-site">Шукаємо {{ jobs.title }}</strong></h2>
+                    
                     <div class="d-flex flex-column mb-1">
                         <div class="mb-2 fw-bold fs-5">
                             від {{ jobs.price_start }} до {{ jobs.price_end }} грн
@@ -57,7 +71,10 @@
                         </div>
                         <label class="fw-bold mb-1"> Посилання:</label>
                         <div class="mb-4">
+                            <a href="{{ jobs.link }}" target="_blank" rel="noopener noreferrer" class="text-site link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+
                             {{ jobs.link }}
+                            </a>
                         </div>
                     </div>
                     {% if user.employer.name_company %} 

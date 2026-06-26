@@ -96,6 +96,8 @@ class Job_singupView(CreateView):
         p_name = form.cleaned_data.get('patronymic')
         date = form.cleaned_data.get('birth_date')
         ref = form.cleaned_data.get('referral')
+        gender = form.cleaned_data.get('gender')  # Дістаємо стать з форми
+        experience_data = form.cleaned_data.get('op')
 
         UserProfile.objects.create(
             user=user,
@@ -104,6 +106,8 @@ class Job_singupView(CreateView):
             patronymic=p_name,
             birth_date = date,
             referral = ref,
+            gender=gender,          # Переконайся, що в моделі UserProfile є таке поле
+            op=experience_data
         )
 
         login(self.request, user)

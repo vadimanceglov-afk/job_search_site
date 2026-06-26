@@ -59,16 +59,16 @@
             <div class="col position-relative">
                 
                 <div class="card h-100 mb-3 mx-auto shadow-sm mb-3 border-0 rounded-4 overflow-hidden">
-                  <h5 class="card-header text-site">
+                  <h5 class="card-header bac-site shadow-none">
                     <div class="row gx-5">
                         <div class="col position-relative" style="z-index: 2;">
                             <img src="{{ jo.company.img_logo }}" alt="Avatar" 
                              class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                              style="width: 35px; height: 35px; object-fit: cover;">
-                            <a href="{% url 'job_company' %}">{{ jo.company }}</a>
+                            <a href="#" class="text-white">{{ jo.company }}</a>
                         </div>
                         <div class="col">
-                            <div class="text-end fs-6">{{ jo.date|date:"d.m.Y" }}</div>
+                            <div class="text-end fs-6 text-white">{{ jo.date|date:"d.m.Y" }}</div>
                         </div>
                     </div>
                   </h5>

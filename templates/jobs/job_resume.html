@@ -20,10 +20,10 @@
                                 class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
                                 style="max-width: 140px; height: 140px; object-fit: cover;">
                             </div>
-                            <div class="d-flex flex-column align-items-cente">
+                            <div class="d-flex flex-column align-items-start">
                                 <h5 class="fw-bold">
-                                    {{ resume.author.first_name }} 
-                                    {{ resume.author.last_name }}
+                                    {{ resume.author.profile.first_name }} 
+                                    {{ resume.author.profile.last_name }}
                                     {{ resume.author.profile.patronymic }}
                                 </h5>
                                 <div class="mb-2 flex-grow-1">
@@ -140,9 +140,9 @@
                             </div>
                             <div class="d-flex flex-column align-items-cente">
                                 <h5 class="fw-bold">
-                                    {{ request.user.first_name }} 
-                                    {{ request.user.last_name }}
-                                    {{ user.profile.patronymic }}
+                                    {{ resume.author.profile.first_name }} 
+                                    {{ resume.author.profile.last_name }}
+                                    {{ resume.author.profile.patronymic }}
                                 </h5>
                                 <div class="mb-2 flex-grow-1">
                                     <label class="fw-bold text-muted"><i class="bi bi-cake"></i> Вік:</label> 

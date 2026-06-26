@@ -181,6 +181,18 @@ class Vacancy_FilterFrom(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
+    employment_type = forms.ChoiceField(
+        choices=EMPLOYMENT_CHOICES,
+        label='Тип зайнятості',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    experience = forms.ChoiceField(
+        choices=EXPERIENCE_CHOICES,
+        label='Досвід роботи',
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
     # Поля для ручного введення ціни
     # ВАЖЛИВО: назви мають збігатися з тими, що у views.py (request.GET.get("..."))
     price_start = forms.IntegerField(

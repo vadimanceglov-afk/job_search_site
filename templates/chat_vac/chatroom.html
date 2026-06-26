@@ -12,24 +12,54 @@
                 <div class="card-body p-4">
                     <div style="padding: 20px;">
                         <h2>Чат по вакансії: {{ application.vacancy.title }}</h2>
-                        <p>Кандидат: {{ application.author.username }} | Роботодавець: {{ application.vacancy.company.user.username }}</p>
+                        <p>Кандидат: {{ application.author.first_name }} {{ application.author.last_name }} | Роботодавець: {{ vacancy.author.name_company }}</p>
 
                         <hr>
 
-                        <div id="chat-panel" style="height: 370px; overflow-y: auto; padding-right: 5px; margin-bottom: 15px;">
+                        <div id="chat-panel" style="height: 390px; overflow-y: auto; padding-right: 5px; margin-bottom: 15px;">
                             {% for msg in user_messages %}
                                 {% if msg.sender == request.user %}
-                                    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                                        <div style="background: #ddedd1; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
-                                            <small style="color: #555; display: block;">Вы</small>
-                                            <span style="word-break: break-all;">{{ msg.content }}</span>
-                                            <small style="color: #666; display: block; text-align: right; font-size: 10px;">{{ msg.created_at|naturaltime }}</small>
+                                    {% if msg.sender == request.user.profile %}
+                                        <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                                            <div style="background: #ddedd1; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img src="{{ msg.sender.profile.img_avatar }}" alt="Avatar" 
+                                                     class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                                     style="width: 25px; height: 25px; object-fit: cover;">
+                                                    <small style="color: #555; display: block;"> Ви:</small>
+                                                </div>
+                                                <span style="word-break: break-all;">{{ msg.content }}</span>
+                                                <small style="color: #666; display: block; text-align: right; font-size: 10px;">{{ msg.created_at|naturaltime }}</small>
+                                                </div>
+                                                <div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% else %}
+                                        <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                                            <div style="background: #ddedd1; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img src="{{ msg.sender.employer.img_logo }}" alt="Avatar" 
+                                                     class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                                     style="width: 25px; height: 25px; object-fit: cover;">
+                                                    <small style="color: #555; display: block;"> Ви:</small>
+                                                </div>
+                                                <span style="word-break: break-all;">{{ msg.content }}</span>
+                                                <small style="color: #666; display: block; text-align: right; font-size: 10px;">{{ msg.created_at|naturaltime }}</small>
+                                                </div>
+                                                <div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
                                 {% else %}
+                                
                                     <div style="display: flex; justify-content: flex-start; margin-bottom: 10px;">
                                         <div style="background: #fff; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
-                                            <small style="color: #888; display: block;">{{ msg.sender.username }}</small>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <img src="{{ msg.sender.profile.img_avatar }}" alt="Avatar" 
+                                                 class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
+                                                 style="width: 25px; height: 25px; object-fit: cover;">
+                                                <small style="color: #888; display: block;">{{ msg.sender.first_name }} {{ msg.sender.last_name }}:</small>
+                                            </div>
                                             <span style="word-break: break-all;">{{ msg.content }}</span>
                                             <small style="color: #bbb; display: block; text-align: right; font-size: 10px;">{{ msg.created_at|naturaltime }}</small>
                                         </div>

@@ -43,9 +43,9 @@ def job_sursceh(request):
     if cat_id:
         vac = vac.filter(category_id=cat_id)
     if ex_id:
-        vac = vac.filter(experience_id=ex_id)
+        vac = vac.filter(experience=ex_id)
     if em_id:
-        vac = vac.filter(employment_type_id=ex_id)
+        vac = vac.filter(employment_type=em_id)
     if p_start:
         vac = vac.filter(price_start__gte=p_start)
     if p_end:
@@ -139,6 +139,19 @@ class Job_site_ListView(ListView):
 
 
 
+    def post(self, request, *args, **kwargs):
+        # Обробка створення відгуку
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            response = form.save(commit=False)
+            response.author = request.user
+            response.save()
+            return redirect('job_list') # Перезавантажуємо сторінку після успіху
+        
+        # Якщо форма невалідна, показуємо сторінку знову з помилками
+        return self.get(request, *args, **kwargs)
+
+
 #Виводе всі вакансій
 class Job_ListView(ListView):
     model = Vacancy  
@@ -159,23 +172,13 @@ class Job_ListView(ListView):
 
         return context
     
-    def post(self, request, *args, **kwargs):
-        # Обробка створення відгуку
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            response = form.save(commit=False)
-            response.author = request.user
-            response.save()
-            return redirect('job_list') # Перезавантажуємо сторінку після успіху
-        
-        # Якщо форма невалідна, показуємо сторінку знову з помилками
-        return self.get(request, *args, **kwargs)
 
 #Інформація про вакансію
 class Job_DatailView(DetailView):
     model = Vacancy
     context_object_name = "jobs"
     template_name = "jobs/job_datail.html"
+
 
 
 #Інформація про резюме
