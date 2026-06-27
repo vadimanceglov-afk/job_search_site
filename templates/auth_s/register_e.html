@@ -7,7 +7,8 @@
       <div class="card shadow border-0" style="width:100%; max-width:600px; border-radius:15px;">
         <div class="card-body p-4">
           <h3 class="fw-bold text-center mt-2 mb-4">Створити користувача</h3>
-          <form method="post" novalidate>
+          
+          <form method="post" enctype="multipart/form-data" novalidate>
             {% csrf_token %}
 
             {% if form.non_field_errors %}
@@ -50,7 +51,6 @@
                 {% endif %}
             </div>
 
-
             <div class="row">
                 <div id="company-logo-block" class="col-md-6 mb-3">
                     <label class="form-label"><strong>Логотип компанії:</strong></label>
@@ -65,13 +65,15 @@
                     {{ form.referral_company }}
                 </div>
             </div>
-              <div id="company-website-block" class=" mb-3">
+            
+            <div id="company-website-block" class=" mb-3">
                 <label><strong>Сайт компанії:</strong></label>
                 {{ form.website }}
                 {% if form.website.errors %}
                     <span class="d-block text-danger small" style="color: red;">{{ form.website.errors }}</span>
                 {% endif %}
-              </div>
+            </div>
+            
             <div class="mb-4">
                 <label><strong>Про компанію / Про себе:</strong></label>
                 {{ form.description }}
@@ -79,6 +81,7 @@
                     <span class="d-block text-danger small" style="color: red;">{{ form.description.errors }}</span>
                 {% endif %}
             </div>
+            
             <div class="row">
               <div class="col-md-6 mb-4">
                 <strong>Пароль:</strong>
@@ -110,11 +113,13 @@
         const referralBlock = document.getElementById("referral-block");
 
         // Самі інпути (для очищення)
+        // ВИПРАВЛЕНО: Додано визначення інпуту назви компанії
+        const nameInput = document.getElementById("id_name_company"); 
         const logoInput = document.getElementById("id_logo");
         const websiteInput = document.getElementById("id_website");
 
         function toggleCompanyFields() {
-            if (typeSelect.value === "company") {
+            if (typeSelect && typeSelect.value === "company") {
                 // Показуємо всі три блоки для компанії
                 if (nameBlock) nameBlock.style.display = "block";
                 if (logoBlock) logoBlock.style.display = "block";
@@ -131,7 +136,7 @@
                 // Напрямок діяльності розтягуємо на весь рядок, щоб не було порожнечі
                 if (referralBlock) referralBlock.className = "col-12 mb-3";
                 
-                // Очищаємо інпути
+                // Очищаємо інпути (тепер nameInput визначено і не викликає помилок)
                 if (nameInput) nameInput.value = ""; 
                 if (logoInput) logoInput.value = ""; 
                 if (websiteInput) websiteInput.value = "";
@@ -142,7 +147,9 @@
         toggleCompanyFields();
 
         // Слідкуємо за зміною типу реєстрації
-        typeSelect.addEventListener("change", toggleCompanyFields);
+        if (typeSelect) {
+            typeSelect.addEventListener("change", toggleCompanyFields);
+        }
     });
 </script>
 {% endblock %}

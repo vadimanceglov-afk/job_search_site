@@ -129,7 +129,8 @@ class Job_Emp_singupView(CreateView):
             name_company=form.cleaned_data.get('name_company'),
             description=form.cleaned_data.get('description'),
             referral_company=form.cleaned_data.get('referral_company'),
-            website=form.cleaned_data.get('website')
+            website=form.cleaned_data.get('website'),
+            logo=form.cleaned_data.get('logo')
         )
 
         login(self.request, user)

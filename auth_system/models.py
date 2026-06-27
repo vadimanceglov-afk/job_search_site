@@ -80,7 +80,7 @@ class EmployerProfile(models.Model):
     logo = models.ImageField(upload_to='company_logos/', blank=True, null=True)#логотип
     referral_company = models.ForeignKey('project.Category', on_delete=models.SET_NULL, null=True)#направлення компаній
     hq_location = models.CharField(max_length=255, blank=True, null=True, verbose_name="Головний офіс (Місто, Країна)")
-    website = models.URLField(max_length=200, null=True, blank=True)#посилання на сайт компаній
+    website = models.URLField(max_length=700, null=True, blank=True)#посилання на сайт компаній
 
     def __str__(self):
         return self.name_company

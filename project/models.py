@@ -78,6 +78,7 @@ class Resume(models.Model):
     file = models.FileField(upload_to='resumes/',  null=True, blank=True)#файл   
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True,)#дата створення
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True, verbose_name="Дата оновлення")
+    email = models.EmailField(max_length=254, blank=True, null=True)
 
     def __str__(self):
         return self.title

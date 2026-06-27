@@ -53,7 +53,7 @@
                                 {% else %}
                                 
                                     <div style="display: flex; justify-content: flex-start; margin-bottom: 10px;">
-                                        <div style="background: #fff; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
+<div style="background: #fff; padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; max-width: 70%;">
                                             <div class="d-flex align-items-center mb-2">
                                                 <img src="{{ msg.sender.profile.img_avatar }}" alt="Avatar" 
                                                  class="rounded-circle img-fluid border border-3 border-light shadow-sm" 
@@ -142,7 +142,8 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': "{{ csrf_token }}"
             },
-            body: JSON.stringify({ "message": message })
+            body: JSON.stringify({ "message":
+message })
         })
         .then(res => res.json())
         .then(data => {

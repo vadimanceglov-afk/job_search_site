@@ -77,7 +77,7 @@ def apply_for_job(request, vacancy_id):
 
     if request.method == 'POST':
         subject = f"Новий відгук на вакансію: {vacancy.title}"
-        message = f"Привіт! На твою вакансію '{vacancy.title}' відгукнувся користувач {request.user.username}.\nПеревір свій кабінет на сайті!"
+        message = f"Привіт! На твою вакансію '{vacancy.title}' відгукнувся користувач {request.user.first_name}.\nПеревір свій кабінет на сайті!"
         from_email = settings.EMAIL_HOST_USER  # Твоя пошта Gmail з settings.py
         recipient_list = [vacancy.company.email]
 
@@ -130,23 +130,39 @@ def Like_Response(request, pk):
         Like.objects.create(user=request.user, response=response)     # Поставити лайк
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
-#Інфа про сайт
 class Job_site_ListView(ListView):
     model = Response
     form_class = Response_CreatFrom   
     context_object_name = "responses"
     template_name = "jobs/job_site.html"
 
-
+    def get_context_data(self, **kwargs):
+        # Отримуємо базовий контекст (там уже є твої responses)
+        context = super().get_context_data(**kwargs)
+        
+        # 1. Створюємо екземпляр форми і передаємо його в шаблон як 'form'
+        context['form'] = self.form_class()
+        
+        # 2. Визначаємо, чи користувач вже залишав відгук
+        user_already_responded = False
+        if self.request.user.is_authenticated:
+            user_already_responded = Response.objects.filter(author=self.request.user).exists()
+        
+        context['user_already_responded'] = user_already_responded
+        return context
 
     def post(self, request, *args, **kwargs):
+        # Якщо користувач не авторизований, не дозволяємо слати POST
+        if not request.user.is_authenticated:
+            return redirect('login')
+            
         # Обробка створення відгуку
         form = self.form_class(request.POST)
         if form.is_valid():
             response = form.save(commit=False)
             response.author = request.user
             response.save()
-            return redirect('job_list') # Перезавантажуємо сторінку після успіху
+            return redirect('job_list') # Або на 'job_site', якщо хочеш лишитися на цій же сторінці
         
         # Якщо форма невалідна, показуємо сторінку знову з помилками
         return self.get(request, *args, **kwargs)
